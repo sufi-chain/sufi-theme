@@ -23,10 +23,17 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-          token: ${{ secrets.GITEATOKEN }}
+        shell: bash
+        env:
+          GITEATOKEN: ${{ secrets.GITEATOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -n "${GITEATOKEN:-}" ]; then
+            git clone --depth 1 https://oauth2:${GITEATOKEN}@git.sabp.ir/sufi-chain/kom-theme.git .
+          else
+            git clone --depth 1 https://git.sabp.ir/sufi-chain/kom-theme.git .
+          fi
+          ls -la
 
       - name: Set package version
         shell: bash
