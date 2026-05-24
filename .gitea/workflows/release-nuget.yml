@@ -23,11 +23,10 @@ jobs:
 
     steps:
       - name: Checkout
-        shell: bash
-        run: |
-          set -euo pipefail
-          git clone --depth 1 https://git.sabp.ir/sufi-chain/kom-theme.git .
-          ls -la
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GITEATOKEN }}
 
       - name: Set package version
         shell: bash
