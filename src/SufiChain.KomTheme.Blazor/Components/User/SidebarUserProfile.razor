@@ -1,0 +1,46 @@
+@using Volo.Abp.Users
+@inject ICurrentUser CurrentUser
+
+@*
+    SidebarUserProfile - User profile component for the expand panel footer
+    
+    Features:
+    - Avatar image or initials
+    - User name and email
+    - Status indicator
+*@
+
+<div class="kom-sidebar-user-profile">
+    @if (CurrentUser.IsAuthenticated)
+    {
+        <div class="sb-stack sb-stack--row sb-stack--align-center" style="gap: var(--sb-space-3);">
+            <div class="kom-sidebar-user-profile__avatar">
+                @GetInitials()
+            </div>
+            <div class="sb-stack sb-stack--column" style="gap: 0; flex: 1; min-width: 0;">
+                <span class="kom-sidebar-user-profile__name">@CurrentUser.UserName</span>
+                @if (!string.IsNullOrEmpty(CurrentUser.Email))
+                {
+                    <span class="kom-sidebar-user-profile__email">@CurrentUser.Email</span>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private string GetInitials()
+    {
+        if (string.IsNullOrEmpty(CurrentUser.UserName))
+            return "?";
+            
+        var parts = CurrentUser.UserName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length >= 2)
+        {
+            return $"{parts[0][0]}{parts[1][0]}".ToUpperInvariant();
+        }
+        return CurrentUser.UserName.Length >= 2 
+            ? CurrentUser.UserName[..2].ToUpperInvariant() 
+            : CurrentUser.UserName.ToUpperInvariant();
+    }
+}

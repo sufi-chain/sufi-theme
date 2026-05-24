@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SufiChain.KomTheme/SufiChain.KomTheme.csproj" />
+    <Project Path="src/SufiChain.KomTheme.Blazor/SufiChain.KomTheme.Blazor.csproj" />
+    <Project Path="src/SufiChain.KomTheme.Blazor.Server/SufiChain.KomTheme.Blazor.Server.csproj" />
+    <Project Path="src/SufiChain.KomTheme.Blazor.WebAssembly/SufiChain.KomTheme.Blazor.WebAssembly.csproj" />
+    <Project Path="src/SufiChain.KomTheme.Blazor.WebAssembly.Bundling/SufiChain.KomTheme.Blazor.WebAssembly.Bundling.csproj" />
+  </Folder>
+</Solution>

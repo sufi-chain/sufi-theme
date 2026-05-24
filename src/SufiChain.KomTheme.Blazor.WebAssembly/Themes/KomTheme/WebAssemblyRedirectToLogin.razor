@@ -1,0 +1,13 @@
+@using SufiChain.SufiAbp.UI.Authentication
+@using Microsoft.Extensions.Options
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject NavigationManager Navigation
+@inject IOptions<AuthenticationOptions> AuthenticationOptions
+
+@code {
+    protected override void OnInitialized()
+    {
+        // For WebAssembly, use NavigateToLogin for OIDC redirect flow
+        Navigation.NavigateToLogin(AuthenticationOptions.Value.LoginUrl);
+    }
+}

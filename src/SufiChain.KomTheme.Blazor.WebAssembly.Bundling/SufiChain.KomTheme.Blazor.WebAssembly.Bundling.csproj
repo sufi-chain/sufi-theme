@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>SufiChain.KomTheme.Blazor.WebAssembly.Bundling</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <IsPackable>true</IsPackable>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>SufiChain.KomTheme.Blazor.WebAssembly.Bundling</PackageId>
+    <Description>KomTheme WebAssembly bundling and style contributors for Sufi Platform.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- ABP Core for module system (only Volo.Abp.Core, NOT Volo.Abp.AspNetCore.*) -->
+    <PackageReference Include="SufiChain.SufiAbp.Core" Version="1.0.0-alpha.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- SufiAbp UI Abstractions for bundling interfaces -->
+    <PackageReference Include="SufiChain.SufiAbp.UI.Abstractions" Version="1.0.0-alpha.1.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,28 @@
+@inherits LayoutComponentBase
+
+@* 
+    EmptyLayout - Minimal layout without navigation
+    
+    Uses SufiBlazor theme provider for consistent styling.
+*@
+
+<SbThemeProvider Theme="@_currentTheme" Direction="@_direction">
+    <div style="min-height: 100vh; background-color: var(--sb-color-background);">
+        <SufiAbpPageAlert />
+        @Body
+    </div>
+    @* Global Message/Confirm Dialog Host *@
+    <SufiAbpOverlayHost />
+</SbThemeProvider>
+
+@code {
+    private SbTheme _currentTheme = SbTheme.Light;
+    private SbDirection _direction = SbDirection.Ltr;
+
+    protected override void OnInitialized()
+    {
+        // Detect RTL
+        var culture = System.Globalization.CultureInfo.CurrentUICulture;
+        _direction = culture.TextInfo.IsRightToLeft ? SbDirection.Rtl : SbDirection.Ltr;
+    }
+}

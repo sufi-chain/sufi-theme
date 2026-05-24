@@ -1,0 +1,104 @@
+@using SufiChain.SufiAbp.UI.Authentication
+@inject IMenuManager MenuManager
+@inject NavigationManager NavigationManager
+@inject ICurrentUser CurrentUser
+@inject IJSRuntime JSRuntime
+@inject IOptions<AuthenticationOptions> AuthenticationOptions
+@implements IDisposable
+
+@if (CurrentUser.IsAuthenticated)
+{
+    <SbMenu Open="@_menuOpen" OpenChanged="@OnMenuOpenChanged">
+        <AnchorContent>
+            <SbButton Variant="SbButtonVariant.Ghost" Size="SbSize.Sm" 
+                      OnClick="ToggleMenu"
+                      title="@CurrentUser.UserName">
+                <SbIcon Name="user" Size="SbSize.Md" />
+                @CurrentUser.UserName
+            </SbButton>
+        </AnchorContent>
+        <ChildContent>
+            @if (_userMenu != null)
+            {
+                @foreach (var item in _userMenu.Items)
+                {
+                    <SbMenuItem OnClick="() => NavigateToAsync(item.Url, item.Target)">
+                        @if (!string.IsNullOrEmpty(item.Icon))
+                        {
+                            <SbIcon Name="@item.Icon" />
+                        }
+                        @item.DisplayName
+                    </SbMenuItem>
+                }
+            }
+            <SbMenuItem OnClick="BeginSignOut">
+                <SbIcon Name="log-out" />
+                Logout
+            </SbMenuItem>
+        </ChildContent>
+    </SbMenu>
+}
+else
+{
+    <SbButton Variant="SbButtonVariant.Solid" Size="SbSize.Sm" OnClick="Login" title="Login">
+        <SbIcon Name="log-in" Size="SbSize.Md" />
+        Login
+    </SbButton>
+}
+
+@code {
+    private ApplicationMenu? _userMenu;
+    private bool _menuOpen;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _userMenu = await MenuManager.GetAsync(StandardMenus.User);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnMenuOpenChanged(bool open)
+    {
+        _menuOpen = open;
+    }
+
+    private void ToggleMenu()
+    {
+        _menuOpen = !_menuOpen;
+    }
+
+    private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        _userMenu = await MenuManager.GetAsync(StandardMenus.User);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task NavigateToAsync(string? uri, string? target = null)
+    {
+        if (string.IsNullOrEmpty(uri)) return;
+        
+        if (target == "_blank")
+        {
+            await JSRuntime.InvokeVoidAsync("open", uri, target);
+        }
+        else
+        {
+            NavigationManager.NavigateTo(uri);
+        }
+    }
+
+    private void Login()
+    {
+        NavigationManager.NavigateTo(AuthenticationOptions.Value.LoginUrl, forceLoad: true);
+    }
+
+    private void BeginSignOut()
+    {
+        // For WebAssembly, use the logout endpoint
+        NavigationManager.NavigateToLogout(AuthenticationOptions.Value.LogoutUrl);
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}

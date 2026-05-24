@@ -1,0 +1,45 @@
+@using SufiChain.SufiAbp.UI.Theming
+@inject IThemeSwitchService ThemeSwitchService
+@implements IDisposable
+
+<button class="theme-switch-btn" @onclick="ToggleThemeAsync" title="@TooltipText" type="button">
+    <span class="theme-icon">
+        @if (IsDarkMode)
+        {
+            <SbIcon Name="sun" Size="SbSize.Md" />
+        }
+        else
+        {
+            <SbIcon Name="moon" Size="SbSize.Md" />
+        }
+    </span>
+</button>
+
+@code {
+    private bool IsDarkMode => ThemeSwitchService.IsDarkMode;
+    private string TooltipText => IsDarkMode ? "Switch to light mode" : "Switch to dark mode";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Load stored theme preference
+        await ThemeSwitchService.GetStoredThemeAsync();
+        
+        // Subscribe to theme changes
+        ThemeSwitchService.ThemeChanged += OnThemeChanged;
+    }
+
+    private void OnThemeChanged(ThemeMode mode)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ToggleThemeAsync()
+    {
+        await ThemeSwitchService.ToggleThemeAsync();
+    }
+
+    public void Dispose()
+    {
+        ThemeSwitchService.ThemeChanged -= OnThemeChanged;
+    }
+}

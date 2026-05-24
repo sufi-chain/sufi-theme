@@ -1,0 +1,58 @@
+@*
+    IconRailNavItem - Renders a menu item as an icon-only nav item for the icon rail
+    
+    Features:
+    - Icon only display
+    - Tooltip for text
+    - Active state indication
+    - Click handler for selection
+*@
+
+<button type="button" 
+        class="kom-icon-rail-item @(IsSelected ? "kom-icon-rail-item--active" : "")" 
+        @onclick="HandleClick"
+        title="@MenuItem.DisplayName">
+    @if (!string.IsNullOrEmpty(MenuItem.Icon))
+    {
+        <SbIcon Name="@MenuItem.Icon" Size="SbSize.Md" />
+    }
+    else
+    {
+        <SbIcon Name="circle" Size="SbSize.Md" />
+    }
+    <span class="kom-icon-rail-item__tooltip">@MenuItem.DisplayName</span>
+</button>
+
+@code {
+    /// <summary>
+    /// The menu item to render.
+    /// </summary>
+    [Parameter]
+    public ApplicationMenuItem MenuItem { get; set; } = null!;
+
+    /// <summary>
+    /// Whether this item is currently selected.
+    /// </summary>
+    [Parameter]
+    public bool IsSelected { get; set; }
+
+    /// <summary>
+    /// Click event handler.
+    /// </summary>
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    private async Task HandleClick()
+    {
+        // If the item has children, trigger selection
+        if (MenuItem.Items.Any())
+        {
+            await OnClick.InvokeAsync();
+        }
+        // If it's a leaf item with URL, navigate
+        else if (!string.IsNullOrEmpty(MenuItem.Url))
+        {
+            await OnClick.InvokeAsync();
+        }
+    }
+}

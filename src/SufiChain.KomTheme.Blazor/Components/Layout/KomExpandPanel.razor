@@ -1,0 +1,56 @@
+@namespace SufiChain.KomTheme.Blazor.Components.Layout
+
+@*
+    KomExpandPanel - The expandable secondary sidebar panel
+    
+    Used within KomDualSidebar to show the expanded navigation content:
+    - Organization switcher
+    - Navigation groups with labels
+    - User profile section
+*@
+
+<div class="kom-expand-panel @Class">
+    @if (Header != null)
+    {
+        <div class="kom-expand-panel__header">
+            @Header
+        </div>
+    }
+    
+    <nav class="kom-expand-panel__nav">
+        @ChildContent
+    </nav>
+    
+    @if (Footer != null)
+    {
+        <div class="kom-expand-panel__footer">
+            @Footer
+        </div>
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// Header content (typically organization switcher).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Header { get; set; }
+    
+    /// <summary>
+    /// Navigation content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    
+    /// <summary>
+    /// Footer content (typically user profile).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Footer { get; set; }
+    
+    /// <summary>
+    /// Additional CSS classes.
+    /// </summary>
+    [Parameter]
+    public string? Class { get; set; }
+}

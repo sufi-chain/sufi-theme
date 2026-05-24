@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>SufiChain.KomTheme.Blazor.WebAssembly</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <IsPackable>true</IsPackable>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>SufiChain.KomTheme.Blazor.WebAssembly</PackageId>
+    <Description>KomTheme Blazor WebAssembly components and layouts for Sufi Platform.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="10.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Our shared Blazor theme -->
+    <ProjectReference Include="..\SufiChain.KomTheme.Blazor\SufiChain.KomTheme.Blazor.csproj" />
+    <!-- WebAssembly bundling -->
+    <ProjectReference Include="..\SufiChain.KomTheme.Blazor.WebAssembly.Bundling\SufiChain.KomTheme.Blazor.WebAssembly.Bundling.csproj" />
+    <!-- Framework WebAssembly package -->
+    <PackageReference Include="SufiChain.SufiAbp.UI.Blazor.WebAssembly" Version="1.0.0-alpha.1.0" />
+  </ItemGroup>
+
+</Project>

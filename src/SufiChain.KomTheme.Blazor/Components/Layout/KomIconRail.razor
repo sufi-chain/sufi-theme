@@ -1,0 +1,65 @@
+@namespace SufiChain.KomTheme.Blazor.Components.Layout
+
+@*
+    KomIconRail - A narrow icon-only navigation rail component
+    
+    Part of the dual sidebar layout pattern:
+    - Fixed narrow width (~60px)
+    - Icon-only navigation items
+    - Logo slot at top
+    - User avatar slot at bottom
+    - Dark theme support
+    - Hover state integration with parent dual sidebar
+*@
+
+<div class="kom-icon-rail @(Dark ? "kom-icon-rail--dark" : "") @Class">
+    @if (Header != null)
+    {
+        <div class="kom-icon-rail__header">
+            @Header
+        </div>
+    }
+    
+    <nav class="kom-icon-rail__nav">
+        @ChildContent
+    </nav>
+    
+    @if (Footer != null)
+    {
+        <div class="kom-icon-rail__footer">
+            @Footer
+        </div>
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// Header content (typically logo).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Header { get; set; }
+    
+    /// <summary>
+    /// Navigation content (icon-only nav items).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    
+    /// <summary>
+    /// Footer content (typically user avatar).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Footer { get; set; }
+    
+    /// <summary>
+    /// Whether to use dark theme styling.
+    /// </summary>
+    [Parameter]
+    public bool Dark { get; set; } = true;
+    
+    /// <summary>
+    /// Additional CSS classes.
+    /// </summary>
+    [Parameter]
+    public string? Class { get; set; }
+}

@@ -1,0 +1,55 @@
+@namespace SufiChain.KomTheme.Blazor.Components.Layout
+@using SufiChain.SufiBlazor.Components.Common
+@*
+    MobileBottomMenu - Fixed bottom bar on mobile with:
+    - Left: optional shortcut slots (e.g. 2 items)
+    - Center: large circular button to open main menu
+    - Right: optional shortcut slots (e.g. 2 items)
+    Reduces header clutter and makes the menu action highly visible.
+*@
+
+<nav class="kom-mobile-bottom-menu @Class" aria-label="Mobile navigation">
+    <div class="kom-mobile-bottom-menu__side kom-mobile-bottom-menu__side--left">
+        @LeftShortcuts
+    </div>
+    <div class="kom-mobile-bottom-menu__center">
+        <button type="button"
+                class="kom-mobile-bottom-menu__menu-btn"
+                @onclick="OnOpenMenu"
+                aria-label="@OpenMenuAriaLabel">
+            <SbIcon Name="menu" Size="SbSize.Xl" />
+        </button>
+    </div>
+    <div class="kom-mobile-bottom-menu__side kom-mobile-bottom-menu__side--right">
+        @RightShortcuts
+    </div>
+</nav>
+
+@code {
+    /// <summary>
+    /// Fired when the center "open menu" button is clicked.
+    /// </summary>
+    [Parameter]
+    public EventCallback OnOpenMenu { get; set; }
+
+    /// <summary>
+    /// Aria-label for the center menu button. Defaults to "Open main menu".
+    /// </summary>
+    [Parameter]
+    public string? OpenMenuAriaLabel { get; set; } = "Open main menu";
+
+    /// <summary>
+    /// Content for the left side (e.g. 2 shortcut buttons).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? LeftShortcuts { get; set; }
+
+    /// <summary>
+    /// Content for the right side (e.g. 2 shortcut buttons).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? RightShortcuts { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+}

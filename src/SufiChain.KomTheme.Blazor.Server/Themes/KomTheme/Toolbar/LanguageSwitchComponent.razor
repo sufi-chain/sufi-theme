@@ -1,0 +1,82 @@
+@inject ILanguageProvider LanguageProvider
+@inject NavigationManager NavigationManager
+@inject ICookieService CookieService
+@inject IJSRuntime JSRuntime
+
+@if (_languages != null && _languages.Count > 1)
+{
+    <SbMenu Open="@_menuOpen" OpenChanged="@OnMenuOpenChanged" Class="language-menu">
+        <AnchorContent>
+            <SbButton Variant="SbButtonVariant.Ghost" Size="SbSize.Sm" 
+                      OnClick="ToggleMenu"
+                      title="@(_currentLanguage != null ? $"Language: {_currentLanguage.DisplayName}" : "Language")">
+                <SbIcon Name="globe" Size="SbSize.Md" />
+            </SbButton>
+        </AnchorContent>
+        <ChildContent>
+            @foreach (var language in _languages)
+            {
+                <SbMenuItem OnClick="() => ChangeLanguageAsync(language)" 
+                            Class="@(language.CultureName == _currentLanguage?.CultureName ? "language-item--active" : "")">
+                    <span class="language-code">@GetLanguageCode(language.CultureName)</span>
+                    <span class="language-name">@language.DisplayName</span>
+                    @if (language.CultureName == _currentLanguage?.CultureName)
+                    {
+                        <SbIcon Name="check" Size="SbSize.Sm" Class="language-check" />
+                    }
+                </SbMenuItem>
+            }
+        </ChildContent>
+    </SbMenu>
+}
+
+@code {
+    private IReadOnlyList<LanguageInfo>? _languages;
+    private LanguageInfo? _currentLanguage;
+    private bool _menuOpen;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _languages = await LanguageProvider.GetLanguagesAsync();
+        var cultureName = CultureInfo.CurrentCulture.Name;
+        var uiCultureName = CultureInfo.CurrentUICulture.Name;
+        
+        // Find language matching current culture
+        _currentLanguage = _languages.FirstOrDefault(l => 
+            l.CultureName == cultureName || l.UiCultureName == uiCultureName) 
+            ?? _languages.FirstOrDefault();
+    }
+
+    private void OnMenuOpenChanged(bool open)
+    {
+        _menuOpen = open;
+    }
+
+    private void ToggleMenu()
+    {
+        _menuOpen = !_menuOpen;
+    }
+
+    private async Task ChangeLanguageAsync(LanguageInfo language)
+    {
+        // Set culture cookie for server-side rendering
+        await CookieService.SetAsync(
+            ".AspNetCore.Culture",
+            $"c={language.CultureName}|uic={language.UiCultureName}",
+            new CookieOptions { Path = "/", MaxAge = (int)TimeSpan.FromDays(365).TotalSeconds }
+        );
+
+        // Reload page to apply changes
+        await JSRuntime.InvokeVoidAsync("location.reload");
+    }
+
+    private static string GetLanguageCode(string? cultureName)
+    {
+        if (string.IsNullOrEmpty(cultureName))
+            return "??";
+
+        // Get base language code (e.g., "EN" from "en-US")
+        var langCode = cultureName.Split('-')[0].ToUpperInvariant();
+        return langCode;
+    }
+}

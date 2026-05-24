@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <Company>Sufi Chain Intelligent Solutions</Company>
+    <Authors>SufiChain Team</Authors>
+    <Product>KomTheme</Product>
+    <PackageProjectUrl>https://sabp.ir</PackageProjectUrl>
+    <RepositoryUrl>https://git.sabp.ir/sufi-chain/kom-theme.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon Condition="Exists('$(MSBuildThisFileDirectory)icon.png')">icon.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)icon.png')">
+    <None Include="$(MSBuildThisFileDirectory)icon.png" Pack="true" PackagePath="\" Visible="false" />
+  </ItemGroup>
+</Project>
