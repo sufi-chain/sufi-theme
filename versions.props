@@ -1,0 +1,11 @@
+<Project>
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <SufiAbpVersion>1.0.0-alpha.4.0</SufiAbpVersion>
+    <MicrosoftAspNetCoreComponentsAuthorizationVersion>10.0.2</MicrosoftAspNetCoreComponentsAuthorizationVersion>
+    <MicrosoftAspNetCoreComponentsWebVersion>10.0.2</MicrosoftAspNetCoreComponentsWebVersion>
+    <MicrosoftAspNetCoreComponentsWebAssemblyVersion>10.0.2</MicrosoftAspNetCoreComponentsWebAssemblyVersion>
+  </PropertyGroup>
+
+</Project>

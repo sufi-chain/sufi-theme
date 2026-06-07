@@ -16,11 +16,6 @@
     <Description>KomTheme Blazor layouts and components for Sufi Platform.</Description>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <SufiAbpRepoRoot>$(MSBuildThisFileDirectory)..\..\..\..\sufi-abp\</SufiAbpRepoRoot>
-    <UseSufiAbpProjectReferences Condition="'$(UseSufiAbpProjectReferences)' == '' and Exists('$(SufiAbpRepoRoot)framework\SufiChain.SufiAbp.UI.Blazor\SufiChain.SufiAbp.UI.Blazor.csproj')">true</UseSufiAbpProjectReferences>
-  </PropertyGroup>
-
   <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
     <ProjectReference Include="$(SufiAbpRepoRoot)framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj" />
     <ProjectReference Include="$(SufiAbpRepoRoot)framework\SufiChain.SufiAbp.Security\SufiChain.SufiAbp.Security.csproj" />
@@ -28,14 +23,14 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' != 'true'">
-    <PackageReference Include="SufiChain.SufiAbp.Core" Version="1.0.0-alpha.1.0" />
-    <PackageReference Include="SufiChain.SufiAbp.Security" Version="1.0.0-alpha.1.0" />
-    <PackageReference Include="SufiChain.SufiAbp.UI.Blazor" Version="1.0.0-alpha.1.0" />
+    <PackageReference Include="SufiChain.SufiAbp.Core" Version="$(SufiAbpVersion)" />
+    <PackageReference Include="SufiChain.SufiAbp.Security" Version="$(SufiAbpVersion)" />
+    <PackageReference Include="SufiChain.SufiAbp.UI.Blazor" Version="$(SufiAbpVersion)" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="10.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="$(MicrosoftAspNetCoreComponentsWebVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="$(MicrosoftAspNetCoreComponentsAuthorizationVersion)" />
   </ItemGroup>
 
   <ItemGroup>

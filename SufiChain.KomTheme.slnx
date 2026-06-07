@@ -1,6 +1,8 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path=".gitea/workflows/release-nuget.yml" />
+    <File Path="Directory.Build.props" />
+    <File Path="versions.props" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/SufiChain.KomTheme.Blazor.Server/SufiChain.KomTheme.Blazor.Server.csproj" />

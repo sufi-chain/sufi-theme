@@ -14,12 +14,12 @@
     <Description>Core KomTheme package - options, layouts, and style definitions for Sufi Platform.</Description>
   </PropertyGroup>
 
-  <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Abstractions\SufiChain.SufiAbp.UI.Abstractions.csproj')">
-    <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Abstractions\SufiChain.SufiAbp.UI.Abstractions.csproj" />
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
+    <ProjectReference Include="$(SufiAbpRepoRoot)framework\SufiChain.SufiAbp.UI.Abstractions\SufiChain.SufiAbp.UI.Abstractions.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="!Exists('$(MSBuildThisFileDirectory)..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Abstractions\SufiChain.SufiAbp.UI.Abstractions.csproj')">
-    <PackageReference Include="SufiChain.SufiAbp.UI.Abstractions" Version="1.0.0-alpha.1.0" />
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' != 'true'">
+    <PackageReference Include="SufiChain.SufiAbp.UI.Abstractions" Version="$(SufiAbpVersion)" />
   </ItemGroup>
 
 </Project>

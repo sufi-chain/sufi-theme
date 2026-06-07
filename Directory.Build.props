@@ -1,4 +1,9 @@
 <Project>
+  <Import Project="versions.props" />
+  <PropertyGroup>
+    <UseSufiAbpProjectReferences>false</UseSufiAbpProjectReferences>
+  </PropertyGroup>
+
   <PropertyGroup>
     <Company>Sufi Chain Intelligent Solutions</Company>
     <Authors>SufiChain Team</Authors>
