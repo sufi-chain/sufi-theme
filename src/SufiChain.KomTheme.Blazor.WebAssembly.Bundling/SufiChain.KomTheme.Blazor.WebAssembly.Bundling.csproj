@@ -16,13 +16,13 @@
 
   <ItemGroup>
     <!-- ABP Core for module system (only Volo.Abp.Core, NOT Volo.Abp.AspNetCore.*) -->
-    <ProjectReference Include="$(SufiAbpRepoRoot)framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj" Condition="'$(UseSufiAbpProjectReferences)' == 'true'" />
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj" Condition="'$(UseSufiAbpProjectReferences)' == 'true'" />
     <PackageReference Include="SufiChain.SufiAbp.Core" Version="$(SufiAbpVersion)" Condition="'$(UseSufiAbpProjectReferences)' != 'true'" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- SufiAbp UI Abstractions for bundling interfaces -->
-    <ProjectReference Include="$(SufiAbpRepoRoot)framework\SufiChain.SufiAbp.UI.Abstractions\SufiChain.SufiAbp.UI.Abstractions.csproj" Condition="'$(UseSufiAbpProjectReferences)' == 'true'" />
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Abstractions\SufiChain.SufiAbp.UI.Abstractions.csproj" Condition="'$(UseSufiAbpProjectReferences)' == 'true'" />
     <PackageReference Include="SufiChain.SufiAbp.UI.Abstractions" Version="$(SufiAbpVersion)" Condition="'$(UseSufiAbpProjectReferences)' != 'true'" />
   </ItemGroup>
 

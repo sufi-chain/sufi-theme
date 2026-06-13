@@ -18,14 +18,18 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="$(MicrosoftAspNetCoreComponentsWebAssemblyVersion)" />
   </ItemGroup>
 
+  <!--<ItemGroup>
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Blazor.WebAssembly\SufiChain.SufiAbp.UI.Blazor.WebAssembly.csproj"  />
+  </ItemGroup>-->
+
   <ItemGroup>
-    <!-- Our shared Blazor theme -->
+    <PackageReference Include="SufiChain.SufiAbp.UI.Blazor.WebAssembly" Version="$(SufiAbpVersion)"/>
+  </ItemGroup>
+
+
+  <ItemGroup>
     <ProjectReference Include="..\SufiChain.KomTheme.Blazor\SufiChain.KomTheme.Blazor.csproj" />
-    <!-- WebAssembly bundling -->
     <ProjectReference Include="..\SufiChain.KomTheme.Blazor.WebAssembly.Bundling\SufiChain.KomTheme.Blazor.WebAssembly.Bundling.csproj" />
-    <!-- Framework WebAssembly package -->
-    <ProjectReference Include="$(SufiAbpRepoRoot)framework\SufiChain.SufiAbp.UI.Blazor.WebAssembly\SufiChain.SufiAbp.UI.Blazor.WebAssembly.csproj" Condition="'$(UseSufiAbpProjectReferences)' == 'true'" />
-    <PackageReference Include="SufiChain.SufiAbp.UI.Blazor.WebAssembly" Version="$(SufiAbpVersion)" Condition="'$(UseSufiAbpProjectReferences)' != 'true'" />
   </ItemGroup>
 
 </Project>
