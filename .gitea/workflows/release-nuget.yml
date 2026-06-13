@@ -35,6 +35,7 @@ env:
   NUGET_ORG_SOURCE_URL: https://api.nuget.org/v3/index.json
   NUGET_PUSH_PARALLELISM: 4
   PACKAGE_OUTPUT: ./artifacts/nuget
+  PACKAGE_PROJECTS: src/SufiChain.KomTheme/SufiChain.KomTheme.csproj src/SufiChain.KomTheme.Blazor/SufiChain.KomTheme.Blazor.csproj src/SufiChain.KomTheme.Blazor.Server/SufiChain.KomTheme.Blazor.Server.csproj src/SufiChain.KomTheme.Blazor.WebAssembly.Bundling/SufiChain.KomTheme.Blazor.WebAssembly.Bundling.csproj src/SufiChain.KomTheme.Blazor.WebAssembly/SufiChain.KomTheme.Blazor.WebAssembly.csproj
   ROOT_SLNX: SufiChain.KomTheme.slnx
   WORKSPACE_DIR: ${{ github.workspace }}
 
@@ -157,11 +158,14 @@ jobs:
           workspace="${WORKSPACE_DIR:-${GITHUB_WORKSPACE:-$PWD}}"
           cd "$workspace"
           echo "Using workspace: $workspace"
-          package_dir="${workspace}/${PACKAGE_OUTPUT#./}"
+          version_package_output="${PACKAGE_OUTPUT%/}/${VERSION}"
+          package_dir="${workspace}/${version_package_output#./}"
+          rm -rf "$package_dir"
+          mkdir -p "$package_dir"
           container_id="$(docker run -d \
-            -v "${workspace}:/src" \
             -w /src \
             -e VERSION \
+            -e PACKAGE_OUTPUT="$version_package_output" \
             -e ROOT_SLNX \
             -e PACKAGE_PROJECTS \
             -e DOTNET_NOLOGO \
@@ -170,41 +174,66 @@ jobs:
             "$SDK_IMAGE" \
             sleep 3600)"
           trap 'docker rm -f "$container_id" >/dev/null 2>&1 || true' EXIT INT TERM
+          docker cp "${workspace}/." "${container_id}:/src/"
           docker exec "$container_id" sh -c '
             set -eu
-            rm -rf /src/artifacts/nuget
-            mkdir -p /src/artifacts/nuget
-            dotnet restore "$ROOT_SLNX" \
-              --verbosity minimal \
-              -p:NuGetAudit=false
-            dotnet build "$ROOT_SLNX" \
-              --configuration Release \
-              --no-restore \
-              --verbosity minimal \
-              -m \
-              -p:PackageVersion="$VERSION" \
-              -p:ContinuousIntegrationBuild=true \
-              -p:BuildInParallel=true \
-              -p:PackageOutputPath="/src/artifacts/nuget" \
-              -p:GeneratePackageOnBuild=true
+            package_output="/src/${PACKAGE_OUTPUT#./}"
+            rm -rf "$package_output"
+            mkdir -p "$package_output"
+            echo "Package output: $package_output"
+            for project in $PACKAGE_PROJECTS; do
+              if [ ! -f "$project" ]; then
+                echo "Package project does not exist: $project" >&2
+                echo "Available projects:" >&2
+                find /src -path "*/bin" -prune -o -path "*/obj" -prune -o -name "*.csproj" -print | sort >&2
+                exit 1
+              fi
+              echo "Packing $project"
+              dotnet restore "$project" \
+                --verbosity minimal \
+                -p:NuGetAudit=false
+              dotnet build "$project" \
+                --configuration Release \
+                --no-restore \
+                --verbosity minimal \
+                -m \
+                -p:PackageVersion="$VERSION" \
+                -p:ContinuousIntegrationBuild=true \
+                -p:BuildInParallel=true \
+                -p:PackageOutputPath="$package_output" \
+                -p:GeneratePackageOnBuild=true
+            done
+            stale_count="$(find "$package_output" -type f -name "*.nupkg" ! -name "*.symbols.nupkg" ! -name "*.${VERSION}.nupkg" | wc -l | tr -d " ")"
+            if [ "$stale_count" != "0" ]; then
+              echo "Pack produced package(s) that do not match resolved version $VERSION:" >&2
+              find "$package_output" -type f -name "*.nupkg" ! -name "*.symbols.nupkg" ! -name "*.${VERSION}.nupkg" | sort >&2
+              exit 1
+            fi
           '
           rm -rf "$package_dir"
           mkdir -p "$package_dir"
-          docker cp "${container_id}:/src/artifacts/nuget/." "$package_dir/"
+          docker cp "${container_id}:/src/${version_package_output#./}/." "$package_dir/"
           docker rm -f "$container_id"
           trap - EXIT INT TERM
-          package_count="$(find "$package_dir" -type f -name '*.nupkg' ! -name '*.symbols.nupkg' | wc -l | tr -d ' ')"
+          stale_packages="$(find "$package_dir" -type f -name '*.nupkg' ! -name '*.symbols.nupkg' ! -name "*.${VERSION}.nupkg" | sort || true)"
+          if [ -n "$stale_packages" ]; then
+            echo "Removing package(s) that do not match resolved version $VERSION:" >&2
+            printf '%s\n' "$stale_packages" >&2
+            find "$package_dir" -type f -name '*.nupkg' ! -name '*.symbols.nupkg' ! -name "*.${VERSION}.nupkg" -exec rm -f {} +
+          fi
+          package_count="$(find "$package_dir" -type f -name "*.${VERSION}.nupkg" ! -name '*.symbols.nupkg' | wc -l | tr -d ' ')"
           if [ "$package_count" = "0" ]; then
-            echo "No NuGet packages were produced in $package_dir." >&2
+            echo "No NuGet packages for resolved version $VERSION were produced in $package_dir." >&2
             exit 1
           fi
-          echo "Packed $package_count package(s) into $package_dir."
+          echo "Packed $package_count package(s) for version $VERSION into $package_dir."
 
       - name: Push packages to BaGet
         if: ${{ gitea.event_name == 'release' || inputs.push_to_baget == true }}
         shell: sh
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
           set -eu
           if [ -z "${NUGET_API_KEY:-}" ]; then
@@ -213,18 +242,30 @@ jobs:
           fi
           workspace="${WORKSPACE_DIR:-${GITHUB_WORKSPACE:-$PWD}}"
           cd "$workspace"
-          docker run --rm \
-            -v "${workspace}:/src" \
+          container_id="$(docker run -d \
             -w /src \
             -e NUGET_API_KEY \
+            -e VERSION \
             -e BAGET_SOURCE_URL \
             -e NUGET_PUSH_PARALLELISM \
-            -e PACKAGE_OUTPUT \
+            -e PACKAGE_OUTPUT="${PACKAGE_OUTPUT%/}/${VERSION}" \
             "$SDK_IMAGE" \
+            sleep 3600)"
+          trap 'docker rm -f "$container_id" >/dev/null 2>&1 || true' EXIT INT TERM
+          docker exec "$container_id" mkdir -p "/src/${PACKAGE_OUTPUT#./}/${VERSION}"
+          docker cp "${workspace}/${PACKAGE_OUTPUT#./}/${VERSION}/." "${container_id}:/src/${PACKAGE_OUTPUT#./}/${VERSION}/"
+          docker exec "$container_id" \
             sh -c '
               set -eu
               package_dir="/src/${PACKAGE_OUTPUT#./}"
-              find "$package_dir" -type f -name "*.nupkg" ! -name "*.symbols.nupkg" -print0 | \
+              find "$package_dir" -type f -name "*.nupkg" ! -name "*.symbols.nupkg" ! -name "*.${VERSION}.nupkg" -exec rm -f {} +
+              package_count="$(find "$package_dir" -type f -name "*.${VERSION}.nupkg" ! -name "*.symbols.nupkg" | wc -l | tr -d " ")"
+              if [ "$package_count" = "0" ]; then
+                echo "No NuGet packages found for resolved version $VERSION in $package_dir." >&2
+                exit 1
+              fi
+              echo "Pushing $package_count package(s) for version $VERSION to BaGet."
+              find "$package_dir" -type f -name "*.${VERSION}.nupkg" ! -name "*.symbols.nupkg" -print0 | \
                 xargs -0 -n 1 -P "$NUGET_PUSH_PARALLELISM" sh -c '\''
                   dotnet nuget push "$1" \
                     --source "$BAGET_SOURCE_URL" \
@@ -232,12 +273,15 @@ jobs:
                     --skip-duplicate
                 '\'' sh
             '
+          docker rm -f "$container_id"
+          trap - EXIT INT TERM
 
       - name: Push packages to nuget.org
         if: ${{ gitea.event_name == 'workflow_dispatch' && inputs.push_to_nuget_org == true && inputs.package_version != '' }}
         shell: sh
         env:
           NUGET_ORG_API_KEY: ${{ secrets.NUGET_ORG_API_KEY }}
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
           set -eu
           if [ -z "${NUGET_ORG_API_KEY:-}" ]; then
@@ -246,18 +290,30 @@ jobs:
           fi
           workspace="${WORKSPACE_DIR:-${GITHUB_WORKSPACE:-$PWD}}"
           cd "$workspace"
-          docker run --rm \
-            -v "${workspace}:/src" \
+          container_id="$(docker run -d \
             -w /src \
             -e NUGET_ORG_API_KEY \
+            -e VERSION \
             -e NUGET_ORG_SOURCE_URL \
             -e NUGET_PUSH_PARALLELISM \
-            -e PACKAGE_OUTPUT \
+            -e PACKAGE_OUTPUT="${PACKAGE_OUTPUT%/}/${VERSION}" \
             "$SDK_IMAGE" \
+            sleep 3600)"
+          trap 'docker rm -f "$container_id" >/dev/null 2>&1 || true' EXIT INT TERM
+          docker exec "$container_id" mkdir -p "/src/${PACKAGE_OUTPUT#./}/${VERSION}"
+          docker cp "${workspace}/${PACKAGE_OUTPUT#./}/${VERSION}/." "${container_id}:/src/${PACKAGE_OUTPUT#./}/${VERSION}/"
+          docker exec "$container_id" \
             sh -c '
               set -eu
               package_dir="/src/${PACKAGE_OUTPUT#./}"
-              find "$package_dir" -type f -name "*.nupkg" ! -name "*.symbols.nupkg" -print0 | \
+              find "$package_dir" -type f -name "*.nupkg" ! -name "*.symbols.nupkg" ! -name "*.${VERSION}.nupkg" -exec rm -f {} +
+              package_count="$(find "$package_dir" -type f -name "*.${VERSION}.nupkg" ! -name "*.symbols.nupkg" | wc -l | tr -d " ")"
+              if [ "$package_count" = "0" ]; then
+                echo "No NuGet packages found for resolved version $VERSION in $package_dir." >&2
+                exit 1
+              fi
+              echo "Pushing $package_count package(s) for version $VERSION to nuget.org."
+              find "$package_dir" -type f -name "*.${VERSION}.nupkg" ! -name "*.symbols.nupkg" -print0 | \
                 xargs -0 -n 1 -P "$NUGET_PUSH_PARALLELISM" sh -c '\''
                   dotnet nuget push "$1" \
                     --source "$NUGET_ORG_SOURCE_URL" \
@@ -265,3 +321,5 @@ jobs:
                     --skip-duplicate
                 '\'' sh
             '
+          docker rm -f "$container_id"
+          trap - EXIT INT TERM
