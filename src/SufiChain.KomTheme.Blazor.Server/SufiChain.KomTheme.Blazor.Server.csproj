@@ -14,17 +14,17 @@
     <Description>KomTheme Blazor Server components and layouts for Sufi Platform.</Description>
   </PropertyGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <PackageReference Include="SufiChain.SufiAbp.Core" Version="$(SufiAbpVersion)" />
     <PackageReference Include="SufiChain.SufiAbp.Security" Version="$(SufiAbpVersion)" />
     <PackageReference Include="SufiChain.SufiAbp.UI" Version="$(SufiAbpVersion)" />
     <PackageReference Include="SufiChain.SufiAbp.MultiTenancy" Version="$(SufiAbpVersion)" />
     <PackageReference Include="SufiChain.SufiAbp.Features" Version="$(SufiAbpVersion)" />
     <PackageReference Include="SufiChain.SufiAbp.UI.Blazor.Server" Version="$(SufiAbpVersion)" />
-  </ItemGroup>
+  </ItemGroup>-->
   
 
-  <!--<ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
     <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj" />
     <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.Security\SufiChain.SufiAbp.Security.csproj" />
     <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI\SufiChain.SufiAbp.UI.csproj" />
@@ -40,7 +40,7 @@
     <PackageReference Include="SufiChain.SufiAbp.MultiTenancy" Version="$(SufiAbpVersion)" />
     <PackageReference Include="SufiChain.SufiAbp.Features" Version="$(SufiAbpVersion)" />
     <PackageReference Include="SufiChain.SufiAbp.UI.Blazor.Server" Version="$(SufiAbpVersion)" />
-  </ItemGroup>-->
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SufiChain.KomTheme.Blazor\SufiChain.KomTheme.Blazor.csproj" />

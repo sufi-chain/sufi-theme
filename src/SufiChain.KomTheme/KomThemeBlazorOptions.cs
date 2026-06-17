@@ -19,6 +19,31 @@ public class MenuItemInfo
 }
 
 /// <summary>
+/// Represents a host-provided shortcut rendered in the mobile bottom menu.
+/// </summary>
+public class MobileMenuShortcut
+{
+    public string Name { get; }
+
+    public string DisplayName { get; }
+
+    public string Url { get; }
+
+    public string Icon { get; }
+
+    public int Order { get; set; }
+
+    public MobileMenuShortcut(string name, string displayName, string url, string icon, int order = 0)
+    {
+        Name = name ?? throw new ArgumentNullException(nameof(name));
+        DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName));
+        Url = url ?? throw new ArgumentNullException(nameof(url));
+        Icon = icon ?? throw new ArgumentNullException(nameof(icon));
+        Order = order;
+    }
+}
+
+/// <summary>
 /// Blazor-specific options for the KomTheme.
 /// Configures the layout type and mobile menu behavior.
 /// </summary>
@@ -118,4 +143,10 @@ public class KomThemeBlazorOptions
     /// Only applies to DualSidebar layout. Defaults to true.
     /// </summary>
     public bool ExpandOnHover { get; set; } = true;
+
+    /// <summary>
+    /// Gets host-provided shortcuts for the mobile bottom menu.
+    /// Layouts render only these explicit shortcuts and never add hardcoded items.
+    /// </summary>
+    public List<MobileMenuShortcut> MobileShortcuts { get; } = new();
 }

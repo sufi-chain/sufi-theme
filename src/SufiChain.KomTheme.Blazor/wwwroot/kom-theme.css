@@ -2076,7 +2076,7 @@ body:has(.kom-app-shell--dual-sidebar) {
 }
 
 /* ============================================
-   SpErrorPage – formal HTTP error pages (404, 403, 500)
+   SufiAbpErrorPage – formal HTTP error pages (404, 403, 500)
    ============================================
    Centered card with icon, title, message, actions.
    Uses same design language as error modal.

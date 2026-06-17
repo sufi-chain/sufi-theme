@@ -15,18 +15,18 @@
   </PropertyGroup>
 
 
-  <ItemGroup >
+  <!--<ItemGroup >
     <PackageReference Include="SufiChain.SufiAbp.UI.Abstractions" Version="$(SufiAbpVersion)" />
-  </ItemGroup>
+  </ItemGroup>-->
 
 
-  <!--<ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
     <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Abstractions\SufiChain.SufiAbp.UI.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' != 'true'">
     <PackageReference Include="SufiChain.SufiAbp.UI.Abstractions" Version="$(SufiAbpVersion)" />
-  </ItemGroup>-->
+  </ItemGroup>
 
 
 

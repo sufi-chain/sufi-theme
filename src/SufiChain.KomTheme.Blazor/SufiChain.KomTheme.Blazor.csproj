@@ -17,13 +17,13 @@
   </PropertyGroup>
 
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <PackageReference Include="SufiChain.SufiAbp.Core" Version="$(SufiAbpVersion)" />
     <PackageReference Include="SufiChain.SufiAbp.Security" Version="$(SufiAbpVersion)" />
     <PackageReference Include="SufiChain.SufiAbp.UI.Blazor" Version="$(SufiAbpVersion)" />
-  </ItemGroup>
+  </ItemGroup>-->
 
-  <!--<ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
     <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj" />
     <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.Security\SufiChain.SufiAbp.Security.csproj" />
     <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Blazor\SufiChain.SufiAbp.UI.Blazor.csproj" />
@@ -33,7 +33,7 @@
     <PackageReference Include="SufiChain.SufiAbp.Core" Version="$(SufiAbpVersion)" />
     <PackageReference Include="SufiChain.SufiAbp.Security" Version="$(SufiAbpVersion)" />
     <PackageReference Include="SufiChain.SufiAbp.UI.Blazor" Version="$(SufiAbpVersion)" />
-  </ItemGroup>-->
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="$(MicrosoftAspNetCoreComponentsWebVersion)" />
@@ -42,6 +42,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SufiChain.KomTheme\SufiChain.KomTheme.csproj" />
+
 
   </ItemGroup>
 

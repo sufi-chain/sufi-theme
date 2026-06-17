@@ -1,7 +1,8 @@
 <Project>
   <Import Project="versions.props" />
   <PropertyGroup>
-    <UseSufiAbpProjectReferences>false</UseSufiAbpProjectReferences>
+    <UseSufiAbpProjectReferences Condition="'$(UseSufiAbpProjectReferences)' == '' And Exists('$(MSBuildThisFileDirectory)..\..\sufi-abp\framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj')">true</UseSufiAbpProjectReferences>
+    <UseSufiAbpProjectReferences Condition="'$(UseSufiAbpProjectReferences)' == ''">false</UseSufiAbpProjectReferences>
   </PropertyGroup>
 
   <PropertyGroup>

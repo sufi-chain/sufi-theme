@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
@@ -14,16 +14,23 @@
     <Description>KomTheme WebAssembly bundling and style contributors for Sufi Platform.</Description>
   </PropertyGroup>
 
-  <ItemGroup>
-    <!-- ABP Core for module system (only Volo.Abp.Core, NOT Volo.Abp.AspNetCore.*) -->
-    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj" Condition="'$(UseSufiAbpProjectReferences)' == 'true'" />
-    <PackageReference Include="SufiChain.SufiAbp.Core" Version="$(SufiAbpVersion)" Condition="'$(UseSufiAbpProjectReferences)' != 'true'" />
+
+  
+  <!--<ItemGroup>
+      <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Abstractions\SufiChain.SufiAbp.UI.Abstractions.csproj" />
+  </ItemGroup>-->
+
+
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Abstractions\SufiChain.SufiAbp.UI.Abstractions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <!-- SufiAbp UI Abstractions for bundling interfaces -->
-    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Abstractions\SufiChain.SufiAbp.UI.Abstractions.csproj" Condition="'$(UseSufiAbpProjectReferences)' == 'true'" />
-    <PackageReference Include="SufiChain.SufiAbp.UI.Abstractions" Version="$(SufiAbpVersion)" Condition="'$(UseSufiAbpProjectReferences)' != 'true'" />
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' != 'true'">
+    <PackageReference Include="SufiChain.SufiAbp.Core" Version="$(SufiAbpVersion)"/>
+    <PackageReference Include="SufiChain.SufiAbp.UI.Abstractions" Version="$(SufiAbpVersion)"/>
   </ItemGroup>
+
 
 </Project>

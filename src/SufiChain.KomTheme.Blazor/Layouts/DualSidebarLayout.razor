@@ -170,20 +170,20 @@
     {
         <MobileBottomMenu OnOpenMenu="ToggleMobileSidebar" OpenMenuAriaLabel="@L["Menu"].Value">
             <LeftShortcuts>
-                <a href="/" class="kom-mobile-bottom-menu__shortcut" aria-label="@L["Home"].Value">
-                    <SbIcon Name="home" Size="SbSize.Lg" />
-                </a>
-                <a href="/" class="kom-mobile-bottom-menu__shortcut" aria-label="@L["Home"].Value">
-                    <SbIcon Name="home" Size="SbSize.Lg" />
-                </a>
+                @foreach (var shortcut in GetMobileShortcuts().Take(2))
+                {
+                    <a href="@shortcut.Url" class="kom-mobile-bottom-menu__shortcut" aria-label="@shortcut.DisplayName">
+                        <SbIcon Name="@shortcut.Icon" Size="SbSize.Lg" />
+                    </a>
+                }
             </LeftShortcuts>
             <RightShortcuts>
-                <a href="/" class="kom-mobile-bottom-menu__shortcut" aria-label="@L["Home"].Value">
-                    <SbIcon Name="home" Size="SbSize.Lg" />
-                </a>
-                <a href="/" class="kom-mobile-bottom-menu__shortcut" aria-label="@L["Home"].Value">
-                    <SbIcon Name="home" Size="SbSize.Lg" />
-                </a>
+                @foreach (var shortcut in GetMobileShortcuts().Skip(2).Take(2))
+                {
+                    <a href="@shortcut.Url" class="kom-mobile-bottom-menu__shortcut" aria-label="@shortcut.DisplayName">
+                        <SbIcon Name="@shortcut.Icon" Size="SbSize.Lg" />
+                    </a>
+                }
             </RightShortcuts>
         </MobileBottomMenu>
         @* Mobile: top drawer for Page Actions (SufiAbpPageToolbar content) *@
@@ -411,6 +411,14 @@
     private void ToggleMobileSidebar()
     {
         _mobileSidebarOpen = !_mobileSidebarOpen;
+    }
+
+    private IReadOnlyList<MobileMenuShortcut> GetMobileShortcuts()
+    {
+        return BlazorOptions.Value.MobileShortcuts
+            .OrderBy(x => x.Order)
+            .Take(4)
+            .ToList();
     }
 
     private void OpenMobileActionsDrawer()
