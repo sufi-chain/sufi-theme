@@ -16,6 +16,12 @@
     <Description>KomTheme Blazor layouts and components for Sufi Platform.</Description>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+  </PropertyGroup>
+
 
   <!--<ItemGroup>
     <PackageReference Include="SufiChain.SufiAbp.Core" Version="$(SufiAbpVersion)" />
@@ -44,6 +50,10 @@
     <ProjectReference Include="..\SufiChain.KomTheme\SufiChain.KomTheme.csproj" />
 
 
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\**\*.*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Pack="true" PackagePath="staticwebassets\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>
