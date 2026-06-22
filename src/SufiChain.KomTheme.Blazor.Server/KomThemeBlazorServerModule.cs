@@ -80,6 +80,11 @@ public class KomThemeBlazorServerModule : AbpModule
                 "/_content/SufiChain.SufiBlazor/vendor/quill.snow.css");
             options.ScriptBundles.Add(BlazorKomThemeBundles.SufiBlazor.Quill, 
                 "/_content/SufiChain.SufiBlazor/vendor/quill.min.js");
+
+            options.StyleBundles.Add(BlazorKomThemeBundles.SufiBlazor.MarkdownEditor,
+                "/_content/SufiChain.SufiBlazor/vendor/easymde/easymde.min.css");
+            options.ScriptBundles.Add(BlazorKomThemeBundles.SufiBlazor.MarkdownEditor,
+                "/_content/SufiChain.SufiBlazor/vendor/easymde/easymde.min.js");
         });
     }
 }

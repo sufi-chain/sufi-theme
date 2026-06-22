@@ -22,5 +22,6 @@ public static class BlazorKomThemeBundles
     public static class SufiBlazor
     {
         public const string Quill = "SufiBlazor.Quill";
+        public const string MarkdownEditor = "SufiBlazor.MarkdownEditor";
     }
 }
