@@ -3,8 +3,9 @@
   <PropertyGroup>
     <NuGetAudit>false</NuGetAudit>
 
-    <UseSufiAbpProjectReferences Condition="'$(UseSufiAbpProjectReferences)' == '' And Exists('$(MSBuildThisFileDirectory)..\..\sufi-abp\framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj')">true</UseSufiAbpProjectReferences>
-    <UseSufiAbpProjectReferences Condition="'$(UseSufiAbpProjectReferences)' == ''">false</UseSufiAbpProjectReferences>
+    <UseSufiAbpProjectReferences>false</UseSufiAbpProjectReferences>
+    <!--<UseSufiAbpProjectReferences Condition="'$(UseSufiAbpProjectReferences)' == '' And Exists('$(MSBuildThisFileDirectory)..\..\sufi-abp\framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj')">true</UseSufiAbpProjectReferences>
+    <UseSufiAbpProjectReferences Condition="'$(UseSufiAbpProjectReferences)' == ''">false</UseSufiAbpProjectReferences>-->
   </PropertyGroup>
 
   <PropertyGroup>

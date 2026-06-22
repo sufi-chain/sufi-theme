@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <SufiAbpVersion>1.0.0-alpha.6.5</SufiAbpVersion>
-    <MicrosoftAspNetCoreComponentsAuthorizationVersion>10.0.2</MicrosoftAspNetCoreComponentsAuthorizationVersion>
-    <MicrosoftAspNetCoreComponentsWebVersion>10.0.2</MicrosoftAspNetCoreComponentsWebVersion>
-    <MicrosoftAspNetCoreComponentsWebAssemblyVersion>10.0.2</MicrosoftAspNetCoreComponentsWebAssemblyVersion>
+    <SufiAbpVersion>1.0.0-alpha.7.1</SufiAbpVersion>
+    <MicrosoftAspNetCoreComponentsAuthorizationVersion>10.0.7</MicrosoftAspNetCoreComponentsAuthorizationVersion>
+    <MicrosoftAspNetCoreComponentsWebVersion>10.0.7</MicrosoftAspNetCoreComponentsWebVersion>
+    <MicrosoftAspNetCoreComponentsWebAssemblyVersion>10.0.7</MicrosoftAspNetCoreComponentsWebAssemblyVersion>
   </PropertyGroup>
 
 </Project>
