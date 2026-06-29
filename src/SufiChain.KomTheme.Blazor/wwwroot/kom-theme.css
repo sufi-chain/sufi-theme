@@ -844,6 +844,60 @@ body:has(.kom-app-shell--dual-sidebar) {
     text-indent: 0;
 }
 
+/*
+   Restore normal button styling inside dropdown panels (.sb-menu / .sb-popover).
+   The icon-rail squashing rules above (40x40, hidden text) target the rail's
+   icon-only ANCHOR buttons, but because they use a descendant selector they also
+   hit buttons rendered inside an open menu/popover panel (e.g. the bell widget's
+   "View All" footer button). These overrides undo the squashing for panel buttons
+   only — higher specificity (3 classes) wins the !important cascade over the
+   2-class anchor rules, so full-width text buttons work again inside panels.
+*/
+.kom-icon-rail__toolbar .sb-menu .sb-button,
+.kom-icon-rail__toolbar .sb-popover .sb-button {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    padding: var(--sb-space-2) var(--sb-space-3) !important;
+    font-size: var(--sb-font-size-sm) !important;
+    text-indent: 0 !important;
+    overflow: visible !important;
+    background-color: transparent !important;
+    border: none !important;
+    color: var(--sb-color-text) !important;
+}
+
+/* Full-width panel buttons (e.g. bell "View All") should span their panel */
+.kom-icon-rail__toolbar .sb-menu .sb-button.sb-button--full-width,
+.kom-icon-rail__toolbar .sb-popover .sb-button.sb-button--full-width {
+    width: 100% !important;
+}
+
+/* Show text inside panel button content (undo the icon-only hiding) */
+.kom-icon-rail__toolbar .sb-menu .sb-button .sb-button__content,
+.kom-icon-rail__toolbar .sb-popover .sb-button .sb-button__content {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: var(--sb-space-2) !important;
+}
+
+.kom-icon-rail__toolbar .sb-menu .sb-button .sb-button__content > *:not([class*="icon"]):not(svg),
+.kom-icon-rail__toolbar .sb-popover .sb-button .sb-button__content > *:not([class*="icon"]):not(svg) {
+    display: inline-flex !important;
+}
+
+/* Restore icon font sizing inside panel buttons */
+.kom-icon-rail__toolbar .sb-menu .sb-button [class*="icon"],
+.kom-icon-rail__toolbar .sb-popover .sb-button [class*="icon"],
+.kom-icon-rail__toolbar .sb-menu .sb-button svg,
+.kom-icon-rail__toolbar .sb-popover .sb-button svg,
+.kom-icon-rail__toolbar .sb-menu .sb-button .sb-icon,
+.kom-icon-rail__toolbar .sb-popover .sb-button .sb-icon {
+    font-size: 1rem !important;
+    text-indent: 0 !important;
+}
+
 /* Also handle the SbMenu wrapper */
 .kom-icon-rail__toolbar .sb-menu {
     display: flex;

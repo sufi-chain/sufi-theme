@@ -2,6 +2,7 @@
   <Import Project="versions.props" />
   <PropertyGroup>
     <NuGetAudit>false</NuGetAudit>
+    <NoWarn>$(NoWarn);CS8601;CS8602;CS8603;CS8604;CS8613;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8669;CS8609;CS8767</NoWarn>
 
     <UseSufiAbpProjectReferences>false</UseSufiAbpProjectReferences>
     <!--<UseSufiAbpProjectReferences Condition="'$(UseSufiAbpProjectReferences)' == '' And Exists('$(MSBuildThisFileDirectory)..\..\sufi-abp\framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj')">true</UseSufiAbpProjectReferences>
