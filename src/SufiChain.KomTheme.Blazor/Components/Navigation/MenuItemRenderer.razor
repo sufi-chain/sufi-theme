@@ -1,16 +1,13 @@
 @*
     MenuItemRenderer - Renders ApplicationMenuItem as sidebar dropdown menu.
     Supports 4 levels: main parent (selected group) → children (Level 0) → grandchildren (Level 1) → great-grandchildren (Level 2) → great-great-grandchildren (Level 3).
-    Leaf items are wrapped in a level-aware container so siblings align with expandable headers.
+    Expand/collapse is Blazor state + CSS only (no JS interop) to avoid height animation locks and stale module cache.
 *@
-
-@implements IAsyncDisposable
-@inject IJSRuntime JS
 
 @if (MenuItem.Items.Any() && Level < MaxLevel)
 {
     @* Menu item with children - render as expandable dropdown; use --row when same level as leaf siblings for alignment *@
-    <div class="kom-menu-item kom-menu-item--parent @(_isExpanded ? "kom-menu-item--expanded" : "") @(Level == 0 ? "kom-menu-item--row" : "")" style="--menu-level: @Level">
+    <div class="kom-menu-item kom-menu-item--parent @(_isExpanded ? "kom-menu-item--expanded" : "") @(Level == 0 ? "kom-menu-item--row" : "")" style="--menu-level: @Level" data-kom-menu-v="2">
         <button type="button" class="kom-menu-item__header" @onclick="ToggleExpanded">
             <span class="kom-menu-item__icon @(string.IsNullOrEmpty(MenuItem.Icon) && string.IsNullOrEmpty(MenuItem.CustomContent) ? "kom-menu-item__icon--placeholder" : "")">
                 @if (!string.IsNullOrEmpty(MenuItem.CustomContent))
@@ -27,11 +24,11 @@
                 <SbIcon Name="chevron-down" Size="SbSize.Xs" />
             </span>
         </button>
-        <div @ref="_submenuRef" class="kom-menu-item__submenu">
+        <div class="kom-menu-item__submenu">
             <div class="kom-menu-item__submenu-content">
                 @foreach (var child in MenuItem.Items)
                 {
-                    <MenuItemRenderer @key="child.Name" MenuItem="@child" Level="@(Level + 1)" MaxLevel="@MaxLevel" GroupStartsCollapsed="@GroupStartsCollapsed" ParentMenuId="@_menuId" />
+                    <MenuItemRenderer @key="child.Name" MenuItem="@child" Level="@(Level + 1)" MaxLevel="@MaxLevel" GroupStartsCollapsed="@GroupStartsCollapsed" />
                 }
             </div>
         </div>
@@ -63,13 +60,8 @@ else
 }
 
 @code {
-    private const string JsModulePath = "./_content/SufiChain.KomTheme.Blazor/kom-theme.js";
-    private IJSObjectReference? _jsModule;
-    private ElementReference _submenuRef;
     private bool _isExpanded;
-    private bool _isInitialized;
-    private string _menuId = null!;
-    private string? _parentMenuId;
+    private bool _initialExpansionSet;
 
     /// <summary>
     /// The menu item to render.
@@ -95,110 +87,40 @@ else
     [Parameter]
     public bool GroupStartsCollapsed { get; set; }
 
-    /// <summary>
-    /// Parent menu item ID for hierarchy tracking (used internally for accordion behavior).
-    /// </summary>
-    [Parameter]
-    public string? ParentMenuId { get; set; }
-
-    protected override void OnInitialized()
-    {
-        _menuId = $"{MenuItem.Name}_{Level}_{Guid.NewGuid():N}";
-        _parentMenuId = ParentMenuId;
-    }
-
     protected override void OnParametersSet()
     {
-        if (GroupStartsCollapsed && MenuItem.Items.Any())
+        if (_initialExpansionSet || !MenuItem.Items.Any())
+        {
+            return;
+        }
+
+        if (GroupStartsCollapsed)
         {
             _isExpanded = false;
         }
-        else if (Level == 0 && MenuItem.Items.Any())
+        else if (Level == 0)
         {
             _isExpanded = true;
         }
+
+        _initialExpansionSet = true;
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private void ToggleExpanded()
     {
-        if (firstRender && MenuItem.Items.Any())
-        {
-            try
-            {
-                _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", JsModulePath);
-                
-                // Register this menu item for accordion behavior
-                await _jsModule.InvokeVoidAsync("registerMenuItem", _menuId, _submenuRef, Level, _parentMenuId);
-                
-                if (_isExpanded)
-                {
-                    // Set expanded without animation on initial load
-                    await _jsModule.InvokeVoidAsync("setSubmenuExpanded", _menuId, _submenuRef);
-                }
-                
-                _isInitialized = true;
-            }
-            catch
-            {
-                // JS interop not available (prerendering) - CSS fallback will handle it
-                _isInitialized = true;
-            }
-        }
-    }
-
-    private async Task ToggleExpanded()
-    {
-        // Toggle state
         _isExpanded = !_isExpanded;
-
-        if (_jsModule is not null && _isInitialized)
-        {
-            try
-            {
-                // Pass menuId for accordion behavior, element for animation, and new state
-                await _jsModule.InvokeVoidAsync("toggleSubmenu", _menuId, _submenuRef, _isExpanded);
-            }
-            catch
-            {
-            }
-        }
+        StateHasChanged();
     }
 
     private string GetUrl()
     {
         var url = MenuItem.Url ?? "#";
-        
-        // Handle relative URLs
+
         if (url.StartsWith("~/"))
         {
-            url = url[1..]; // Remove ~
+            url = url[1..];
         }
-        
-        return url;
-    }
 
-    public async ValueTask DisposeAsync()
-    {
-        if (_jsModule is not null)
-        {
-            try
-            {
-                // Unregister from menu registry
-                try
-                {
-                    await _jsModule.InvokeVoidAsync("unregisterMenuItem", _menuId);
-                }
-                catch
-                {
-                    // Ignore unregister errors
-                }
-                
-                await _jsModule.DisposeAsync();
-            }
-            catch
-            {
-                // Ignore disposal errors
-            }
-        }
+        return url;
     }
 }

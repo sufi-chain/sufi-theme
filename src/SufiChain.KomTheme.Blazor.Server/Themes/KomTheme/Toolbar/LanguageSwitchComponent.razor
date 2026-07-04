@@ -5,7 +5,7 @@
 
 @if (_languages != null && _languages.Count > 1)
 {
-    <SbMenu Open="@_menuOpen" OpenChanged="@OnMenuOpenChanged" Class="language-menu">
+    <SbMenu Open="@_menuOpen" OpenChanged="@OnMenuOpenChanged" Placement="SbPlacement.BottomEnd" Class="language-menu">
         <AnchorContent>
             <SbButton Variant="SbButtonVariant.Ghost" Size="SbSize.Sm" 
                       OnClick="ToggleMenu"

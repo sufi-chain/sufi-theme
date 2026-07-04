@@ -13,7 +13,7 @@
 <SbThemeProvider Theme="@CurrentTheme" Direction="@Direction">
     <div class="sb-stack sb-stack--column" style="min-height: 100vh;">
         @* Top Navigation Bar *@
-        <KomTopBar ShowMenuButton="true" OnMenuClick="ToggleMobileMenu" ContentVersion="@LayoutContentVersion">
+        <KomTopBar ShowMenuButton="true" OnMenuClick="ToggleMobileMenu" ContentVersion="@LayoutContentVersion" Class="kom-topbar--top-menu">
             <Logo>
                 <a href="/" class="kom-topbar-brand">
                     @if (!string.IsNullOrEmpty(BrandingProvider.LogoUrl))
@@ -25,8 +25,8 @@
             </Logo>
             <CenterContent>
                 @* Desktop horizontal menu - hidden on mobile *@
-                <nav class="sb-stack sb-stack--row sb-stack--align-center" 
-                     style="gap: var(--sb-space-1);"
+                <nav class="sb-stack sb-stack--row sb-stack--align-center"
+                     style="gap: var(--sb-space-1); flex-wrap: wrap; min-width: 0;"
                      aria-label="Main navigation">
                     @foreach (var menuItem in MenuItems)
                     {
@@ -74,6 +74,7 @@
                         }
                     </div>
                 }
+                <SidebarUserAvatar Placement="SbPlacement.BottomEnd" />
             </EndContent>
         </KomTopBar>
 

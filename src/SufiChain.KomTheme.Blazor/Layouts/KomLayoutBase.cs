@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using SufiChain.KomTheme.Blazor.Menus;
 using SufiChain.SufiBlazor.Components;
 using SufiChain.SufiBlazor.Theming;
 using SufiChain.SufiAbp.UI.Branding;
@@ -50,6 +51,9 @@ public abstract class KomLayoutBase : LayoutComponentBase, IDisposable
     [Inject]
     protected IStringLocalizer<SufiAbpFrameworkResource> L { get; set; } = default!;
 
+    [Inject]
+    protected IPublicMenuProvider PublicMenuProvider { get; set; } = default!;
+
     // Common state fields
     protected SbTheme CurrentTheme { get; set; } = SbTheme.Light;
     protected SbDirection Direction { get; set; } = SbDirection.Ltr;
@@ -82,9 +86,8 @@ public abstract class KomLayoutBase : LayoutComponentBase, IDisposable
         _currentUrl = NavigationManager.Uri;
         NavigationManager.LocationChanged += OnLocationChanged;
 
-        // Load menu items
-        var menu = await MenuManager.GetMainMenuAsync();
-        MenuItems = menu.Items.ToList();
+        // Load menu items (DB-driven public menu when a provider supplies one, else contributor-based main menu)
+        MenuItems = await LoadMenuItemsAsync();
 
         // Load toolbar items
         var toolbar = await ToolbarManager.GetAsync(KomToolbars.Main);
@@ -101,7 +104,7 @@ public abstract class KomLayoutBase : LayoutComponentBase, IDisposable
         await SyncThemeFromServiceAsync();
         ThemeSwitchService.ThemeChanged += OnThemeChanged;
 
-        // Generate initial breadcrumbs
+        // Generate initial breadcrumbs from menu hierarchy
         await UpdateBreadcrumbsAsync();
     }
 
@@ -135,19 +138,23 @@ public abstract class KomLayoutBase : LayoutComponentBase, IDisposable
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // After page content renders, check if we need to update the layout
         if (_needsBreadcrumbUpdate)
         {
             _needsBreadcrumbUpdate = false;
 
-            // Give the page a chance to set its own breadcrumbs (they set in OnInitialized)
-            // If page hasn't set any, auto-generate from menu
+            // Give the page a chance to set its own breadcrumbs (they set in OnInitialized).
+            // If page hasn't set any, auto-generate from menu.
             if (!PageLayout.BreadcrumbItems.Any())
             {
                 await UpdateBreadcrumbsAsync();
             }
-            
-            // Always re-render after navigation to pick up the new page's title/toolbar
+
+            StateHasChanged();
+        }
+        else if (firstRender && !PageLayout.BreadcrumbItems.Any())
+        {
+            // Menu breadcrumbs were empty after layout init; page Title may now be available.
+            EnsureMinimumBreadcrumb();
             StateHasChanged();
         }
     }
@@ -163,9 +170,24 @@ public abstract class KomLayoutBase : LayoutComponentBase, IDisposable
             _ = InvokeAsync(async () =>
             {
                 await Task.Yield();
+                // Public (DB-driven) menus are URL-contextual (e.g. KB category menu depends on the project slug),
+                // so reload menu items on navigation. Contributor-based menus are static and unaffected.
+                MenuItems = await LoadMenuItemsAsync();
                 StateHasChanged();
             });
         }
+    }
+
+    private async Task<List<ApplicationMenuItem>> LoadMenuItemsAsync()
+    {
+        var publicItems = await PublicMenuProvider.GetMenuItemsAsync(NavigationManager.Uri);
+        if (publicItems != null)
+        {
+            return publicItems;
+        }
+
+        var menu = await MenuManager.GetMainMenuAsync();
+        return menu.Items.ToList();
     }
 
     private async Task UpdateBreadcrumbsAsync()
@@ -177,18 +199,73 @@ public abstract class KomLayoutBase : LayoutComponentBase, IDisposable
             {
                 PageLayout.BreadcrumbItems.Add(item);
             }
-            
+
             // Auto-set page title from the last breadcrumb (current page's menu DisplayName)
             // if the page hasn't explicitly set its own title
             if (string.IsNullOrEmpty(PageLayout.Title) && breadcrumbs.Count > 0)
             {
                 PageLayout.Title = breadcrumbs[^1].Text;
             }
+
+            // Fallback only when menu-based generation produced nothing
+            EnsureMinimumBreadcrumb();
         }
         catch
         {
-            // Ignore errors in breadcrumb generation
+            EnsureMinimumBreadcrumb();
         }
+    }
+
+    /// <summary>
+    /// Fallback when menu breadcrumbs and page-defined breadcrumbs are both empty.
+    /// Does not replace breadcrumbs already set by the menu service or the page.
+    /// </summary>
+    private void EnsureMinimumBreadcrumb()
+    {
+        if (PageLayout.BreadcrumbItems.Any())
+        {
+            return;
+        }
+
+        var text = PageLayout.Title;
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            text = GetTitleFromUrlPath();
+        }
+
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            text = BrandingProvider.AppName;
+        }
+
+        PageLayout.BreadcrumbItems.Add(new BreadcrumbItem(text));
+    }
+
+    private string GetTitleFromUrlPath()
+    {
+        var uri = NavigationManager.Uri;
+        if (string.IsNullOrEmpty(uri))
+        {
+            return string.Empty;
+        }
+
+        var path = uri.StartsWith('/')
+            ? uri.Split('?', '#')[0]
+            : (Uri.TryCreate(uri, UriKind.Absolute, out var absolute) ? absolute.AbsolutePath : uri);
+
+        path = path.Trim('/');
+        if (string.IsNullOrEmpty(path))
+        {
+            return string.Empty;
+        }
+
+        var segment = path.Split('/', StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+        if (string.IsNullOrEmpty(segment))
+        {
+            return string.Empty;
+        }
+
+        return segment.Replace('-', ' ').Replace('_', ' ');
     }
 
     private void OnPageLayoutChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)

@@ -26,7 +26,7 @@
 <div class="kom-sidebar-user-avatar @(CurrentUser.IsAuthenticated ? "" : "kom-sidebar-user-avatar--guest")">
     @if (CurrentUser.IsAuthenticated)
     {
-        <SbMenu Open="@_menuOpen" OpenChanged="@OnMenuOpenChanged" Placement="SbPlacement.TopEnd" Class="kom-sidebar-user-avatar__menu">
+        <SbMenu Open="@_menuOpen" OpenChanged="@OnMenuOpenChanged" Placement="@Placement" Class="kom-sidebar-user-avatar__menu">
             <AnchorContent>
                 <button type="button" class="kom-sidebar-user-avatar__button" @onclick="ToggleMenu" title="@CurrentUser.UserName">
                     <span class="kom-sidebar-user-avatar__initials">@GetInitials()</span>
@@ -79,6 +79,13 @@
 </div>
 
 @code {
+    /// <summary>
+    /// Popover placement for the user menu. Defaults to <c>TopEnd</c> (icon-rail footer).
+    /// Top-bar layouts should pass <c>BottomEnd</c> so the menu opens downward.
+    /// </summary>
+    [Parameter]
+    public SbPlacement Placement { get; set; } = SbPlacement.TopEnd;
+
     private ApplicationMenu? _userMenu;
     private bool _menuOpen;
 

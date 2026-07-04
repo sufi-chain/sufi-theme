@@ -6,6 +6,26 @@
    They use CSS custom properties from SufiBlazor design tokens.
 */
 
+/* Box-sizing reset for KomTheme layout containers.
+   Without this, padded full-width containers (e.g. .kom-topbar) render at 100% + padding
+   and overflow the viewport, causing a horizontal scrollbar. SufiBlazor ships no global reset. */
+.kom-app-shell,
+.kom-app-shell__body,
+.kom-app-shell__header,
+.kom-app-shell__main,
+.kom-app-shell__content,
+.kom-app-shell__content-wrapper,
+.kom-app-shell__sidebar,
+.kom-topbar,
+.kom-topbar__start,
+.kom-topbar__center,
+.kom-topbar__end,
+.kom-content-wrapper,
+.kom-content-body,
+.kom-footer {
+    box-sizing: border-box;
+}
+
 /* ============================================
    RTL / Farsi fonts (Vazir FD – Farsi Digits) + 4 Free fonts for the editor
    ============================================
@@ -85,48 +105,86 @@
 
 :root,
 .sb-theme-root {
-    /* Primary – neutral dark (#0b0809), light theme */
-    --sb-color-primary: #0b0809;
-    --sb-color-primary-hover: #1a1618;
-    --sb-color-primary-active: #050405;
-    --sb-color-primary-50: #fafaf9;
-    --sb-color-primary-100: #e8e6e5;
-    --sb-color-primary-light: #e8e6e5;
-    --sb-color-on-primary: #ffffff;
+    /* Dual-sidebar semantic surfaces — dark sidebar column (rail + panel) */
+    --kom-color-rail: #1F172B;                 /* Main Surface (dark column) */
+    --kom-color-rail-text: #B4B1BD;            /* Secondary Text on rail */
+    --kom-color-rail-hover: rgba(255, 255, 255, 0.06);
+    --kom-color-rail-active: rgba(115, 86, 195, 0.22); /* violet-tinted active */
+    --kom-color-rail-active-text: #FCFCFC;
+    --kom-color-panel: #160E23;               /* Background (Dark) — expand panel / nav */
+    --kom-color-panel-text: #FCFCFC;          /* light text on dark panel */
+    --kom-color-panel-text-muted: #8B8797;    /* Placeholder on dark panel */
+    --kom-color-panel-border: rgba(255, 255, 255, 0.08);
+    --kom-color-panel-hover: rgba(255, 255, 255, 0.06);  /* hover on dark panel */
+    --kom-color-panel-active: rgba(115, 86, 195, 0.22);  /* violet active on dark */
+    --kom-color-tooltip: #160E23;              /* tooltip surface — palette dark */
 
-    /* Secondary – #787e87, light theme */
-    --sb-color-secondary: #787e87;
-    --sb-color-secondary-hover: #656b73;
-    --sb-color-secondary-active: #5a5f66;
-    --sb-color-secondary-50: #f4f5f6;
-    --sb-color-secondary-100: #e4e5e7;
-    --sb-color-secondary-light: #e4e5e7;
-    --sb-color-on-secondary: #ffffff;
+    /* Primary — matches expand-panel nav column (panel + rail elevation) */
+    --sb-color-primary: var(--kom-color-panel);
+    --sb-color-primary-hover: var(--kom-color-rail);
+    --sb-color-primary-active: #120A1C;
+    --sb-color-primary-50: rgba(22, 14, 35, 0.06);
+    --sb-color-primary-100: #EDE8F9;
+    --sb-color-primary-light: #EDE8F9;
+    --sb-color-on-primary: var(--kom-color-panel-text);
+
+    /* Secondary – muted elevation surfaces, light theme */
+    --sb-color-secondary: #5A546A;
+    --sb-color-secondary-hover: #4C455C;
+    --sb-color-secondary-active: #3E364B;
+    --sb-color-secondary-50: rgba(90, 84, 106, 0.08);
+    --sb-color-secondary-100: #F0EFF2;
+    --sb-color-secondary-light: #F0EFF2;
+    --sb-color-on-secondary: #FCFCFC;
+
+    /* Focus accent for interactive elements */
+    --sb-focus-ring-color: #8E73D8;
 }
 
-/* Dark theme: neutral light primary (#d8d3d4) on dark backgrounds */
+/* Dark theme: restrained dark monochromatic palette with violet accents */
 .sb-theme-dark {
-    --sb-color-primary: #d8d3d4;
-    --sb-color-primary-hover: #e5e2e3;
-    --sb-color-primary-active: #c9c4c5;
-    --sb-color-primary-50: rgba(216, 211, 212, 0.08);
-    --sb-color-primary-100: #2b2829;
-    --sb-color-primary-light: #2b2829;
-    --sb-color-on-primary: #0b0809;
+    /* Primary – violet accent palette for dark premium SaaS */
+    --sb-color-primary: #7356C3;            /* Button Gradient Start */
+    --sb-color-primary-hover: #8166D3;      /* Button Gradient End */
+    --sb-color-primary-active: #6555AB;     /* Primary Purple */
+    --sb-color-primary-50: rgba(115, 86, 195, 0.08);
+    --sb-color-primary-100: #2C2638;        /* Card Surface */
+    --sb-color-primary-light: #2C2638;
+    --sb-color-on-primary: #FCFCFC;
 
-    /* Secondary – #787e87, dark theme */
-    --sb-color-secondary: #787e87;
-    --sb-color-secondary-hover: #8b9199;
-    --sb-color-secondary-active: #6b7078;
-    --sb-color-secondary-50: rgba(120, 126, 135, 0.08);
-    --sb-color-secondary-100: #2b2d30;
-    --sb-color-secondary-light: #2b2d30;
-    --sb-color-on-secondary: #0f172a;
+    /* Secondary – muted elevation surfaces, dark theme */
+    --sb-color-secondary: #5A546A;          /* Secondary Surface */
+    --sb-color-secondary-hover: #4C455C;    /* Muted Surface */
+    --sb-color-secondary-active: #3E364B;   /* Elevated Surface */
+    --sb-color-secondary-50: rgba(90, 84, 106, 0.08);
+    --sb-color-secondary-100: #2C2638;      /* Card Surface */
+    --sb-color-secondary-light: #2C2638;
+    --sb-color-on-secondary: #FCFCFC;
+
+    /* Focus accent for interactive elements */
+    --sb-focus-ring-color: #8E73D8;         /* Focus Border */
+
+    /* Outer page background gradient (surrounds the app shell) */
+    --sb-color-page: linear-gradient(180deg, #6A6479 0%, #615C70 50%, #6A6578 100%);
+
+    /* Dual-sidebar semantic surfaces — darkest rail over an elevated panel */
+    --kom-color-rail: #160E23;                 /* Background (Dark) — darkest */
+    --kom-color-rail-text: var(--sb-color-text-muted);
+    --kom-color-rail-hover: var(--sb-color-surface-variant);
+    --kom-color-rail-active: rgba(115, 86, 195, 0.22); /* violet-tinted active */
+    --kom-color-rail-active-text: #FCFCFC;
+    --kom-color-panel: var(--sb-color-surface);/* Main Surface (lighter than rail) */
+    --kom-color-panel-text: var(--sb-color-text);  /* theme-aware text on panel */
+    --kom-color-panel-text-muted: var(--sb-color-text-muted);
+    --kom-color-panel-border: var(--sb-color-border);
+    --kom-color-panel-hover: rgba(255, 255, 255, 0.06); /* hover on dark panel */
+    --kom-color-panel-active: rgba(115, 86, 195, 0.22); /* violet active on dark */
+    --kom-color-tooltip: #160E23;              /* tooltip surface — palette dark */
 }
 
 * {
     scrollbar-width: thin;
-    scrollbar-color: #2a2627 transparent;
+    scrollbar-color: #706B79 transparent;
 }
 
 body {
@@ -141,6 +199,11 @@ body {
 .text-muted {
     color: var(--sb-color-text-muted);
     font-size: var(--sb-font-size-xs);
+}
+/* Dark theme: outer page gradient surrounds the app shell */
+body.sb-theme-dark,
+.sb-theme-dark body {
+    background: var(--sb-color-page);
 }
 /* ============================================
    Focus visible – reduce outline on non-interactive elements
@@ -251,6 +314,7 @@ h6:focus-visible:not(a) {
 .kom-app-shell--dual-sidebar {
     --kom-sidebar-width: 60px;
     --kom-expand-panel-width: 260px;
+    --kom-sidebar-content-gap: var(--sb-space-6);
     height: 100vh;
     overflow: hidden;
 }
@@ -273,7 +337,8 @@ body:has(.kom-app-shell--dual-sidebar) {
     flex: 1;
     min-width: 0;
     min-height: 0;
-    margin-left: var(--kom-sidebar-width, 60px);
+    /* Match main content inset: sidebar width + gap (body padding already offsets sidebar by --sb-space-2) */
+    margin-left: calc(var(--kom-sidebar-width, 60px) + var(--kom-sidebar-content-gap, var(--sb-space-6)) - var(--sb-space-2));
     overflow: hidden;
     transition: margin-left 0.25s ease;
 }
@@ -282,7 +347,7 @@ body:has(.kom-app-shell--dual-sidebar) {
 .kom-dual-sidebar:hover ~ .kom-app-shell__content-wrapper,
 .kom-dual-sidebar--expanded ~ .kom-app-shell__content-wrapper,
 .kom-dual-sidebar--pinned ~ .kom-app-shell__content-wrapper {
-    margin-left: calc(var(--kom-sidebar-width, 60px) + var(--kom-expand-panel-width, 260px));
+    margin-left: calc(var(--kom-sidebar-width, 60px) + var(--kom-expand-panel-width, 260px) + var(--kom-sidebar-content-gap, var(--sb-space-6)) - var(--sb-space-2));
 }
 
 .kom-app-shell--dual-sidebar .kom-app-shell__main {
@@ -296,7 +361,7 @@ body:has(.kom-app-shell--dual-sidebar) {
 /* RTL: content wrapper margin on the inline-start side (right in RTL) */
 [dir="rtl"] .kom-app-shell--dual-sidebar .kom-app-shell__content-wrapper {
     margin-left: 0;
-    margin-right: var(--kom-sidebar-width, 60px);
+    margin-right: calc(var(--kom-sidebar-width, 60px) + var(--kom-sidebar-content-gap, var(--sb-space-6)) - var(--sb-space-2));
     transition: margin-right 0.25s ease;
 }
 
@@ -304,7 +369,7 @@ body:has(.kom-app-shell--dual-sidebar) {
 [dir="rtl"] .kom-dual-sidebar--expanded ~ .kom-app-shell__content-wrapper,
 [dir="rtl"] .kom-dual-sidebar--pinned ~ .kom-app-shell__content-wrapper {
     margin-left: 0;
-    margin-right: calc(var(--kom-sidebar-width, 60px) + var(--kom-expand-panel-width, 260px));
+    margin-right: calc(var(--kom-sidebar-width, 60px) + var(--kom-expand-panel-width, 260px) + var(--kom-sidebar-content-gap, var(--sb-space-6)) - var(--sb-space-2));
 }
 
 /* Fixed container: no scroll here so border-radius clips content and all 4 corners show */
@@ -547,7 +612,8 @@ body:has(.kom-app-shell--dual-sidebar) {
 }
 
 .kom-topbar__center {
-    flex: 0 0 auto;
+    flex: 0 1 auto;
+    min-width: 0;
     justify-content: center;
 }
 
@@ -638,6 +704,75 @@ body:has(.kom-app-shell--dual-sidebar) {
     align-items: center;
 }
 
+/* Theme switch button (dark/light) — sized to match ghost icon buttons in the toolbar */
+.theme-switch-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: var(--sb-radius-md);
+    background: transparent;
+    color: var(--sb-color-text-muted);
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.theme-switch-btn:hover {
+    color: var(--sb-color-text);
+    background-color: var(--sb-color-surface-hover);
+}
+
+.theme-switch-btn .theme-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* User avatar in the topbar (TopMenu/SideMenu) — shrink from the 40px icon-rail size to match the 32px toolbar cluster */
+.kom-topbar .kom-sidebar-user-avatar__button {
+    width: 32px;
+    height: 32px;
+}
+
+.kom-topbar .kom-sidebar-user-avatar__initials {
+    font-size: var(--sb-font-size-xs, 0.75rem);
+}
+
+/* TopMenuLayout: the burger button is mobile-only; the desktop horizontal nav is desktop-only.
+   Scoped via the .kom-topbar--top-menu modifier so other layouts (SideMenu/DualSidebar) are unaffected. */
+.kom-topbar--top-menu .kom-topbar__menu-btn {
+    display: none;
+}
+
+.kom-topbar--top-menu .kom-topbar__center {
+    display: flex;
+}
+
+/* Keep toolbar widgets visible and consistently sized across layouts */
+.kom-topbar--top-menu .kom-topbar__end {
+    flex-shrink: 0;
+}
+
+.kom-topbar--top-menu .kom-topbar-toolbar .sb-button,
+.kom-topbar--top-menu .kom-topbar-toolbar .theme-switch-btn {
+    height: 32px;
+    min-width: 32px;
+}
+
+@media (max-width: 768px) {
+    /* Mobile: show burger, hide desktop horizontal nav */
+    .kom-topbar--top-menu .kom-topbar__menu-btn {
+        display: flex;
+    }
+
+    .kom-topbar--top-menu .kom-topbar__center {
+        display: none;
+    }
+}
+
 /* Topbar Page Info - Title + Breadcrumbs stacked vertically */
 .kom-topbar-page-info {
     display: flex;
@@ -653,6 +788,7 @@ body:has(.kom-app-shell--dual-sidebar) {
     gap: var(--sb-space-4);
     flex: 1;
     min-width: 0;
+    overflow: hidden;
     padding: 0 var(--sb-space-4);
 }
 
@@ -661,6 +797,9 @@ body:has(.kom-app-shell--dual-sidebar) {
     font-weight: var(--sb-font-weight-semibold);
     color: var(--sb-color-text);
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
     margin: 0;
     line-height: 1.2;
 }
@@ -699,12 +838,12 @@ body:has(.kom-app-shell--dual-sidebar) {
 
 .kom-icon-rail {
     --kom-icon-rail-width: 60px;
-    --kom-icon-rail-bg: var(--sb-color-gray-900);
-    --kom-icon-rail-text: #cbd5e1;
-    --kom-icon-rail-hover: var(--sb-color-gray-700);
+    --kom-icon-rail-bg: transparent;             /* inherits the bounded __rail surface */
+    --kom-icon-rail-text: var(--kom-color-rail-text);
+    --kom-icon-rail-hover: var(--kom-color-rail-hover);
     --kom-icon-rail-active: var(--sb-color-primary);
 
-    border-radius: 0.5rem;
+    border-radius: 0;
     display: flex;
     flex-direction: column;
     width: var(--kom-icon-rail-width);
@@ -715,21 +854,9 @@ body:has(.kom-app-shell--dual-sidebar) {
     overflow: hidden;
 }
 
-.kom-dual-sidebar--expanded .kom-icon-rail,
-.kom-dual-sidebar--pinned .kom-icon-rail {
-    border-radius: 0.5rem 0 0 0.5rem;
-}
-
-[dir="rtl"] .kom-dual-sidebar--expanded .kom-icon-rail,
-[dir="rtl"] .kom-dual-sidebar--pinned .kom-icon-rail {
-    border-radius: 0 0.5rem 0.5rem 0;
-}
-
 .kom-icon-rail--dark {
-    --kom-icon-rail-bg: #0b0809;
-    --kom-icon-rail-text: var(--sb-color-text-muted);
-    --kom-icon-rail-hover: #2b2b40;
-    --kom-icon-rail-active: var(--sb-color-primary);
+    /* No-op: the rail surface & text come from --kom-color-rail* tokens above,
+       defined per-theme in :root / .sb-theme-dark. Kept for markup compatibility. */
 }
 
 .kom-icon-rail__header {
@@ -993,8 +1120,8 @@ body:has(.kom-app-shell--dual-sidebar) {
     height: 20px;
     font-size: var(--sb-font-size-xs);
     font-weight: var(--sb-font-weight-semibold);
-    background-color: #f1f5f9;
-    color: var(--sb-color-gray-700);
+    background-color: var(--sb-color-surface-variant);
+    color: var(--sb-color-text-secondary);
     border-radius: var(--sb-radius-sm);
     letter-spacing: 0.5px;
     transition: background-color 0.15s ease, color 0.15s ease;
@@ -1017,11 +1144,11 @@ body:has(.kom-app-shell--dual-sidebar) {
 }
 
 .language-item--active {
-    background-color: rgba(59, 130, 246, 0.08);
+    background-color: var(--sb-color-primary-50);
 }
 
 .language-item--active:hover {
-    background-color: rgba(59, 130, 246, 0.12);
+    background-color: var(--sb-color-primary-100);
 }
 
 .language-item--active .language-code {
@@ -1057,8 +1184,8 @@ body:has(.kom-app-shell--dual-sidebar) {
 
 .kom-icon-rail-item--active,
 .kom-icon-rail-item.active {
-    background-color: #34343899;
-    color: var(--sb-color-white, #ffffff);
+    background-color: var(--kom-color-rail-active);
+    color: var(--kom-color-rail-active-text);
 }
 
 /* Icon Rail Tooltip */
@@ -1068,7 +1195,7 @@ body:has(.kom-app-shell--dual-sidebar) {
     top: 50%;
     transform: translateY(-50%);
     padding: var(--sb-space-2) var(--sb-space-3);
-    background-color: var(--sb-color-gray-900);
+    background-color: var(--kom-color-tooltip);
     color: var(--sb-color-white);
     border-radius: var(--sb-radius-md);
     font-size: var(--sb-font-size-sm);
@@ -1088,7 +1215,7 @@ body:has(.kom-app-shell--dual-sidebar) {
     transform: translateY(-50%);
     border-width: 6px;
     border-style: solid;
-    border-color: transparent var(--sb-color-gray-900) transparent transparent;
+    border-color: transparent var(--kom-color-tooltip) transparent transparent;
 }
 
 [dir="rtl"] .kom-icon-rail-item__tooltip {
@@ -1099,7 +1226,7 @@ body:has(.kom-app-shell--dual-sidebar) {
 [dir="rtl"] .kom-icon-rail-item__tooltip::before {
     left: auto;
     right: -6px;
-    border-color: transparent transparent transparent var(--sb-color-gray-900);
+    border-color: transparent transparent transparent var(--kom-color-tooltip);
 }
 
 .kom-icon-rail-item:hover .kom-icon-rail-item__tooltip {
@@ -1119,10 +1246,13 @@ body:has(.kom-app-shell--dual-sidebar) {
     top: var(--sb-space-2);
     bottom: var(--sb-space-2);
     display: flex;
+    gap: 0;
     flex-shrink: 0;
     /* No fixed width: container spans rail + panel so hover stays active when moving to panel */
     z-index: var(--sb-z-sticky, 100);
     border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid var(--kom-color-panel-border);
 }
 
 /* RTL: sidebar sticks to the right edge; with dir=rtl flex start is right, so rail (first child) stays far right, panel (second) opens to its left */
@@ -1132,6 +1262,11 @@ body:has(.kom-app-shell--dual-sidebar) {
 }
 
 .kom-dual-sidebar__rail {
+    /* Icon rail — flush against expand panel (no gap) */
+    background-color: var(--kom-color-rail);
+    border: none;
+    border-radius: 0;
+    overflow: hidden;
     flex-shrink: 0;
     z-index: 2;
 }
@@ -1140,14 +1275,10 @@ body:has(.kom-app-shell--dual-sidebar) {
     width: 0;
     height: 100%;
     overflow: hidden;
-    background-color: var(--sb-color-sidebar-dark);
+    background-color: var(--kom-color-panel);
+    border: none;
     transition: width 0.25s ease;
     z-index: 1;
-    border-radius: 0 0.5rem 0.5rem 0;
-}
-
-[dir="rtl"] .kom-dual-sidebar__panel {
-    border-radius: 0.5rem 0 0 0.5rem;
 }
 
 .kom-dual-sidebar__panel--visible {
@@ -1198,17 +1329,17 @@ body:has(.kom-app-shell--dual-sidebar) {
 }
 
 .kom-expand-panel__header .sb-button--primary {
-    color: var(--sb-color-text-muted);
+    color: var(--kom-color-panel-text-muted);
 }
 
 .kom-expand-panel__header .sb-button--ghost.sb-button--primary:hover:not(:disabled) {
-    background-color: #34343899;
-    color: var(--sb-color-text-white);
+    background-color: var(--kom-color-panel-hover);
+    color: var(--kom-color-panel-text);
 }
 
 .kom-expand-panel__title {
     font-weight: var(--sb-font-weight-semibold);
-    color: var(--sb-color-text-white);
+    color: var(--kom-color-panel-text);
     font-size: var(--sb-font-size-md);
     white-space: nowrap;
     overflow: hidden;
@@ -1224,7 +1355,7 @@ body:has(.kom-app-shell--dual-sidebar) {
 .kom-expand-panel__footer {
     flex-shrink: 0;
     padding: var(--sb-space-4);
-    border-top: 1px solid var(--sb-color-border);
+    border-top: 1px solid var(--kom-color-panel-border);
 }
 
 /* Nav Group in Expand Panel */
@@ -1239,7 +1370,7 @@ body:has(.kom-app-shell--dual-sidebar) {
     font-weight: var(--sb-font-weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--sb-color-text-muted);
+    color: var(--kom-color-panel-text-muted);
 }
 
 .kom-dual-sidebar__panel .sb-nav-menu {
@@ -1262,26 +1393,26 @@ body:has(.kom-app-shell--dual-sidebar) {
 }
 
 .kom-dual-sidebar__panel .sb-nav-item {
-    color: var(--sb-color-text-white);
+    color: var(--kom-color-panel-text);
     padding: var(--sb-space-2) var(--sb-space-3);
     gap: var(--sb-space-2);
 }
 
 .kom-dual-sidebar__panel .sb-nav-item .sb-nav-item__icon {
-    color: var(--sb-color-text-muted);
+    color: var(--kom-color-panel-text-muted);
 }
 
 .kom-dual-sidebar__panel .sb-nav-item--active {
-    background-color: #34343899;
+    background-color: var(--kom-color-panel-active);
 }
 
 .kom-dual-sidebar__panel .sb-nav-item--active .sb-nav-item__icon {
-    color: var(--sb-color-text-white);
+    color: var(--kom-color-panel-text);
 }
 
 .kom-dual-sidebar__panel .sb-nav-item:hover:not(.sb-nav-item--disabled) {
-    background-color: #34343899;
-    color: var(--sb-color-text-white);
+    background-color: var(--kom-color-panel-hover);
+    color: var(--kom-color-panel-text);
 }
 
 
@@ -1335,12 +1466,12 @@ body:has(.kom-app-shell--dual-sidebar) {
     border: 2px solid var(--kom-icon-rail-bg);
 }
 
-/* User avatar menu - escape icon rail overflow, position above avatar */
-.kom-sidebar-user-avatar .sb-menu-anchor {
+/* User avatar menu (icon rail) - escape icon rail overflow, position above avatar */
+.kom-icon-rail .kom-sidebar-user-avatar .sb-menu-anchor {
     position: static;
 }
 
-.kom-sidebar-user-avatar__menu.sb-menu {
+.kom-icon-rail .kom-sidebar-user-avatar__menu.sb-menu {
     position: fixed;
     bottom: 80px;
     left: 70px;
@@ -1360,7 +1491,7 @@ body:has(.kom-app-shell--dual-sidebar) {
     animation: language-menu-in 0.2s ease-out;
 }
 
-[dir="rtl"] .kom-sidebar-user-avatar__menu.sb-menu {
+[dir="rtl"] .kom-icon-rail .kom-sidebar-user-avatar__menu.sb-menu {
     left: auto;
     right: 70px;
 }
@@ -1802,10 +1933,12 @@ body:has(.kom-app-shell--dual-sidebar) {
     .kom-mobile-actions-drawer.sb-drawer--top {
         height: max-content;
         max-height: 90vh;
+        overflow: visible;
     }
 
     .kom-mobile-actions-drawer .sb-drawer__container {
         height: max-content;
+        overflow: visible;
     }
 
     /* Mobile top drawer: page actions – row layout, wrap when overflow, content at top */
@@ -1818,6 +1951,20 @@ body:has(.kom-app-shell--dual-sidebar) {
         align-items: center;
         align-content: flex-start;
         min-height: 0;
+        overflow: visible;
+    }
+
+    /* Let SbSimpleSelect dropdowns escape the compact drawer body (search + options list). */
+    .kom-mobile-actions-drawer .sb-select-anchor {
+        width: min(100%, 20rem);
+        min-width: 10rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .kom-mobile-actions-drawer .sufi-calendar-scheduler__calendar-select {
+        width: min(100%, 20rem);
+        min-width: 10rem;
     }
 
     /* Direct children (buttons or SbStack) stay side-by-side and wrap; no full-width stretch */
@@ -1975,7 +2122,7 @@ body:has(.kom-app-shell--dual-sidebar) {
     background: transparent;
     border: none;
     border-radius: var(--sb-radius-md);
-    color: var(--sb-color-text-white);
+    color: var(--kom-color-panel-text);
     font-size: var(--sb-font-size-sm);
     font-weight: var(--sb-font-weight-medium);
     text-align: left;
@@ -1991,12 +2138,12 @@ body:has(.kom-app-shell--dual-sidebar) {
 }
 
 .kom-menu-item__header:hover {
-    background-color: #34343899;
-    color: var(--sb-color-text-white);
+    background-color: var(--kom-color-panel-hover);
+    color: var(--kom-color-panel-text);
 }
 
 .kom-menu-item--expanded > .kom-menu-item__header {
-    color: var(--sb-color-text-white);
+    color: var(--kom-color-panel-text);
 }
 
 .kom-menu-item__icon {
@@ -2006,7 +2153,7 @@ body:has(.kom-app-shell--dual-sidebar) {
     flex-shrink: 0;
     width: 20px;
     height: 20px;
-    color: var(--sb-color-text-muted);
+    color: var(--kom-color-panel-text-muted);
 }
 
 /* Placeholder bullet when menu has no icon - reserves space so siblings align */
@@ -2045,7 +2192,7 @@ body:has(.kom-app-shell--dual-sidebar) {
 
 .kom-menu-item__header:hover .kom-menu-item__icon,
 .kom-menu-item--expanded > .kom-menu-item__header .kom-menu-item__icon {
-    color: var(--sb-color-text-muted);
+    color: var(--kom-color-panel-text-muted);
 }
 
 .kom-menu-item__text {
@@ -2064,27 +2211,32 @@ body:has(.kom-app-shell--dual-sidebar) {
     width: 16px;
     height: 16px;
     margin-left: auto;
-    color: var(--sb-color-text-muted);
+    color: var(--kom-color-panel-text-muted);
     transition: transform 0.25s ease;
 }
 
 .kom-menu-item--expanded > .kom-menu-item__header .kom-menu-item__chevron {
     transform: rotate(180deg);
-    color: var(--sb-color-text-white);
+    color: var(--kom-color-panel-text);
 }
 
 .kom-menu-item__submenu {
+    display: grid;
+    grid-template-rows: 0fr;
     overflow: hidden;
-    height: 0;
-    transition: height 0.25s ease;
+    transition: grid-template-rows 0.25s ease;
 }
 
-/* CSS fallback when JS is not available */
 .kom-menu-item--expanded > .kom-menu-item__submenu {
-    height: auto;
+    grid-template-rows: 1fr;
+    /* Override stale inline height from older kom-theme.js builds */
+    height: auto !important;
+    max-height: none !important;
 }
 
 .kom-menu-item__submenu-content {
+    overflow: hidden;
+    min-height: 0;
     padding: var(--sb-space-1) 0;
 }
 

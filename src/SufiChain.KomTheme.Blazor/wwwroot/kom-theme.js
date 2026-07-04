@@ -55,11 +55,63 @@ export function disposeViewportBreakpoint(id) {
 // Sidebar Menu - Smooth height animations
 // ============================================
 
-// Track active animations to prevent rapid-click issues
+const SUBMENU_TRANSITION_MS = 250;
+const SUBMENU_ANIMATION_FALLBACK_MS = SUBMENU_TRANSITION_MS + 150;
+
+// Track in-flight submenu height animations (WeakMap avoids leaks when nodes are removed)
 const _activeAnimations = new WeakMap();
 
 // Track all menu items for accordion behavior
 const _menuRegistry = new Map();
+
+function finishSubmenuAnimation(element) {
+    const state = _activeAnimations.get(element);
+    if (!state) {
+        return;
+    }
+
+    if (state.onTransitionEnd) {
+        element.removeEventListener('transitionend', state.onTransitionEnd);
+    }
+    if (state.fallbackTimer) {
+        clearTimeout(state.fallbackTimer);
+    }
+
+    _activeAnimations.delete(element);
+}
+
+function runHeightAnimation(element, applyAnimation, afterComplete) {
+    if (!element) {
+        return;
+    }
+
+    finishSubmenuAnimation(element);
+
+    let finished = false;
+    const finish = () => {
+        if (finished) {
+            return;
+        }
+        finished = true;
+        if (typeof afterComplete === 'function') {
+            afterComplete();
+        }
+        finishSubmenuAnimation(element);
+    };
+
+    const onTransitionEnd = (event) => {
+        if (event.target === element && event.propertyName === 'height') {
+            finish();
+        }
+    };
+
+    const fallbackTimer = setTimeout(finish, SUBMENU_ANIMATION_FALLBACK_MS);
+
+    _activeAnimations.set(element, { onTransitionEnd, fallbackTimer });
+    element.addEventListener('transitionend', onTransitionEnd);
+
+    applyAnimation(finish);
+}
 
 /**
  * Register a menu item for accordion behavior
@@ -90,7 +142,7 @@ export function registerMenuItem(menuId, element, level, parentId) {
     // Initialize collapsed state
     element.style.overflow = 'hidden';
     element.style.height = '0';
-    element.style.transition = 'height 0.25s ease';
+    element.style.transition = `height ${SUBMENU_TRANSITION_MS}ms ease`;
 }
 
 /**
@@ -99,10 +151,14 @@ export function registerMenuItem(menuId, element, level, parentId) {
  */
 export function unregisterMenuItem(menuId) {
     const item = _menuRegistry.get(menuId);
-    if (item && item.parentId) {
-        const parent = _menuRegistry.get(item.parentId);
-        if (parent) {
-            parent.children = parent.children.filter(id => id !== menuId);
+    if (item) {
+        finishSubmenuAnimation(item.element);
+
+        if (item.parentId) {
+            const parent = _menuRegistry.get(item.parentId);
+            if (parent) {
+                parent.children = parent.children.filter(id => id !== menuId);
+            }
         }
     }
     _menuRegistry.delete(menuId);
@@ -132,7 +188,11 @@ function collapseAllChildren(menuId) {
 /**
  * Collapse all siblings at the same level
  * @param {string} menuId - Current menu item ID
+ *
+ * Disabled: accordion behavior was causing sibling menus to get stuck after repeated
+ * expand/collapse clicks (Blazor CSS state and JS height animations desynced).
  */
+/*
 function collapseAllSiblings(menuId) {
     const item = _menuRegistry.get(menuId);
     if (!item) return;
@@ -152,39 +212,36 @@ function collapseAllSiblings(menuId) {
         }
     }
 }
+*/
 
 /**
  * Expand a submenu with smooth animation
  * @param {HTMLElement} element - The submenu container element
  */
 function expandSubmenu(element) {
-    if (!element) return;
-    
-    // Prevent animation if already animating
-    if (_activeAnimations.get(element)) return;
-    
-    _activeAnimations.set(element, true);
+    if (!element) {
+        return;
+    }
 
-    // Measure content height
-    element.style.height = 'auto';
-    const height = element.scrollHeight;
-    element.style.height = '0';
-    
-    // Force reflow
-    element.offsetHeight;
-    
-    // Animate to target height
-    element.style.height = height + 'px';
+    runHeightAnimation(element, (finish) => {
+        element.style.height = 'auto';
+        const height = element.scrollHeight;
+        element.style.height = '0';
 
-    // After animation, set to auto for dynamic content
-    const onTransitionEnd = () => {
+        // Force reflow before animating
+        element.offsetHeight;
+
+        if (height === 0) {
+            finish();
+            return;
+        }
+
+        element.style.height = height + 'px';
+    }, () => {
         if (element.style.height !== '0px') {
             element.style.height = 'auto';
         }
-        _activeAnimations.delete(element);
-        element.removeEventListener('transitionend', onTransitionEnd);
-    };
-    element.addEventListener('transitionend', onTransitionEnd);
+    });
 }
 
 /**
@@ -192,28 +249,25 @@ function expandSubmenu(element) {
  * @param {HTMLElement} element - The submenu container element
  */
 function collapseSubmenu(element) {
-    if (!element) return;
-    
-    // Prevent animation if already animating
-    if (_activeAnimations.get(element)) return;
-    
-    _activeAnimations.set(element, true);
-    
-    // Get current height
-    const height = element.scrollHeight;
-    element.style.height = height + 'px';
-    
-    // Force reflow
-    element.offsetHeight;
-    
-    // Animate to 0
-    element.style.height = '0';
-    
-    const onTransitionEnd = () => {
-        _activeAnimations.delete(element);
-        element.removeEventListener('transitionend', onTransitionEnd);
-    };
-    element.addEventListener('transitionend', onTransitionEnd);
+    if (!element) {
+        return;
+    }
+
+    runHeightAnimation(element, (finish) => {
+        const height = element.scrollHeight;
+        element.style.height = height + 'px';
+
+        // Force reflow before animating
+        element.offsetHeight;
+
+        if (height === 0) {
+            element.style.height = '0';
+            finish();
+            return;
+        }
+
+        element.style.height = '0';
+    });
 }
 
 /**
@@ -229,8 +283,8 @@ export function toggleSubmenu(menuId, element, shouldExpand) {
     if (!item) return;
     
     if (shouldExpand) {
-        // Collapse all siblings first (accordion behavior)
-        collapseAllSiblings(menuId);
+        // Accordion disabled — allow multiple sibling menus to stay open
+        // collapseAllSiblings(menuId);
         
         // Then expand this item
         expandSubmenu(element);
@@ -256,9 +310,11 @@ export function setSubmenuExpanded(menuId, element) {
         item.isExpanded = true;
     }
     
+    finishSubmenuAnimation(element);
+
     element.style.height = 'auto';
     element.style.overflow = 'hidden';
-    element.style.transition = 'height 0.25s ease';
+    element.style.transition = `height ${SUBMENU_TRANSITION_MS}ms ease`;
 }
 
 // Expose viewport helpers on window so Blazor can invoke them as global functions

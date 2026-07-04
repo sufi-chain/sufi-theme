@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SufiChain.KomTheme.Blazor.Layouts;
 using SufiChain.SufiAbp.UI.Blazor.Layouts;
 using SufiChain.KomTheme.DependencyInjection;
+using SufiChain.KomTheme.Blazor.Menus;
 
 namespace SufiChain.KomTheme.Blazor.DependencyInjection;
 
@@ -54,6 +55,10 @@ public static class ServiceCollectionExtensions
 
         // Add core theme services
         services.AddKomTheme(configureThemeOptions, configureBlazorOptions);
+
+        // Default public-menu provider (no-op). Hosts replace this to supply
+        // database-driven menus for landing/KB layout zones.
+        services.AddSingleton<IPublicMenuProvider, NullPublicMenuProvider>();
 
         return services;
     }
