@@ -54,16 +54,19 @@ This release includes **5 NuGet packages**:
 - Breakpoint-based layout adjustments
 
 ### Layout Types
-- **Application Layout** - Main app layout with navigation, toolbar, breadcrumbs
-- **Account Layout** - Login, register, and authentication pages
-- **Empty Layout** - Minimal layout for special pages
-- **Public Layout** - Public-facing pages
+
+| Layout name | Implementation | Notes |
+| --- | --- | --- |
+| **Application** | `SideMenuLayout`, `TopMenuLayout`, or `DualSidebarLayout` (via `KomThemeBlazorOptions.Layout`) | Main app shell with navigation, toolbar, breadcrumbs |
+| **Account** | `AccountLayout` from `SufiChain.SufiAbp.UI.Blazor.Layouts` | Registered at startup as `KomLayouts.Account`; hosts may use a custom layout (e.g. Console `ConsoleAccountLayout`) |
+| **Empty** | `EmptyLayout` in KomTheme | Minimal wrapper — no navigation chrome |
+| **Public** | Same component as **Application** (`StandardLayouts.Public` → `_options.Layout` in `Kom1Theme`) | Not a separate shell file. Public *navigation* via `IPublicMenuProvider` — see platform doc `sufi-abp/docs/kom-theme/public-navigation.md` |
 
 ### Integration
-- Seamless SufiAbp framework integration
-- Compatible with SufiBlazor component library
+
+- Requires **SufiAbp UI** packages (`SufiChain.SufiAbp.UI.*`) — not a SufiBlazor-only add-on
+- Built on **SufiBlazor** for all in-content `Sb*` components and design tokens
 - Support for Blazor Server and WebAssembly
-- AI-ready with SufiAbp AI Management integration
 
 ### Theming & Customization
 - CSS variable-based theming

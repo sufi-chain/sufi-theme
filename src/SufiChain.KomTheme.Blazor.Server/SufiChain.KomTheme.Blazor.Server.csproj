@@ -14,6 +14,10 @@
     <Description>KomTheme Blazor Server components and layouts for Sufi Platform.</Description>
   </PropertyGroup>
 
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
   <!--<ItemGroup>
     <PackageReference Include="SufiChain.SufiAbp.Core" Version="$(SufiAbpVersion)" />
     <PackageReference Include="SufiChain.SufiAbp.Security" Version="$(SufiAbpVersion)" />

@@ -515,6 +515,16 @@ body:has(.kom-app-shell--dual-sidebar) {
     border-top: none;
 }
 
+.kom-footer__link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}
+
+.kom-footer__link:hover {
+    opacity: 0.88;
+}
+
 /* Dual-sidebar: ensure inline footer stays at end of content inside the fixed container (no viewport fix) */
 .kom-app-shell--dual-sidebar .kom-app-shell__main .kom-footer.kom-footer--inline {
     position: relative;
@@ -620,7 +630,7 @@ body:has(.kom-app-shell--dual-sidebar) {
 .kom-topbar__end {
     flex: 0 0 auto;
     justify-content: flex-end;
-    margin-left: auto;
+    margin-inline-start: auto;
 }
 
 .kom-topbar__menu-btn {
@@ -771,6 +781,22 @@ body:has(.kom-app-shell--dual-sidebar) {
     .kom-topbar--top-menu .kom-topbar__center {
         display: none;
     }
+}
+
+/* TopMenuLayout RTL: logo stays on the right; nav items flow from the right (next to logo);
+   toolbar absorbs free space on the left. Without this, flex:1 on __start grows leftward and
+   pushes the horizontal nav away from the logo toward the screen center. */
+[dir="rtl"] .kom-topbar--top-menu .kom-topbar__start {
+    flex: 0 0 auto;
+}
+
+[dir="rtl"] .kom-topbar--top-menu .kom-topbar__center {
+    justify-content: flex-start;
+}
+
+[dir="rtl"] .kom-topbar--top-menu .kom-topbar__end {
+    flex: 1;
+    margin-inline-start: 0;
 }
 
 /* Topbar Page Info - Title + Breadcrumbs stacked vertically */

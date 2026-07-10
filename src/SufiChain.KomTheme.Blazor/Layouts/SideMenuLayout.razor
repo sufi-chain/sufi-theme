@@ -97,7 +97,7 @@
     @if (BlazorOptions.Value.ShowFooter)
     {
         <footer class="kom-footer kom-footer--side-menu">
-            &copy; @DateTime.Now.Year @BrandingProvider.AppName — @L["PoweredWithLoveBy"]
+            <KomFooterCopyright />
         </footer>
     }
     @* Global Message/Confirm Dialog Host *@
