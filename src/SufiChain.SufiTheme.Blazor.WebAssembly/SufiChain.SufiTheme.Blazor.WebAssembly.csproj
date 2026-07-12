@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>SufiChain.SufiTheme.Blazor.WebAssembly</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <IsPackable>true</IsPackable>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>SufiChain.SufiTheme.Blazor.WebAssembly</PackageId>
+    <Description>SufiTheme Blazor WebAssembly components and layouts for Sufi Platform.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="$(MicrosoftAspNetCoreComponentsWebAssemblyVersion)" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Blazor.WebAssembly\SufiChain.SufiAbp.UI.Blazor.WebAssembly.csproj"  />
+  </ItemGroup>-->
+
+
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Blazor.WebAssembly\SufiChain.SufiAbp.UI.Blazor.WebAssembly.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' != 'true'">
+      <PackageReference Include="SufiChain.SufiAbp.UI.Blazor.WebAssembly" Version="$(SufiAbpVersion)"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SufiChain.SufiTheme.Blazor\SufiChain.SufiTheme.Blazor.csproj" />
+    <ProjectReference Include="..\SufiChain.SufiTheme.Blazor.WebAssembly.Bundling\SufiChain.SufiTheme.Blazor.WebAssembly.Bundling.csproj" />
+  </ItemGroup>
+
+</Project>

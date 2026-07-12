@@ -1,0 +1,458 @@
+@inherits SufiLayoutBase
+@using SufiChain.SufiAbp.UI.Browser
+@implements IAsyncDisposable
+
+@* 
+    DualSidebarLayout - Uses SufiBlazor Design System with SufiTheme Components
+    
+    This layout implements the dual sidebar pattern:
+    - Sidebar full height on left (icon rail + expandable panel)
+    - Header spans only content area with: Page Title/Breadcrumbs (left) | Page Actions (right)
+    - System toolbar items (theme, language, login) in icon rail footer
+    - Inline footer within content area
+*@
+
+<SbThemeProvider Theme="@CurrentTheme" Direction="@Direction">
+    <SufiAppShell Variant="SufiAppShellVariant.DualSidebar">
+        <TopBar>
+            @if (_isMobile)
+            {
+                @* Mobile: single fixed row – logo + Page Actions only; title + breadcrumbs scroll with content below *@
+                <MobileHeader Logo="@_mobileLogoFragment"
+                              ShowPageActionsButton="@(PageLayout.ToolbarContent != null)"
+                              PageActionsLabel="@L["PageActions"].Value"
+                              OnPageActionsClick="OpenMobileActionsDrawer" />
+            }
+            else
+            {
+                <SufiTopBar ShowMenuButton="false" ContentVersion="@LayoutContentVersion" RenderPageToolbar="true">
+                    <StartContent>
+                        <div class="sufi-topbar-page-info">
+                            @if (!string.IsNullOrEmpty(PageLayout.Title))
+                            {
+                                <h1 class="sufi-topbar-page-title">@PageLayout.Title</h1>
+                            }
+                            @if (BlazorOptions.Value.ShowBreadcrumbs && PageLayout.BreadcrumbItems.Any())
+                            {
+                                <SufiAbpBreadcrumbs ShowHome="false" />
+                            }
+                        </div>
+                    </StartContent>
+                </SufiTopBar>
+            }
+        </TopBar>
+
+        <DualSidebar>
+            <SufiDualSidebar ExpandOnHover="@BlazorOptions.Value.ExpandOnHover" Pinned="@_sidebarPinned" PinnedChanged="OnSidebarPinnedChanged"
+                             Open="@(_isMobile && _mobileSidebarOpen)">
+                <IconRail>
+                    <SufiIconRail Dark="@BlazorOptions.Value.IconRailDarkMode">
+                        <Header>
+                            <a href="/" class="sufi-icon-rail__logo">
+                                @if (!string.IsNullOrEmpty(BrandingProvider.LogoUrl))
+                                {
+                                    <img src="@BrandingProvider.LogoUrl" alt="@BrandingProvider.AppName" style="height: 32px; width: 32px; object-fit: contain;" />
+                                }
+                                else
+                                {
+                                    <SbIcon Name="grid" Size="SbSize.Lg" />
+                                }
+                            </a>
+                        </Header>
+                        <ChildContent>
+                            @foreach (var menuItem in MenuItems)
+                            {
+                                <IconRailNavItem MenuItem="@menuItem" OnClick="() => SelectMenuItem(menuItem)" IsSelected="@IsMenuItemSelected(menuItem)" />
+                            }
+                        </ChildContent>
+                        <Footer>
+                            @* System Toolbar items (theme switch, language, user menu, etc.) *@
+                            @if (ToolbarItems.Any())
+                            {
+                                <div class="sufi-icon-rail__toolbar">
+                                    @foreach (var item in ToolbarItems)
+                                    {
+                                        <DynamicComponent Type="@item.ComponentType" />
+                                    }
+                                </div>
+                            }
+                            <SidebarUserAvatar />
+                        </Footer>
+                    </SufiIconRail>
+                </IconRail>
+                <ExpandPanel>
+                    <SufiExpandPanel>
+                        <Header>
+                            <div class="sufi-expand-panel__header-content">
+                                <span class="sufi-expand-panel__title">@BrandingProvider.AppName</span>
+                                <SbButton Variant="SbButtonVariant.Ghost" Size="SbSize.Sm" OnClick="ToggleSidebarPin" title="@(_sidebarPinned ? "Unpin sidebar" : "Pin sidebar")">
+                                    <SbIcon Name="@(_sidebarPinned ? "unpin" : "thumbtack")" Size="SbSize.Sm" />
+                                </SbButton>
+                            </div>
+                        </Header>
+                        <ChildContent>
+                            @if (_selectedMenuItem != null && _selectedMenuItem.Items.Any())
+                            {
+                                <div class="sufi-nav-group">
+                                    <span class="sufi-nav-group__label">@_selectedMenuItem.DisplayName</span>
+                                    <SbNavMenu>
+                                        @foreach (var child in _selectedMenuItem.Items)
+                                        {
+                                            <MenuItemRenderer @key="child.Name" MenuItem="@child" Level="0" GroupStartsCollapsed="@(_selectedMenuItem.IsCollapsed == false)" />
+                                        }
+                                    </SbNavMenu>
+                                </div>
+                            }
+                            else
+                            {
+                                <SbNavMenu>
+                                    @foreach (var menuItem in MenuItems)
+                                    {
+                                        <MenuItemRenderer @key="menuItem.Name" MenuItem="@menuItem" />
+                                    }
+                                </SbNavMenu>
+                            }
+                        </ChildContent>
+                        @* <Footer>
+                            <SidebarUserProfile />
+                        </Footer> *@
+                    </SufiExpandPanel>
+                </ExpandPanel>
+            </SufiDualSidebar>
+        </DualSidebar>
+
+        <ChildContent>
+            <div class="sufi-content-wrapper @(_isMobile ? "sufi-content-wrapper--mobile-bottom-menu" : "")">
+                @* Mobile: backdrop when sidebar drawer is open *@
+                @if (_isMobile && _mobileSidebarOpen)
+                {
+                    <div class="sufi-dual-sidebar-backdrop" @onclick="ToggleMobileSidebar" aria-hidden="true"></div>
+                }
+                @* Mobile: page title + breadcrumbs scroll with content (not in fixed header) *@
+                @if (_isMobile)
+                {
+                    <div class="sufi-content-wrapper__mobile-page-header">
+                        @if (!string.IsNullOrEmpty(PageLayout.Title))
+                        {
+                            <h1 class="sufi-content-wrapper__mobile-page-title">@PageLayout.Title</h1>
+                        }
+                        @if (BlazorOptions.Value.ShowBreadcrumbs && PageLayout.BreadcrumbItems.Any())
+                        {
+                            <SufiAbpBreadcrumbs ShowHome="false" />
+                        }
+                    </div>
+                }
+                <SufiAbpPageAlert />
+                <SufiAbpLayoutHook Name="@LayoutHooks.Body.First" />
+                
+                @* SufiAbpPageToolbar only registers toolbar content, title/breadcrumbs are in top bar (desktop) or above (mobile) *@
+                <SufiAbpPageToolbar />
+                
+                <div class="sufi-content-body">
+                    @Body
+                </div>
+                
+                <SufiAbpLayoutHook Name="@LayoutHooks.Body.Last" />
+                <SufiAbpDynamicLayoutComponent />
+                
+                @* Footer inside content area *@
+                @if (BlazorOptions.Value.ShowFooter)
+                {
+                    <footer class="sufi-footer sufi-footer--inline">
+                        <SufiFooterCopyright />
+                    </footer>
+                }
+            </div>
+        </ChildContent>
+    </SufiAppShell>
+    @* Mobile: fixed bottom bar with center menu button and shortcuts (replaces header hamburger) *@
+    @if (_isMobile)
+    {
+        <MobileBottomMenu OnOpenMenu="ToggleMobileSidebar" OpenMenuAriaLabel="@L["Menu"].Value">
+            <LeftShortcuts>
+                @foreach (var shortcut in GetMobileShortcuts().Take(2))
+                {
+                    <a href="@shortcut.Url" class="sufi-mobile-bottom-menu__shortcut" aria-label="@shortcut.DisplayName">
+                        <SbIcon Name="@shortcut.Icon" Size="SbSize.Lg" />
+                    </a>
+                }
+            </LeftShortcuts>
+            <RightShortcuts>
+                @foreach (var shortcut in GetMobileShortcuts().Skip(2).Take(2))
+                {
+                    <a href="@shortcut.Url" class="sufi-mobile-bottom-menu__shortcut" aria-label="@shortcut.DisplayName">
+                        <SbIcon Name="@shortcut.Icon" Size="SbSize.Lg" />
+                    </a>
+                }
+            </RightShortcuts>
+        </MobileBottomMenu>
+        @* Mobile: top drawer for Page Actions (SufiAbpPageToolbar content) *@
+        @if (PageLayout.ToolbarContent is RenderFragment toolbarFragment)
+        {
+            <SbDrawer @bind-Open="_mobileActionsDrawerOpen" Title="@L["PageActions"].Value"
+                      Placement="SbDrawerPlacement.Top" Height="max-content" Class="sufi-mobile-actions-drawer">
+                @toolbarFragment
+            </SbDrawer>
+        }
+    }
+    @* Global Message/Confirm Dialog Host *@
+    <SufiAbpOverlayHost />
+</SbThemeProvider>
+
+@code {
+    private const string SidebarPinnedStorageKey = "sabp-sufi-sidebar-pinned";
+    private const int MobileBreakpointPx = 768;
+
+    private bool _sidebarPinned;
+    private bool _isMobile;
+    private bool _mobileSidebarOpen;
+    private bool _mobileActionsDrawerOpen;
+    private ApplicationMenuItem? _selectedMenuItem;
+    private string _viewportListenerId = Guid.NewGuid().ToString("N");
+    private DotNetObjectReference<DualSidebarLayout>? _dotNetRef;
+    private bool _viewportInitialized;
+    private bool _pinRestored;
+
+    private RenderFragment? _mobileLogoFragment => builder =>
+    {
+        builder.OpenComponent<MobileTopBarLogo>(0);
+        builder.AddAttribute(1, "BrandingProvider", BrandingProvider);
+        builder.AddAttribute(2, "ShowAppName", true);
+        builder.CloseComponent();
+    };
+
+    [Inject]
+    private ILocalStorageService LocalStorage { get; set; } = null!;
+
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; } = null!;
+
+    [JSInvokable]
+    public void OnViewportBreakpointChanged(bool isMobile)
+    {
+        if (_isMobile != isMobile)
+        {
+            _isMobile = isMobile;
+            if (!_isMobile)
+                _mobileSidebarOpen = false;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    protected override Task OnInitializedLayoutAsync()
+    {
+        // Select IconRail item from current URL so reload/direct navigation shows correct active menu
+        SyncSelectedMenuItemFromUrl();
+        if (_selectedMenuItem == null)
+            _selectedMenuItem = MenuItems.FirstOrDefault(m => m.Items.Any());
+        // Close mobile sidebar when navigation occurs (e.g. user clicked a menu link)
+        NavigationManager.LocationChanged += CloseMobileSidebarOnNavigate;
+        return Task.CompletedTask;
+    }
+
+    private void CloseMobileSidebarOnNavigate(object? sender, LocationChangedEventArgs e)
+    {
+        _mobileSidebarOpen = false;
+        SyncSelectedMenuItemFromUrl();
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    /// <summary>
+    /// Sets <see cref="_selectedMenuItem"/> to the top-level menu item that contains the current URL
+    /// (e.g. /admin/... → Administration, /sufi-blazor-demo/... → Sufi Blazor Demo).
+    /// </summary>
+    private void SyncSelectedMenuItemFromUrl()
+    {
+        var forUrl = GetTopLevelMenuItemForCurrentUrl();
+        if (forUrl != null)
+            _selectedMenuItem = forUrl;
+    }
+
+    /// <summary>
+    /// Finds the top-level IconRail menu item whose URL or any descendant URL matches the current path.
+    /// </summary>
+    private ApplicationMenuItem? GetTopLevelMenuItemForCurrentUrl()
+    {
+        var path = GetCurrentPath();
+        if (string.IsNullOrEmpty(path))
+            return null;
+        foreach (var item in MenuItems)
+        {
+            if (MenuItemOrDescendantMatchesPath(item, path))
+                return item;
+        }
+        return null;
+    }
+
+    private static bool MenuItemOrDescendantMatchesPath(ApplicationMenuItem item, string currentPath)
+    {
+        if (PathMatches(currentPath, item.Url))
+            return true;
+        foreach (var child in item.Items)
+        {
+            if (MenuItemOrDescendantMatchesPath(child, currentPath))
+                return true;
+        }
+        return false;
+    }
+
+    private static bool PathMatches(string currentPath, string? itemUrl)
+    {
+        if (string.IsNullOrEmpty(itemUrl))
+            return false;
+        var urlPath = itemUrl.StartsWith("/", StringComparison.Ordinal) ? itemUrl : "/" + itemUrl;
+        if (currentPath.Equals(urlPath, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (!currentPath.StartsWith(urlPath, StringComparison.OrdinalIgnoreCase))
+            return false;
+        return urlPath.Length == currentPath.Length || currentPath[urlPath.Length] == '/';
+    }
+
+    private string GetCurrentPath()
+    {
+        try
+        {
+            return new Uri(NavigationManager.Uri).AbsolutePath;
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
+
+    public override void Dispose()
+    {
+        NavigationManager.LocationChanged -= CloseMobileSidebarOnNavigate;
+        base.Dispose();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        // Restore sidebar pinned state as soon as localStorage is available (independent of viewport).
+        // Run until we've restored once so we don't depend on viewport init succeeding (fixes: menu closed on load while icon shows pinned).
+        if (!_pinRestored)
+        {
+            try
+            {
+                var stored = await LocalStorage.GetItemAsync(SidebarPinnedStorageKey);
+                if (!string.IsNullOrEmpty(stored) && bool.TryParse(stored, out var pinned) && _sidebarPinned != pinned)
+                {
+                    _sidebarPinned = pinned;
+                    StateHasChanged();
+                }
+                _pinRestored = true;
+            }
+            catch
+            {
+                // JS/localStorage not available yet (e.g. prerender) – will retry on next OnAfterRenderAsync
+            }
+        }
+
+        // Retry viewport init until JS is available (e.g. after prerender, or script not yet loaded on reload)
+        if (!_viewportInitialized)
+        {
+            try
+            {
+                _dotNetRef = DotNetObjectReference.Create(this);
+                var isMobile = await JSRuntime.InvokeAsync<bool>("SufiThemeViewportInit", _dotNetRef, MobileBreakpointPx, _viewportListenerId);
+                _viewportInitialized = true;
+                _isMobile = isMobile;
+                StateHasChanged();
+            }
+            catch (JSDisconnectedException)
+            {
+                _ = InvokeAsync(StateHasChanged);
+            }
+            catch (Exception)
+            {
+                await Task.Delay(150);
+                _ = InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            // Only call JS when we actually initialized in the browser (skip during prerender dispose)
+            if (_viewportInitialized && _viewportListenerId != null)
+            {
+                await JSRuntime.InvokeVoidAsync("SufiThemeViewportDispose", _viewportListenerId);
+            }
+        }
+        catch (ObjectDisposedException)
+        {
+            // Module or runtime already disposed
+        }
+        catch (JSDisconnectedException)
+        {
+            // Circuit already disconnected – cannot call JS; skip cleanup
+        }
+        catch (InvalidOperationException)
+        {
+            // Prerender / static render – JS interop not allowed
+        }
+        finally
+        {
+            _dotNetRef?.Dispose();
+        }
+    }
+
+    private async Task OnSidebarPinnedChanged(bool pinned)
+    {
+        _sidebarPinned = pinned;
+        await PersistSidebarPinnedAsync(pinned);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void ToggleMobileSidebar()
+    {
+        _mobileSidebarOpen = !_mobileSidebarOpen;
+    }
+
+    private IReadOnlyList<MobileMenuShortcut> GetMobileShortcuts()
+    {
+        return BlazorOptions.Value.MobileShortcuts
+            .OrderBy(x => x.Order)
+            .Take(4)
+            .ToList();
+    }
+
+    private void OpenMobileActionsDrawer()
+    {
+        _mobileActionsDrawerOpen = true;
+    }
+
+    private async Task ToggleSidebarPin()
+    {
+        _sidebarPinned = !_sidebarPinned;
+        await PersistSidebarPinnedAsync(_sidebarPinned);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task PersistSidebarPinnedAsync(bool pinned)
+    {
+        try
+        {
+            await LocalStorage.SetItemAsync(SidebarPinnedStorageKey, pinned.ToString());
+        }
+        catch
+        {
+            // Ignore storage errors (e.g. private browsing)
+        }
+    }
+
+    private void SelectMenuItem(ApplicationMenuItem menuItem)
+    {
+        _selectedMenuItem = menuItem;
+        StateHasChanged();
+    }
+
+    private bool IsMenuItemSelected(ApplicationMenuItem menuItem)
+    {
+        return _selectedMenuItem?.Name == menuItem.Name;
+    }
+}

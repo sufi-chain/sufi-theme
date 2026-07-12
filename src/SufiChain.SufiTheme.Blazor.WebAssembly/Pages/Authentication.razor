@@ -1,0 +1,26 @@
+@page "/authentication/{action}"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using SufiChain.SufiTheme.Blazor.Layouts
+
+<RemoteAuthenticatorView Action="@Action">
+    <LoggingIn>
+        <div class="sb-stack sb-stack--center" style="min-height: 100vh;">
+            Logging in...
+        </div>
+    </LoggingIn>
+    <LogOut>
+        <div class="sb-stack sb-stack--center" style="min-height: 100vh;">
+            Logging out...
+        </div>
+    </LogOut>
+    <LogOutSucceeded>
+        <div class="sb-stack sb-stack--center" style="min-height: 100vh;">
+            You have been logged out successfully.
+        </div>
+    </LogOutSucceeded>
+</RemoteAuthenticatorView>
+
+@code {
+    [Parameter]
+    public string Action { get; set; }
+}

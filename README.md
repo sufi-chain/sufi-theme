@@ -1,4 +1,4 @@
-# KomTheme v1.0.0-alpha.1.0 Release Notes
+# SufiTheme v1.0.0-alpha.1.0 Release Notes
 
 **Release Date:** 2025-05-24  
 **Status:** Alpha Release  
@@ -8,7 +8,7 @@
 
 ## 🎉 First Release
 
-This is the **first alpha release** of KomTheme, the official theme system for Sufi Platform. KomTheme provides a modern, dual-layout Blazor theme with comprehensive support for both collapsed and expanded navigation shells, LTR/RTL layouts, and seamless integration with SufiAbp framework.
+This is the **first alpha release** of SufiTheme, the official theme system for Sufi Platform. SufiTheme provides a modern, dual-layout Blazor theme with comprehensive support for both collapsed and expanded navigation shells, LTR/RTL layouts, and seamless integration with SufiAbp framework.
 
 ---
 
@@ -16,19 +16,19 @@ This is the **first alpha release** of KomTheme, the official theme system for S
 
 This release includes **5 NuGet packages**:
 
-1. **SufiChain.KomTheme** `v1.0.0-alpha.1.0`
+1. **SufiChain.SufiTheme** `v1.0.0-alpha.1.0`
    - Core theme options, layouts, and style definitions
    
-2. **SufiChain.KomTheme.Blazor** `v1.0.0-alpha.1.0`
+2. **SufiChain.SufiTheme.Blazor** `v1.0.0-alpha.1.0`
    - Shared Blazor layouts and components
    
-3. **SufiChain.KomTheme.Blazor.Server** `v1.0.0-alpha.1.0`
+3. **SufiChain.SufiTheme.Blazor.Server** `v1.0.0-alpha.1.0`
    - Blazor Server-specific components and layouts
    
-4. **SufiChain.KomTheme.Blazor.WebAssembly** `v1.0.0-alpha.1.0`
+4. **SufiChain.SufiTheme.Blazor.WebAssembly** `v1.0.0-alpha.1.0`
    - Blazor WebAssembly-specific components and layouts
    
-5. **SufiChain.KomTheme.Blazor.WebAssembly.Bundling** `v1.0.0-alpha.1.0`
+5. **SufiChain.SufiTheme.Blazor.WebAssembly.Bundling** `v1.0.0-alpha.1.0`
    - WebAssembly bundling and style contributors
 
 ---
@@ -57,10 +57,10 @@ This release includes **5 NuGet packages**:
 
 | Layout name | Implementation | Notes |
 | --- | --- | --- |
-| **Application** | `SideMenuLayout`, `TopMenuLayout`, or `DualSidebarLayout` (via `KomThemeBlazorOptions.Layout`) | Main app shell with navigation, toolbar, breadcrumbs |
-| **Account** | `AccountLayout` from `SufiChain.SufiAbp.UI.Blazor.Layouts` | Registered at startup as `KomLayouts.Account`; hosts may use a custom layout (e.g. Console `ConsoleAccountLayout`) |
-| **Empty** | `EmptyLayout` in KomTheme | Minimal wrapper — no navigation chrome |
-| **Public** | Same component as **Application** (`StandardLayouts.Public` → `_options.Layout` in `Kom1Theme`) | Not a separate shell file. Public *navigation* via `IPublicMenuProvider` — see platform doc `sufi-abp/docs/kom-theme/public-navigation.md` |
+| **Application** | `SideMenuLayout`, `TopMenuLayout`, or `DualSidebarLayout` (via `SufiThemeBlazorOptions.Layout`) | Main app shell with navigation, toolbar, breadcrumbs |
+| **Account** | `AccountLayout` from `SufiChain.SufiAbp.UI.Blazor.Layouts` | Registered at startup as `SufiLayouts.Account`; hosts may use a custom layout (e.g. Console `ConsoleAccountLayout`) |
+| **Empty** | `EmptyLayout` in SufiTheme | Minimal wrapper — no navigation chrome |
+| **Public** | Same component as **Application** (`StandardLayouts.Public` → `_options.Layout` in `Sufi1Theme`) | Not a separate shell file. Public *navigation* via `IPublicMenuProvider` — see platform doc `sufi-abp/docs/sufi-theme/public-navigation.md` |
 
 ### Integration
 
@@ -113,20 +113,20 @@ This release includes **5 NuGet packages**:
 
 ```bash
 # For Blazor Server applications
-dotnet add package SufiChain.KomTheme.Blazor.Server --version 1.0.0-alpha.1.0
+dotnet add package SufiChain.SufiTheme.Blazor.Server --version 1.0.0-alpha.1.0
 
 # For Blazor WebAssembly applications
-dotnet add package SufiChain.KomTheme.Blazor.WebAssembly --version 1.0.0-alpha.1.0
+dotnet add package SufiChain.SufiTheme.Blazor.WebAssembly --version 1.0.0-alpha.1.0
 ```
 
 ### Package Manager Console
 
 ```powershell
 # For Blazor Server
-Install-Package SufiChain.KomTheme.Blazor.Server -Version 1.0.0-alpha.1.0
+Install-Package SufiChain.SufiTheme.Blazor.Server -Version 1.0.0-alpha.1.0
 
 # For Blazor WebAssembly
-Install-Package SufiChain.KomTheme.Blazor.WebAssembly -Version 1.0.0-alpha.1.0
+Install-Package SufiChain.SufiTheme.Blazor.WebAssembly -Version 1.0.0-alpha.1.0
 ```
 
 ---
@@ -139,31 +139,31 @@ Choose the appropriate package for your Blazor hosting model (Server or WebAssem
 
 ### 2. Configure Module Dependencies
 
-Add the KomTheme module dependency to your Blazor module:
+Add the SufiTheme module dependency to your Blazor module:
 
 ```csharp
-[DependsOn(typeof(KomThemeBlazorServerModule))] // or KomThemeBlazorWebAssemblyModule
+[DependsOn(typeof(SufiThemeBlazorServerModule))] // or SufiThemeBlazorWebAssemblyModule
 public class YourBlazorModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<KomThemeBlazorOptions>(options =>
+        Configure<SufiThemeBlazorOptions>(options =>
         {
             // Configure your theme options
-            options.DefaultLayout = KomThemeLayouts.Collapsed; // or Expanded
+            options.DefaultLayout = SufiThemeLayouts.Collapsed; // or Expanded
         });
     }
 }
 ```
 
-### 3. Use KomTheme Layouts
+### 3. Use SufiTheme Layouts
 
-Reference KomTheme layouts in your Blazor pages:
+Reference SufiTheme layouts in your Blazor pages:
 
 ```razor
-@layout KomApplicationLayout
+@layout SufiApplicationLayout
 
-<h1>Welcome to KomTheme</h1>
+<h1>Welcome to SufiTheme</h1>
 ```
 
 ---
@@ -173,10 +173,10 @@ Reference KomTheme layouts in your Blazor pages:
 ### Theme Options
 
 ```csharp
-Configure<KomThemeBlazorOptions>(options =>
+Configure<SufiThemeBlazorOptions>(options =>
 {
     // Default layout (Collapsed or Expanded)
-    options.DefaultLayout = KomThemeLayouts.Collapsed;
+    options.DefaultLayout = SufiThemeLayouts.Collapsed;
     
     // Enable layout switching
     options.AllowLayoutSwitch = true;
@@ -194,15 +194,15 @@ Configure<KomThemeBlazorOptions>(options =>
 ### Layout Selection
 
 ```csharp
-public class Kom1Theme : ITheme
+public class Sufi1Theme : ITheme
 {
     public virtual Type? GetLayout(string name, bool fallbackToDefault = true)
     {
         return name switch
         {
             StandardLayouts.Application => _options.Layout,
-            StandardLayouts.Account => KomLayouts.Account,
-            StandardLayouts.Empty => KomLayouts.Empty,
+            StandardLayouts.Account => SufiLayouts.Account,
+            StandardLayouts.Empty => SufiLayouts.Empty,
             StandardLayouts.Public => _options.Layout,
             _ => fallbackToDefault ? _options.Layout : null
         };
@@ -284,9 +284,9 @@ All packages now use **PackageReference** instead of **ProjectReference** to Suf
 
 ## 📚 Resources
 
-- **Documentation:** https://docs.sufiabp.com/themes/kom-theme
-- **GitHub:** https://github.com/sufichain/kom-theme
-- **NuGet:** https://www.nuget.org/packages/SufiChain.KomTheme
+- **Documentation:** https://docs.sufiabp.com/themes/sufi-theme
+- **GitHub:** https://github.com/sufichain/sufi-theme
+- **NuGet:** https://www.nuget.org/packages/SufiChain.SufiTheme
 - **Support:** support@sufichain.ir
 - **Community:** https://discord.gg/sufiabp
 
@@ -294,7 +294,7 @@ All packages now use **PackageReference** instead of **ProjectReference** to Suf
 
 ## 🤝 Contributing
 
-KomTheme is part of the Sufi Platform open-source ecosystem. Contributions are welcome!
+SufiTheme is part of the Sufi Platform open-source ecosystem. Contributions are welcome!
 
 1. Fork the repository
 2. Create a feature branch
@@ -307,15 +307,15 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## 📄 License
 
-KomTheme is licensed under **LGPL-3.0**.
+SufiTheme is licensed under **LGPL-3.0**.
 
-You can use KomTheme in both open-source and commercial projects without restrictions.
+You can use SufiTheme in both open-source and commercial projects without restrictions.
 
 ---
 
 ## 🙏 Acknowledgments
 
-KomTheme is built on top of:
+SufiTheme is built on top of:
 - **SufiAbp Framework** - Modular application framework
 - **ABP Framework** - Foundation for enterprise applications
 - **Blazor** - Microsoft's modern web UI framework
@@ -330,7 +330,7 @@ Special thanks to the Sufi Platform community for feedback and contributions.
 ### Community Support
 - Discord: https://discord.gg/sufiabp
 - Stack Overflow: Tag questions with `komtheme` or `sufiabp`
-- GitHub Issues: https://github.com/sufichain/kom-theme/issues
+- GitHub Issues: https://github.com/sufichain/sufi-theme/issues
 
 ### Commercial Support
 - Email: support@sufichain.ir

@@ -1,0 +1,142 @@
+@namespace SufiChain.SufiTheme.Blazor.Components.Layout
+@using SufiChain.SufiAbp.UI.Layout
+@implements IDisposable
+@inject IPageLayout PageLayout
+
+<div class="sufi-topbar @Class">
+    <div class="sufi-topbar__start">
+        @if (MenuButton != null)
+        {
+            <div class="sufi-topbar__menu-btn">
+                @MenuButton
+            </div>
+        }
+        else if (ShowMenuButton)
+        {
+            <button type="button" class="sufi-topbar__menu-btn" @onclick="OnMenuClick" aria-label="Toggle menu">
+                <SbIcon Name="menu" Size="SbSize.Lg" />
+            </button>
+        }
+        
+        @if (Logo != null)
+        {
+            <div class="sufi-topbar__logo">
+                @Logo
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(Title))
+        {
+            <div class="sufi-topbar__title">@Title</div>
+        }
+        
+        @StartContent
+    </div>
+    
+    @if (CenterContent != null)
+    {
+        <div class="sufi-topbar__center">
+            @CenterContent
+        </div>
+    }
+    
+    <div class="sufi-topbar__end">
+        @* Render page toolbar content directly from PageLayout when enabled *@
+        @if (RenderPageToolbar && PageLayout.ToolbarContent is RenderFragment toolbarFragment)
+        {
+            <div class="sufi-topbar-page-actions">
+                @toolbarFragment
+            </div>
+        }
+        @EndContent
+    </div>
+</div>
+
+@code {
+    /// <summary>
+    /// Application title.
+    /// </summary>
+    [Parameter]
+    public string? Title { get; set; }
+    
+    /// <summary>
+    /// Logo content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Logo { get; set; }
+    
+    /// <summary>
+    /// Custom menu button.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? MenuButton { get; set; }
+    
+    /// <summary>
+    /// Whether to show default menu button.
+    /// </summary>
+    [Parameter]
+    public bool ShowMenuButton { get; set; }
+    
+    /// <summary>
+    /// Start section content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? StartContent { get; set; }
+    
+    /// <summary>
+    /// Center section content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? CenterContent { get; set; }
+    
+    /// <summary>
+    /// End section content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? EndContent { get; set; }
+    
+    /// <summary>
+    /// Callback when menu button is clicked.
+    /// </summary>
+    [Parameter]
+    public EventCallback OnMenuClick { get; set; }
+    
+    /// <summary>
+    /// Additional CSS classes.
+    /// </summary>
+    [Parameter]
+    public string? Class { get; set; }
+    
+    /// <summary>
+    /// Version counter to force re-render when content changes.
+    /// Incrementing this value triggers a re-render of the component.
+    /// </summary>
+    [Parameter]
+    public int ContentVersion { get; set; }
+    
+    /// <summary>
+    /// Whether to render page toolbar content directly from PageLayout.ToolbarContent.
+    /// Set to true for layouts where toolbar should appear in the top bar.
+    /// </summary>
+    [Parameter]
+    public bool RenderPageToolbar { get; set; }
+
+    protected override void OnInitialized()
+    {
+        // Subscribe to PageLayout changes to re-render when toolbar content changes
+        PageLayout.PropertyChanged += OnPageLayoutChanged;
+    }
+
+    private void OnPageLayoutChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        // Re-render when page layout properties change (especially ToolbarContent)
+        if (e.PropertyName == nameof(IPageLayout.ToolbarContent))
+        {
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public void Dispose()
+    {
+        PageLayout.PropertyChanged -= OnPageLayoutChanged;
+    }
+}

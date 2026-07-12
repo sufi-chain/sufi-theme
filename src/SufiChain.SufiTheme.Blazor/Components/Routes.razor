@@ -1,0 +1,46 @@
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.Extensions.Localization
+@using SufiChain.SufiAbp.UI.Blazor.Components
+@using SufiChain.SufiAbp.UI.Localization
+@using SufiChain.SufiTheme.Blazor.Layouts
+@inject IStringLocalizer<SufiAbpFrameworkResource> L
+
+<Router AppAssembly="@typeof(Routes).Assembly" AdditionalAssemblies="@AdditionalAssemblies">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@DefaultLayout">
+            <NotAuthorized>
+                @if (context.User.Identity?.IsAuthenticated != true)
+                {
+                    <RedirectToLogin />
+                }
+                else
+                {
+                    <LayoutView Layout="@DefaultLayout">
+                        <SufiAbpErrorPage StatusCode="403" Title="@L["NotAuthorized"]" Message="@L["NotAuthorizedMessage"]" />
+                    </LayoutView>
+                }
+            </NotAuthorized>
+        </AuthorizeRouteView>
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>@L["PageNotFound"]</PageTitle>
+        <LayoutView Layout="@DefaultLayout">
+            <SufiAbpErrorPage StatusCode="404" Title="@L["PageNotFound"]" Message="@L["PageNotFoundMessage"]" />
+        </LayoutView>
+    </NotFound>
+</Router>
+
+@code {
+    /// <summary>
+    /// Additional assemblies to scan for routable components.
+    /// </summary>
+    [Parameter]
+    public IEnumerable<System.Reflection.Assembly>? AdditionalAssemblies { get; set; }
+
+    /// <summary>
+    /// The default layout to use for pages.
+    /// </summary>
+    [Parameter]
+    public Type DefaultLayout { get; set; } = typeof(SideMenuLayout);
+}

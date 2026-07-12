@@ -1,0 +1,56 @@
+@namespace SufiChain.SufiTheme.Blazor.Components.Layout
+
+@*
+    SufiExpandPanel - The expandable secondary sidebar panel
+    
+    Used within SufiDualSidebar to show the expanded navigation content:
+    - Organization switcher
+    - Navigation groups with labels
+    - User profile section
+*@
+
+<div class="sufi-expand-panel @Class">
+    @if (Header != null)
+    {
+        <div class="sufi-expand-panel__header">
+            @Header
+        </div>
+    }
+    
+    <nav class="sufi-expand-panel__nav">
+        @ChildContent
+    </nav>
+    
+    @if (Footer != null)
+    {
+        <div class="sufi-expand-panel__footer">
+            @Footer
+        </div>
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// Header content (typically organization switcher).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Header { get; set; }
+    
+    /// <summary>
+    /// Navigation content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    
+    /// <summary>
+    /// Footer content (typically user profile).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Footer { get; set; }
+    
+    /// <summary>
+    /// Additional CSS classes.
+    /// </summary>
+    [Parameter]
+    public string? Class { get; set; }
+}

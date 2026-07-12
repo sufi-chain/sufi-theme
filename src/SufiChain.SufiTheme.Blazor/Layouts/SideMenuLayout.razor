@@ -1,0 +1,120 @@
+@inherits SufiLayoutBase
+
+@* 
+    SideMenuLayout - Uses SufiBlazor Design System with SufiTheme Components
+    
+    This layout uses SufiTheme layout components (SufiAppShell, SufiSidebar, etc.)
+    combined with SufiBlazor primitive components (SbNavMenu, SbButton, etc.).
+    Top bar: Logo | Page Title + Breadcrumbs | Page Actions + System Toolbar
+*@
+
+<SbThemeProvider Theme="@CurrentTheme" Direction="@Direction">
+    <SufiAppShell SidebarCollapsed="@_sidebarCollapsed" SidebarCollapsedChanged="OnSidebarCollapsedChanged">
+        <TopBar>
+            <SufiTopBar ShowMenuButton="true" OnMenuClick="ToggleMobileSidebar" ContentVersion="@LayoutContentVersion" RenderPageToolbar="true">
+                <Logo>
+                    <a href="/" class="sufi-topbar-brand">
+                        @if (!string.IsNullOrEmpty(BrandingProvider.LogoUrl))
+                        {
+                            <img src="@BrandingProvider.LogoUrl" alt="@BrandingProvider.AppName" class="sufi-topbar-brand__logo" />
+                        }
+                        <span class="sufi-topbar-brand__name">@BrandingProvider.AppName</span>
+                    </a>
+                </Logo>
+                <CenterContent>
+                    @* Page Title + Breadcrumbs *@
+                    <div class="sufi-topbar-page-header">
+                        @if (!string.IsNullOrEmpty(PageLayout.Title))
+                        {
+                            <span class="sufi-topbar-page-title">@PageLayout.Title</span>
+                        }
+                        @if (BlazorOptions.Value.ShowBreadcrumbs && PageLayout.BreadcrumbItems.Any())
+                        {
+                            <SufiAbpBreadcrumbs ShowHome="false" />
+                        }
+                    </div>
+                </CenterContent>
+                <EndContent>
+                    @* Page Actions are now rendered directly by SufiTopBar from PageLayout.ToolbarContent *@
+                    @* System Toolbar *@
+                    @if (ToolbarItems.Any())
+                    {
+                        <div class="sufi-topbar-toolbar">
+                            @foreach (var item in ToolbarItems)
+                            {
+                                <DynamicComponent Type="@item.ComponentType" />
+                            }
+                        </div>
+                    }
+                    <SidebarUserAvatar Placement="SbPlacement.BottomEnd" />
+                </EndContent>
+            </SufiTopBar>
+        </TopBar>
+
+        <Sidebar>
+            <SufiSidebar Collapsible="@BlazorOptions.Value.ShowSidebarToggle">
+                <Header>
+                    <a href="/" class="sb-stack sb-stack--row sb-stack--align-center" style="gap: var(--sb-space-2); text-decoration: none;">
+                        @if (!string.IsNullOrEmpty(BrandingProvider.LogoUrl))
+                        {
+                            <img src="@BrandingProvider.LogoUrl" alt="@BrandingProvider.AppName" style="height: 28px;" />
+                        }
+                        <span style="font-weight: var(--sb-font-weight-semibold); color: var(--sb-color-text);">
+                            @BrandingProvider.AppName
+                        </span>
+                    </a>
+                </Header>
+                <ChildContent>
+                    <SbNavMenu>
+                        @foreach (var menuItem in MenuItems)
+                        {
+                            <MenuItemRenderer @key="menuItem.Name" MenuItem="@menuItem" GroupStartsCollapsed="@(menuItem.IsCollapsed == false)" />
+                        }
+                    </SbNavMenu>
+                </ChildContent>
+            </SufiSidebar>
+        </Sidebar>
+
+        <ChildContent>
+            <div class="sufi-content-wrapper">
+                <SufiAbpPageAlert />
+                <SufiAbpLayoutHook Name="@LayoutHooks.Body.First" />
+                
+                @* SufiAbpPageToolbar only registers toolbar content, title/breadcrumbs are in top bar *@
+                <SufiAbpPageToolbar />
+                
+                <div class="sufi-content-body">
+                    @Body
+                </div>
+                
+                <SufiAbpLayoutHook Name="@LayoutHooks.Body.Last" />
+                <SufiAbpDynamicLayoutComponent />
+            </div>
+        </ChildContent>
+    </SufiAppShell>
+    
+    @* Fixed Footer *@
+    @if (BlazorOptions.Value.ShowFooter)
+    {
+        <footer class="sufi-footer sufi-footer--side-menu">
+            <SufiFooterCopyright />
+        </footer>
+    }
+    @* Global Message/Confirm Dialog Host *@
+    <SufiAbpOverlayHost />
+</SbThemeProvider>
+
+@code {
+    private bool _sidebarCollapsed;
+    private bool _mobileSidebarOpen;
+
+    private void OnSidebarCollapsedChanged(bool collapsed)
+    {
+        _sidebarCollapsed = collapsed;
+    }
+
+    private void ToggleMobileSidebar()
+    {
+        _mobileSidebarOpen = !_mobileSidebarOpen;
+    }
+}

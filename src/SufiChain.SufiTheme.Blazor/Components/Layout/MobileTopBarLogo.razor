@@ -1,0 +1,31 @@
+@namespace SufiChain.SufiTheme.Blazor.Components.Layout
+@using SufiChain.SufiAbp.UI.Branding
+@using SufiChain.SufiBlazor.Components.Common
+
+<div class="sufi-topbar-brand sufi-topbar-brand--with-name">
+    <a href="/" class="sufi-topbar-brand__link">
+        @if (!string.IsNullOrEmpty(BrandingProvider?.LogoUrl))
+        {
+            <img src="@BrandingProvider.LogoUrl" alt="@BrandingProvider.AppName" class="sufi-topbar-brand__logo" style="height: 28px; width: auto; object-fit: contain;" />
+        }
+        else
+        {
+            <SbIcon Name="grid" Size="SbSize.Lg" />
+        }
+    </a>
+    @if (ShowAppName && !string.IsNullOrEmpty(BrandingProvider?.AppName))
+    {
+        <span class="sufi-topbar-brand__name">@BrandingProvider.AppName</span>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public IBrandingProvider? BrandingProvider { get; set; }
+
+    /// <summary>
+    /// When true, show the app name from BrandingProvider next to the logo (e.g. in mobile header).
+    /// </summary>
+    [Parameter]
+    public bool ShowAppName { get; set; }
+}

@@ -1,0 +1,162 @@
+@inherits SufiLayoutBase
+@using Microsoft.Extensions.Localization
+@using SufiChain.SufiAbp.UI.Localization
+@inject IStringLocalizer<SufiAbpFrameworkResource> L
+
+@* 
+    TopMenuLayout - Uses SufiBlazor Design System
+    
+    Horizontal top navigation layout using design system components.
+    Has a secondary header bar for page title + breadcrumbs + page actions.
+*@
+
+<SbThemeProvider Theme="@CurrentTheme" Direction="@Direction">
+    <div class="sb-stack sb-stack--column" style="min-height: 100vh;">
+        @* Top Navigation Bar *@
+        <SufiTopBar ShowMenuButton="true" OnMenuClick="ToggleMobileMenu" ContentVersion="@LayoutContentVersion" Class="sufi-topbar--top-menu">
+            <Logo>
+                <a href="/" class="sufi-topbar-brand">
+                    @if (!string.IsNullOrEmpty(BrandingProvider.LogoUrl))
+                    {
+                        <img src="@BrandingProvider.LogoUrl" alt="@BrandingProvider.AppName" class="sufi-topbar-brand__logo" />
+                    }
+                    <span class="sufi-topbar-brand__name">@BrandingProvider.AppName</span>
+                </a>
+            </Logo>
+            <CenterContent>
+                @* Desktop horizontal menu - hidden on mobile *@
+                <nav class="sb-stack sb-stack--row sb-stack--align-center"
+                     style="gap: var(--sb-space-1); flex-wrap: wrap; min-width: 0;"
+                     aria-label="Main navigation">
+                    @foreach (var menuItem in MenuItems)
+                    {
+                        @if (menuItem.Items.Any())
+                        {
+                            <div style="position: relative;">
+                                <SbButton Variant="SbButtonVariant.Ghost" OnClick="@(() => ToggleDropdown(menuItem.Name))">
+                                    @menuItem.DisplayName
+                                    <SbIcon Name="chevron-down" Size="SbSize.Sm" />
+                                </SbButton>
+                                @if (_openDropdown == menuItem.Name)
+                                {
+                                    <div style="position: absolute; top: 100%; inset-inline-start: 0; z-index: var(--sb-z-dropdown); background: var(--sb-color-surface); border: 1px solid var(--sb-color-border); border-radius: var(--sb-radius-md); box-shadow: var(--sb-shadow-lg); min-width: 200px; padding: var(--sb-space-2);">
+                                        <SbNavMenu>
+                                            @foreach (var child in menuItem.Items)
+                                            {
+                                                <SbNavItem Href="@(child.Url ?? "#")" Text="@child.DisplayName">
+                                                    <Icon>
+                                                        @if (!string.IsNullOrEmpty(child.Icon))
+                                                        {
+                                                            <SbIcon Name="@child.Icon" />
+                                                        }
+                                                    </Icon>
+                                                </SbNavItem>
+                                            }
+                                        </SbNavMenu>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <SbNavItem Href="@(menuItem.Url ?? "#")" Text="@menuItem.DisplayName" />
+                        }
+                    }
+                </nav>
+            </CenterContent>
+            <EndContent>
+                @if (ToolbarItems.Any())
+                {
+                    <div class="sufi-topbar-toolbar">
+                        @foreach (var item in ToolbarItems)
+                        {
+                            <DynamicComponent Type="@item.ComponentType" />
+                        }
+                    </div>
+                }
+                <SidebarUserAvatar Placement="SbPlacement.BottomEnd" />
+            </EndContent>
+        </SufiTopBar>
+
+        @* Secondary Page Header Bar - Title + Breadcrumbs + Page Actions *@
+        @if (!string.IsNullOrEmpty(PageLayout.Title) || PageLayout.BreadcrumbItems.Any() || PageLayout.ToolbarContent != null)
+        {
+            <div class="sufi-page-header-bar">
+                <div class="sufi-topbar-page-header">
+                    @if (!string.IsNullOrEmpty(PageLayout.Title))
+                    {
+                        <span class="sufi-topbar-page-title">@PageLayout.Title</span>
+                    }
+                    @if (BlazorOptions.Value.ShowBreadcrumbs && PageLayout.BreadcrumbItems.Any())
+                    {
+                        <SufiAbpBreadcrumbs ShowHome="false" />
+                    }
+                </div>
+                @if (PageLayout.ToolbarContent is RenderFragment toolbarFragment)
+                {
+                    <div class="sufi-topbar-page-actions">
+                        @toolbarFragment
+                    </div>
+                }
+            </div>
+        }
+
+        @* Mobile Menu Drawer *@
+        <SbDrawer Open="@_mobileMenuOpen" OpenChanged="@OnMobileMenuChanged" Placement="SbDrawerPlacement.Start" Title="@L["Menu"]">
+            <SbNavMenu>
+                @foreach (var menuItem in MenuItems)
+                {
+                    <MenuItemRenderer MenuItem="@menuItem" GroupStartsCollapsed="@(menuItem.IsCollapsed == false)" />
+                }
+            </SbNavMenu>
+        </SbDrawer>
+
+        @* Main Content *@
+        <main class="sufi-content-wrapper" style="flex: 1;">
+            <SbContainer MaxWidth="SbContainerMaxWidth.Xxl">
+                <SufiAbpPageAlert />
+                <SufiAbpLayoutHook Name="@LayoutHooks.Body.First" />
+                
+                @* SufiAbpPageToolbar only registers toolbar content *@
+                <SufiAbpPageToolbar />
+                
+                <div class="sufi-content-body">
+                    @Body
+                </div>
+                
+                <SufiAbpLayoutHook Name="@LayoutHooks.Body.Last" />
+                <SufiAbpDynamicLayoutComponent />
+            </SbContainer>
+        </main>
+    </div>
+    
+    @* Fixed Footer *@
+    @if (BlazorOptions.Value.ShowFooter)
+    {
+        <footer class="sufi-footer sufi-footer--top-menu">
+            <SufiFooterCopyright />
+        </footer>
+    }
+    @* Global Message/Confirm Dialog Host *@
+    <SufiAbpOverlayHost />
+</SbThemeProvider>
+
+@code {
+    private bool _mobileMenuOpen;
+    private string? _openDropdown;
+
+    private void ToggleMobileMenu()
+    {
+        _mobileMenuOpen = !_mobileMenuOpen;
+    }
+
+    private void OnMobileMenuChanged(bool open)
+    {
+        _mobileMenuOpen = open;
+    }
+
+    private void ToggleDropdown(string name)
+    {
+        _openDropdown = _openDropdown == name ? null : name;
+    }
+}

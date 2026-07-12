@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitea/workflows/release-nuget.yml" />
+    <File Path="Directory.Build.props" />
+    <File Path="NuGet.Config" />
+    <File Path="versions.props" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/SufiChain.SufiTheme.Blazor.Server/SufiChain.SufiTheme.Blazor.Server.csproj" />
+    <Project Path="src/SufiChain.SufiTheme.Blazor.WebAssembly.Bundling/SufiChain.SufiTheme.Blazor.WebAssembly.Bundling.csproj" />
+    <Project Path="src/SufiChain.SufiTheme.Blazor.WebAssembly/SufiChain.SufiTheme.Blazor.WebAssembly.csproj" />
+    <Project Path="src/SufiChain.SufiTheme.Blazor/SufiChain.SufiTheme.Blazor.csproj" />
+    <Project Path="src/SufiChain.SufiTheme/SufiChain.SufiTheme.csproj" />
+  </Folder>
+</Solution>

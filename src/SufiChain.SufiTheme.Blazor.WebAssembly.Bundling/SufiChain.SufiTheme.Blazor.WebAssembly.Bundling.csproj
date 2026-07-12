@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>SufiChain.SufiTheme.Blazor.WebAssembly.Bundling</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <IsPackable>true</IsPackable>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>SufiChain.SufiTheme.Blazor.WebAssembly.Bundling</PackageId>
+    <Description>SufiTheme WebAssembly bundling and style contributors for Sufi Platform.</Description>
+  </PropertyGroup>
+
+
+  
+  <!--<ItemGroup>
+      <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Abstractions\SufiChain.SufiAbp.UI.Abstractions.csproj" />
+  </ItemGroup>-->
+
+
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Abstractions\SufiChain.SufiAbp.UI.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' != 'true'">
+    <PackageReference Include="SufiChain.SufiAbp.Core" Version="$(SufiAbpVersion)"/>
+    <PackageReference Include="SufiChain.SufiAbp.UI.Abstractions" Version="$(SufiAbpVersion)"/>
+  </ItemGroup>
+
+
+</Project>

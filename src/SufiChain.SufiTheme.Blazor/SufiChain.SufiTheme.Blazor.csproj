@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>SufiChain.SufiTheme.Blazor</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <IsPackable>true</IsPackable>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>SufiChain.SufiTheme.Blazor</PackageId>
+    <Description>SufiTheme Blazor layouts and components for Sufi Platform.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+  </PropertyGroup>
+
+
+  <!--<ItemGroup>
+    <PackageReference Include="SufiChain.SufiAbp.Core" Version="$(SufiAbpVersion)" />
+    <PackageReference Include="Volo.Abp.Security" Version="$(AbpVersion)" />
+    <PackageReference Include="SufiChain.SufiAbp.UI.Blazor" Version="$(SufiAbpVersion)" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Security" Version="$(AbpVersion)" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Blazor\SufiChain.SufiAbp.UI.Blazor.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' != 'true'">
+    <PackageReference Include="SufiChain.SufiAbp.Core" Version="$(SufiAbpVersion)" />
+    <PackageReference Include="SufiChain.SufiAbp.UI.Blazor" Version="$(SufiAbpVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="$(MicrosoftAspNetCoreComponentsWebVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="$(MicrosoftAspNetCoreComponentsAuthorizationVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SufiChain.SufiTheme\SufiChain.SufiTheme.csproj" />
+
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\**\*.*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Pack="true" PackagePath="staticwebassets\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>

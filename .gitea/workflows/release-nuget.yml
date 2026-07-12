@@ -35,8 +35,8 @@ env:
   NUGET_ORG_SOURCE_URL: https://api.nuget.org/v3/index.json
   NUGET_PUSH_PARALLELISM: 4
   PACKAGE_OUTPUT: ./artifacts/nuget
-  PACKAGE_PROJECTS: src/SufiChain.KomTheme/SufiChain.KomTheme.csproj src/SufiChain.KomTheme.Blazor/SufiChain.KomTheme.Blazor.csproj src/SufiChain.KomTheme.Blazor.Server/SufiChain.KomTheme.Blazor.Server.csproj src/SufiChain.KomTheme.Blazor.WebAssembly.Bundling/SufiChain.KomTheme.Blazor.WebAssembly.Bundling.csproj src/SufiChain.KomTheme.Blazor.WebAssembly/SufiChain.KomTheme.Blazor.WebAssembly.csproj
-  ROOT_SLNX: SufiChain.KomTheme.slnx
+  PACKAGE_PROJECTS: src/SufiChain.SufiTheme/SufiChain.SufiTheme.csproj src/SufiChain.SufiTheme.Blazor/SufiChain.SufiTheme.Blazor.csproj src/SufiChain.SufiTheme.Blazor.Server/SufiChain.SufiTheme.Blazor.Server.csproj src/SufiChain.SufiTheme.Blazor.WebAssembly.Bundling/SufiChain.SufiTheme.Blazor.WebAssembly.Bundling.csproj src/SufiChain.SufiTheme.Blazor.WebAssembly/SufiChain.SufiTheme.Blazor.WebAssembly.csproj
+  ROOT_SLNX: SufiChain.SufiTheme.slnx
   WORKSPACE_DIR: ${{ github.workspace }}
 
 concurrency:

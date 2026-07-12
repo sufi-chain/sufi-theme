@@ -1,0 +1,99 @@
+@namespace SufiChain.SufiTheme.Blazor.Components.Layout
+
+<div class="sufi-sidebar @(_isCollapsed ? "sufi-sidebar--collapsed" : "") @Class">
+    @if (Header != null)
+    {
+        <div class="sufi-sidebar__header">
+            @Header
+        </div>
+    }
+    
+    <nav class="sufi-sidebar__nav">
+        @ChildContent
+    </nav>
+    
+    @if (Footer != null)
+    {
+        <div class="sufi-sidebar__footer">
+            @Footer
+        </div>
+    }
+    
+    @if (Collapsible)
+    {
+        <button type="button" class="sufi-sidebar__toggle" @onclick="ToggleCollapse" aria-label="@(_isCollapsed ? "Expand" : "Collapse")">
+            @(_isCollapsed ? "→" : "←")
+        </button>
+    }
+</div>
+
+@code {
+    private bool _isCollapsed;
+    
+    /// <summary>
+    /// Header content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Header { get; set; }
+    
+    /// <summary>
+    /// Navigation content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    
+    /// <summary>
+    /// Footer content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Footer { get; set; }
+    
+    /// <summary>
+    /// Whether the sidebar is collapsible.
+    /// </summary>
+    [Parameter]
+    public bool Collapsible { get; set; } = true;
+    
+    /// <summary>
+    /// Whether the sidebar is collapsed.
+    /// </summary>
+    [Parameter]
+    public bool Collapsed { get; set; }
+    
+    /// <summary>
+    /// Callback when collapsed state changes.
+    /// </summary>
+    [Parameter]
+    public EventCallback<bool> CollapsedChanged { get; set; }
+    
+    /// <summary>
+    /// Parent app shell.
+    /// </summary>
+    [CascadingParameter]
+    public SufiAppShell? AppShell { get; set; }
+    
+    /// <summary>
+    /// Additional CSS classes.
+    /// </summary>
+    [Parameter]
+    public string? Class { get; set; }
+    
+    protected override void OnParametersSet()
+    {
+        _isCollapsed = AppShell?.IsSidebarCollapsed ?? Collapsed;
+    }
+    
+    private async Task ToggleCollapse()
+    {
+        if (AppShell != null)
+        {
+            await AppShell.ToggleSidebarAsync();
+            _isCollapsed = AppShell.IsSidebarCollapsed;
+        }
+        else
+        {
+            _isCollapsed = !_isCollapsed;
+            await CollapsedChanged.InvokeAsync(_isCollapsed);
+        }
+    }
+}

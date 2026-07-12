@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>SufiChain.SufiTheme.Blazor.Server</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <IsPackable>true</IsPackable>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>SufiChain.SufiTheme.Blazor.Server</PackageId>
+    <Description>SufiTheme Blazor Server components and layouts for Sufi Platform.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <PackageReference Include="SufiChain.SufiAbp.Core" Version="$(SufiAbpVersion)" />
+    <PackageReference Include="Volo.Abp.Security" Version="$(AbpVersion)" />
+    <PackageReference Include="SufiChain.SufiAbp.UI" Version="$(SufiAbpVersion)" />
+    <PackageReference Include="SufiChain.SufiAbp.MultiTenancy" Version="$(SufiAbpVersion)" />
+    <PackageReference Include="SufiChain.SufiAbp.Features" Version="$(SufiAbpVersion)" />
+    <PackageReference Include="SufiChain.SufiAbp.UI.Blazor.Server" Version="$(SufiAbpVersion)" />
+  </ItemGroup>-->
+  
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Security" Version="$(AbpVersion)" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.Core\SufiChain.SufiAbp.Core.csproj" />
+    <PackageReference Include="Volo.Abp.UI" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.MultiTenancy" Version="$(AbpVersion)" />
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.Features\SufiChain.SufiAbp.Features.csproj" />
+    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Blazor.Server\SufiChain.SufiAbp.UI.Blazor.Server.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' != 'true'">
+    <PackageReference Include="SufiChain.SufiAbp.Core" Version="$(SufiAbpVersion)" />
+    <PackageReference Include="Volo.Abp.UI" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.MultiTenancy" Version="$(AbpVersion)" />
+    <PackageReference Include="SufiChain.SufiAbp.Features" Version="$(SufiAbpVersion)" />
+    <PackageReference Include="SufiChain.SufiAbp.UI.Blazor.Server" Version="$(SufiAbpVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SufiChain.SufiTheme.Blazor\SufiChain.SufiTheme.Blazor.csproj" />
+  </ItemGroup>
+
+</Project>
