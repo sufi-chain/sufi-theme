@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using SufiChain.SufiTheme.Blazor.WebAssembly.Themes.SufiTheme.Toolbar;
-using SufiChain.SufiAbp.UI.Toolbars;
+using SufiChain.SufiPlatform.UI.Toolbars;
 
 namespace SufiChain.SufiTheme.Blazor.WebAssembly.Toolbars;
 

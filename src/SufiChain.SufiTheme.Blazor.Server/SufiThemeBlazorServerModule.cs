@@ -6,19 +6,19 @@ using SufiChain.SufiTheme.Blazor.Server.TenantSelector;
 using SufiChain.SufiTheme.Blazor.Server.Bundling;
 using SufiChain.SufiTheme.Blazor.Server.Toolbars;
 using SufiChain.SufiTheme.Blazor.Server.Users;
-using SufiChain.SufiAbp.UI.Authorization;
-using SufiChain.SufiAbp.UI.Blazor.DependencyInjection;
-using SufiChain.SufiAbp.UI.Blazor.Server.DependencyInjection;
-using SufiChain.SufiAbp.UI.Branding;
-using SufiChain.SufiAbp.UI.Bundling;
-using SufiChain.SufiAbp.UI.MultiTenancy;
-using SufiChain.SufiAbp.UI.Routing;
-using SufiChain.SufiAbp.UI.Services.DependencyInjection;
-using SufiChain.SufiAbp.UI.Toolbars;
-using SufiChain.SufiAbp.UI.Users;
+using SufiChain.SufiPlatform.UI.Authorization;
+using SufiChain.SufiPlatform.UI.Blazor.DependencyInjection;
+using SufiChain.SufiPlatform.UI.Blazor.Server.DependencyInjection;
+using SufiChain.SufiPlatform.UI.Branding;
+using SufiChain.SufiPlatform.UI.Bundling;
+using SufiChain.SufiPlatform.UI.MultiTenancy;
+using SufiChain.SufiPlatform.UI.Routing;
+using SufiChain.SufiPlatform.UI.Services.DependencyInjection;
+using SufiChain.SufiPlatform.UI.Toolbars;
+using SufiChain.SufiPlatform.UI.Users;
 using Volo.Abp.Modularity;
 
-using SufiChain.SufiAbp.UI;
+using SufiChain.SufiPlatform.UI;
 
 namespace SufiChain.SufiTheme.Blazor.Server;
 
@@ -30,14 +30,14 @@ namespace SufiChain.SufiTheme.Blazor.Server;
 /// </summary>
 [DependsOn(
     typeof(SufiThemeBlazorModule),
-    typeof(SufiAbpUiDomainSharedModule)
+    typeof(SufiUiDomainSharedModule)
 )]
 public class SufiThemeBlazorServerModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        // Bridge ABP's branding provider to SufiAbp's branding system
-        // Registered before AddSufiAbpUIServices() so the adapter takes precedence over the default
+        // Bridge ABP's branding provider to Sufi Platform branding system
+        // Registered before AddSufiUIServices() so the adapter takes precedence over the default
         context.Services.AddSingleton<IBrandingProvider, AbpBrandingProviderAdapter>();
 
         // Override tenant selector visibility with ABP-backed implementation
@@ -45,19 +45,19 @@ public class SufiThemeBlazorServerModule : AbpModule
 
         // Bridge ABP current user and authorization for menu/toolbar permission filtering
         context.Services.Replace(ServiceDescriptor.Scoped<ICurrentUserAccessor, AbpCurrentUserAccessorAdapter>());
-        context.Services.Replace(ServiceDescriptor.Scoped<ISufiAbpPermissionChecker, SufiThemeAuthorizationPermissionChecker>());
+        context.Services.Replace(ServiceDescriptor.Scoped<ISufiPermissionChecker, SufiThemeAuthorizationPermissionChecker>());
 
-        // Register SufiAbp UI services (menu, toolbar, branding, etc.)
-        context.Services.AddSufiAbpUIServices();
+        // Register Sufi Platform UI services (menu, toolbar, branding, etc.)
+        context.Services.AddSufiUIServices();
 
-        // Register SufiAbp UI Blazor services (messages, notifications, tenant switch, etc.)
-        context.Services.AddSufiAbpUIBlazor();
+        // Register Sufi Platform UI Blazor services (messages, notifications, tenant switch, etc.)
+        context.Services.AddSufiUIBlazor();
 
         // Blazor Server: isolate overlay components (toasts, block UI) per circuit/user session
-        context.Services.AddSufiAbpBlazorServerCircuitServices();
+        context.Services.AddSufiBlazorServerCircuitServices();
 
         // Register this assembly for Blazor routing
-        Configure<SufiAbpRouterOptions>(options =>
+        Configure<SufiRouterOptions>(options =>
         {
             options.AdditionalAssemblies.Add(typeof(SufiThemeBlazorServerModule).Assembly);
         });

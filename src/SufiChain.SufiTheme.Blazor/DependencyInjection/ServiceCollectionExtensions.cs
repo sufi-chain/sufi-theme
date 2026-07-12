@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using SufiChain.SufiTheme.Blazor.Layouts;
-using SufiChain.SufiAbp.UI.Blazor.Layouts;
+using SufiChain.SufiPlatform.UI.Blazor.Layouts;
 using SufiChain.SufiTheme.DependencyInjection;
 using SufiChain.SufiTheme.Blazor.Menus;
 

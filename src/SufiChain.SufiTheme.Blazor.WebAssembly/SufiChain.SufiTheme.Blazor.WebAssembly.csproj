@@ -19,16 +19,16 @@
   </ItemGroup>
 
   <!--<ItemGroup>
-    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Blazor.WebAssembly\SufiChain.SufiAbp.UI.Blazor.WebAssembly.csproj"  />
+    <ProjectReference Include="..\..\..\..\sufi-platform\framework\SufiChain.SufiPlatform.UI.Blazor.WebAssembly\SufiChain.SufiPlatform.UI.Blazor.WebAssembly.csproj"  />
   </ItemGroup>-->
 
 
-  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
-    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Blazor.WebAssembly\SufiChain.SufiAbp.UI.Blazor.WebAssembly.csproj" />
+  <ItemGroup Condition="'$(UseSufiProjectReferences)' == 'true'">
+    <ProjectReference Include="..\..\..\..\sufi-platform\framework\SufiChain.SufiPlatform.UI.Blazor.WebAssembly\SufiChain.SufiPlatform.UI.Blazor.WebAssembly.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' != 'true'">
-      <PackageReference Include="SufiChain.SufiAbp.UI.Blazor.WebAssembly" Version="$(SufiAbpVersion)"/>
+  <ItemGroup Condition="'$(UseSufiProjectReferences)' != 'true'">
+      <PackageReference Include="SufiChain.SufiPlatform.UI.Blazor.WebAssembly" Version="$(SufiVersion)"/>
   </ItemGroup>
 
   <ItemGroup>

@@ -1,8 +1,8 @@
 using SufiChain.SufiTheme.Blazor.Layouts;
-using SufiChain.SufiAbp.UI.Blazor.Components;
-using SufiChain.SufiAbp.UI.Blazor.Layouts;
-using SufiChain.SufiAbp.UI.Layout;
-using SufiChain.SufiAbp.UI.Theming;
+using SufiChain.SufiPlatform.UI.Blazor.Components;
+using SufiChain.SufiPlatform.UI.Blazor.Layouts;
+using SufiChain.SufiPlatform.UI.Layout;
+using SufiChain.SufiPlatform.UI.Theming;
 
 namespace SufiChain.SufiTheme.Blazor;
 
@@ -23,7 +23,7 @@ public class SufiBlazorTheme : ITheme
             StandardLayouts.Application => typeof(SideMenuLayout),
             StandardLayouts.Account => typeof(AccountLayout),
             StandardLayouts.Empty => typeof(EmptyLayout),
-            _ => fallbackToDefault ? typeof(SideMenuLayout) : typeof(SufiAbpNullLayout)
+            _ => fallbackToDefault ? typeof(SideMenuLayout) : typeof(SufiNullLayout)
         };
     }
 

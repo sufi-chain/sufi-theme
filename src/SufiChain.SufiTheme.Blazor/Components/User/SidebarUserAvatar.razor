@@ -1,16 +1,16 @@
 @using Microsoft.Extensions.Localization
 @using SufiChain.SufiBlazor.Components
 @using SufiChain.SufiBlazor.Icons
-@using SufiChain.SufiAbp.UI.Authentication
-@using SufiChain.SufiAbp.UI.Localization
-@using SufiChain.SufiAbp.UI.Navigation
+@using SufiChain.SufiPlatform.UI.Authentication
+@using SufiChain.SufiPlatform.UI.Localization
+@using SufiChain.SufiPlatform.UI.Navigation
 @using Microsoft.AspNetCore.Components.Routing
 @inject ICurrentUser CurrentUser
 @inject IMenuManager MenuManager
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 @inject IOptions<AuthenticationOptions> AuthenticationOptions
-@inject IStringLocalizer<SufiAbpFrameworkResource> L
+@inject IStringLocalizer<SufiFrameworkResource> L
 @implements IDisposable
 
 @*

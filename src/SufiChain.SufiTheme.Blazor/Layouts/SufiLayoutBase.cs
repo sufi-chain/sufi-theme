@@ -5,12 +5,12 @@ using Microsoft.Extensions.Options;
 using SufiChain.SufiTheme.Blazor.Menus;
 using SufiChain.SufiBlazor.Components;
 using SufiChain.SufiBlazor.Theming;
-using SufiChain.SufiAbp.UI.Branding;
-using SufiChain.SufiAbp.UI.Layout;
-using SufiChain.SufiAbp.UI.Localization;
-using SufiChain.SufiAbp.UI.Navigation;
-using SufiChain.SufiAbp.UI.Theming;
-using SufiChain.SufiAbp.UI.Toolbars;
+using SufiChain.SufiPlatform.UI.Branding;
+using SufiChain.SufiPlatform.UI.Layout;
+using SufiChain.SufiPlatform.UI.Localization;
+using SufiChain.SufiPlatform.UI.Navigation;
+using SufiChain.SufiPlatform.UI.Theming;
+using SufiChain.SufiPlatform.UI.Toolbars;
 
 namespace SufiChain.SufiTheme.Blazor.Layouts;
 
@@ -49,7 +49,7 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
     protected IThemeSwitchService ThemeSwitchService { get; set; } = default!;
 
     [Inject]
-    protected IStringLocalizer<SufiAbpFrameworkResource> L { get; set; } = default!;
+    protected IStringLocalizer<SufiFrameworkResource> L { get; set; } = default!;
 
     [Inject]
     protected IPublicMenuProvider PublicMenuProvider { get; set; } = default!;

@@ -81,7 +81,7 @@ This release includes **5 NuGet packages**:
 ### Dependencies
 
 **SufiAbp Framework Packages (v1.0.0-alpha.1.0):**
-- SufiChain.SufiAbp.AI.Abstractions
+- SufiChain.SufiPlatform.SufiAI.Abstractions
 - SufiChain.SufiAbp.Core
 - SufiChain.SufiAbp.Features
 - SufiChain.SufiAbp.MultiTenancy

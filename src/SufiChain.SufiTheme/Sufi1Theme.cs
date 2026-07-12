@@ -1,5 +1,5 @@
-using SufiChain.SufiAbp.UI.Layout;
-using SufiChain.SufiAbp.UI.Theming;
+using SufiChain.SufiPlatform.UI.Layout;
+using SufiChain.SufiPlatform.UI.Theming;
 using Microsoft.Extensions.Options;
 
 namespace SufiChain.SufiTheme;

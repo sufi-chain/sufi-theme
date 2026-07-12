@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using SufiChain.SufiAbp.UI.Theming;
+using SufiChain.SufiPlatform.UI.Theming;
 
 namespace SufiChain.SufiTheme.DependencyInjection;
 

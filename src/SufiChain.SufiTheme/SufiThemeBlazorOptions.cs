@@ -1,4 +1,4 @@
-using SufiChain.SufiAbp.UI.Navigation;
+using SufiChain.SufiPlatform.UI.Navigation;
 
 namespace SufiChain.SufiTheme;
 

@@ -1,9 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using SufiChain.SufiTheme.Blazor.WebAssembly.Bundling;
 using SufiChain.SufiTheme.Blazor.WebAssembly.Toolbars;
-using SufiChain.SufiAbp.UI.Authentication;
-using SufiChain.SufiAbp.UI.Routing;
-using SufiChain.SufiAbp.UI.Toolbars;
+using SufiChain.SufiPlatform.UI.Authentication;
+using SufiChain.SufiPlatform.UI.Routing;
+using SufiChain.SufiPlatform.UI.Toolbars;
 using Volo.Abp.Modularity;
 
 namespace SufiChain.SufiTheme.Blazor.WebAssembly;
@@ -20,7 +20,7 @@ public class SufiThemeBlazorWebAssemblyModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         // Register this assembly for Blazor routing
-        Configure<SufiAbpRouterOptions>(options =>
+        Configure<SufiRouterOptions>(options =>
         {
             options.AdditionalAssemblies.Add(typeof(SufiThemeBlazorWebAssemblyModule).Assembly);
         });

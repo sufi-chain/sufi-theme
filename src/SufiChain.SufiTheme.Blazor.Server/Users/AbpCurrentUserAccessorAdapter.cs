@@ -1,6 +1,6 @@
 using System;
 using System.Security.Claims;
-using SufiChain.SufiAbp.UI.Users;
+using SufiChain.SufiPlatform.UI.Users;
 using Volo.Abp.Users;
 
 namespace SufiChain.SufiTheme.Blazor.Server.Users;

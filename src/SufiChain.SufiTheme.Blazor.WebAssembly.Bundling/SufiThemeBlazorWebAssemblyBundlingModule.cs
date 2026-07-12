@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using SufiChain.SufiAbp.UI.Bundling;
+using SufiChain.SufiPlatform.UI.Bundling;
 using Volo.Abp.Modularity;
 
 namespace SufiChain.SufiTheme.Blazor.WebAssembly.Bundling;

@@ -1,8 +1,8 @@
-@using SufiChain.SufiAbp.UI.Branding
-@using SufiChain.SufiAbp.UI.Localization
+@using SufiChain.SufiPlatform.UI.Branding
+@using SufiChain.SufiPlatform.UI.Localization
 @using Microsoft.Extensions.Localization
 @inject IBrandingProvider BrandingProvider
-@inject IStringLocalizer<SufiAbpFrameworkResource> L
+@inject IStringLocalizer<SufiFrameworkResource> L
 
 © @DateTime.Now.Year @BrandingProvider.AppName — @L["PoweredWithLoveByLead"]<a href="@PlatformUrl"
                                                                       target="_blank"

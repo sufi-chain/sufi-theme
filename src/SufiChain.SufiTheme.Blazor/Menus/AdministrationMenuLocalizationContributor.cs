@@ -1,5 +1,5 @@
-using SufiChain.SufiAbp.UI.Localization;
-using SufiChain.SufiAbp.UI.Navigation;
+using SufiChain.SufiPlatform.UI.Localization;
+using SufiChain.SufiPlatform.UI.Navigation;
 
 namespace SufiChain.SufiTheme.Blazor.Menus;
 
@@ -16,7 +16,7 @@ public class AdministrationMenuLocalizationContributor : IMenuContributor
             return Task.CompletedTask;
         }
 
-        var l = context.GetLocalizer<SufiAbpFrameworkResource>();
+        var l = context.GetLocalizer<SufiFrameworkResource>();
         var administration = context.Menu.GetAdministration();
         administration.DisplayName = l["Administration"];
         return Task.CompletedTask;

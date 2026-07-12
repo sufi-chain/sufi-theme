@@ -1,4 +1,4 @@
-using SufiChain.SufiAbp.UI.Authorization;
+using SufiChain.SufiPlatform.UI.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace SufiChain.SufiTheme.Blazor.Server.Authorization;
 /// <summary>
 /// Bridges ABP <see cref="IPermissionChecker"/> to SufiAbp menu/toolbar permission filtering.
 /// </summary>
-public class SufiThemeAuthorizationPermissionChecker : ISufiAbpPermissionChecker
+public class SufiThemeAuthorizationPermissionChecker : ISufiPermissionChecker
 {
     private readonly IPermissionChecker _permissionChecker;
 

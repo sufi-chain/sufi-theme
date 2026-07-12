@@ -16,16 +16,16 @@
 
 
   <!--<ItemGroup >
-    <PackageReference Include="SufiChain.SufiAbp.UI.Abstractions" Version="$(SufiAbpVersion)" />
+    <PackageReference Include="SufiChain.SufiPlatform.UI.Abstractions" Version="$(SufiVersion)" />
   </ItemGroup>-->
 
 
-  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' == 'true'">
-    <ProjectReference Include="..\..\..\..\sufi-abp\framework\SufiChain.SufiAbp.UI.Abstractions\SufiChain.SufiAbp.UI.Abstractions.csproj" />
+  <ItemGroup Condition="'$(UseSufiProjectReferences)' == 'true'">
+    <ProjectReference Include="..\..\..\..\sufi-platform\framework\SufiChain.SufiPlatform.UI.Abstractions\SufiChain.SufiPlatform.UI.Abstractions.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(UseSufiAbpProjectReferences)' != 'true'">
-    <PackageReference Include="SufiChain.SufiAbp.UI.Abstractions" Version="$(SufiAbpVersion)" />
+  <ItemGroup Condition="'$(UseSufiProjectReferences)' != 'true'">
+    <PackageReference Include="SufiChain.SufiPlatform.UI.Abstractions" Version="$(SufiVersion)" />
   </ItemGroup>
 
 

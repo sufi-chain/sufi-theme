@@ -1,24 +1,24 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using SufiChain.SufiAbp.UI.MultiTenancy;
+using SufiChain.SufiPlatform.UI.MultiTenancy;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 using Volo.Abp.MultiTenancy;
-using ICurrentTenant = SufiChain.SufiAbp.UI.MultiTenancy.ICurrentTenant;
+using ICurrentTenant = SufiChain.SufiPlatform.UI.MultiTenancy.ICurrentTenant;
 
 namespace SufiChain.SufiTheme.Blazor.Server.TenantSelector;
 
 /// <summary>
 /// ABP-backed implementation of ITenantSelectorVisibilityService.
 /// Always shows tenant selector when multi-tenancy is enabled (required for login/register).
-/// The SufiAbpUI.TenantSelector.Mode feature controls the mode (InputName, SelectFromList, Search).
+/// The SufiUi.TenantSelector.Mode feature controls the mode (InputName, SelectFromList, Search).
 /// Reads the feature in host context so the same mode is used whether the user is on host or a tenant.
 /// </summary>
 public class AbpTenantSelectorVisibilityService : ITenantSelectorVisibilityService, ITransientDependency
 {
-    public const string TenantSelectorModeFeatureName = "SufiAbpUI.TenantSelector.Mode";
+    public const string TenantSelectorModeFeatureName = "SufiUI.TenantSelector.Mode";
     public const string ModeInputName = "InputName";
 
     private readonly AbpMultiTenancyOptions _multiTenancyOptions;

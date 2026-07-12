@@ -1,4 +1,4 @@
-using SufiChain.SufiAbp.UI.Branding;
+using SufiChain.SufiPlatform.UI.Branding;
 using AbpBranding = Volo.Abp.Ui.Branding;
 
 namespace SufiChain.SufiTheme.Blazor.Server.Branding;

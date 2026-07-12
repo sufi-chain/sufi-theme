@@ -3,9 +3,9 @@ using SufiChain.SufiBlazor;
 using SufiChain.SufiTheme.Blazor.DependencyInjection;
 using SufiChain.SufiTheme.Blazor.Menus;
 using SufiChain.SufiTheme.Blazor.Toolbar;
-using SufiChain.SufiAbp.UI.Navigation;
-using SufiChain.SufiAbp.UI.Routing;
-using SufiChain.SufiAbp.UI.Theming;
+using SufiChain.SufiPlatform.UI.Navigation;
+using SufiChain.SufiPlatform.UI.Routing;
+using SufiChain.SufiPlatform.UI.Theming;
 using Volo.Abp.Modularity;
 
 namespace SufiChain.SufiTheme.Blazor;
@@ -29,7 +29,7 @@ public class SufiThemeBlazorModule : AbpModule
         context.Services.AddTransient<SufiBlazorTheme>();
 
         // Register this assembly for Blazor routing
-        Configure<SufiAbpRouterOptions>(options =>
+        Configure<SufiRouterOptions>(options =>
         {
             options.AdditionalAssemblies.Add(typeof(SufiThemeBlazorModule).Assembly);
         });
@@ -46,7 +46,7 @@ public class SufiThemeBlazorModule : AbpModule
         });
 
         // Localize the Administration menu group label (e.g. "مدیریت" for Farsi)
-        Configure<SufiAbpNavigationOptions>(options =>
+        Configure<SufiNavigationOptions>(options =>
         {
             options.MenuContributors.Add(new AdministrationMenuLocalizationContributor());
         });
