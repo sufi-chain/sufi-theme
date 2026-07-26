@@ -12,7 +12,7 @@
     <Company>Sufi Chain Intelligent Solutions</Company>
     <Authors>SufiChain Team</Authors>
     <Product>SufiTheme</Product>
-    <PackageProjectUrl>https://sufiplatform.com</PackageProjectUrl>
+    <PackageProjectUrl>https://sufichain.com</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sufi-chain/sufi-theme.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageIcon Condition="Exists('$(MSBuildThisFileDirectory)icon.png')">icon.png</PackageIcon>
