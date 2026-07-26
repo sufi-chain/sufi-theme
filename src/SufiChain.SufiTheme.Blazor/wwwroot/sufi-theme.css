@@ -109,24 +109,24 @@
     --sufi-color-rail: #1F172B;                 /* Main Surface (dark column) */
     --sufi-color-rail-text: #B4B1BD;            /* Secondary Text on rail */
     --sufi-color-rail-hover: rgba(255, 255, 255, 0.06);
-    --sufi-color-rail-active: rgba(115, 86, 195, 0.22); /* violet-tinted active */
+    --sufi-color-rail-active: rgba(20, 184, 166, 0.22); /* teal-tinted active */
     --sufi-color-rail-active-text: #FCFCFC;
     --sufi-color-panel: #160E23;               /* Background (Dark) — expand panel / nav */
     --sufi-color-panel-text: #FCFCFC;          /* light text on dark panel */
     --sufi-color-panel-text-muted: #8B8797;    /* Placeholder on dark panel */
     --sufi-color-panel-border: rgba(255, 255, 255, 0.08);
     --sufi-color-panel-hover: rgba(255, 255, 255, 0.06);  /* hover on dark panel */
-    --sufi-color-panel-active: rgba(115, 86, 195, 0.22);  /* violet active on dark */
+    --sufi-color-panel-active: rgba(20, 184, 166, 0.22);  /* teal active on dark */
     --sufi-color-tooltip: #160E23;              /* tooltip surface — palette dark */
 
-    /* Primary — matches expand-panel nav column (panel + rail elevation) */
-    --sb-color-primary: var(--sufi-color-panel);
-    --sb-color-primary-hover: var(--sufi-color-rail);
-    --sb-color-primary-active: #120A1C;
-    --sb-color-primary-50: rgba(22, 14, 35, 0.06);
-    --sb-color-primary-100: #EDE8F9;
-    --sb-color-primary-light: #EDE8F9;
-    --sb-color-on-primary: var(--sufi-color-panel-text);
+    /* Primary — teal accent (shell nav column still uses rail/panel surfaces) */
+    --sb-color-primary: #0F766E;
+    --sb-color-primary-hover: #0D9488;
+    --sb-color-primary-active: #115E59;
+    --sb-color-primary-50: rgba(15, 118, 110, 0.08);
+    --sb-color-primary-100: #CCFBF1;
+    --sb-color-primary-light: #CCFBF1;
+    --sb-color-on-primary: #FCFCFC;
 
     /* Secondary – muted elevation surfaces, light theme */
     --sb-color-secondary: #5A546A;
@@ -138,18 +138,18 @@
     --sb-color-on-secondary: #FCFCFC;
 
     /* Focus accent for interactive elements */
-    --sb-focus-ring-color: #8E73D8;
+    --sb-focus-ring-color: #2DD4BF;
 }
 
-/* Dark theme: restrained dark monochromatic palette with violet accents */
+/* Dark theme: restrained dark monochromatic palette with teal accents */
 .sb-theme-dark {
-    /* Primary – violet accent palette for dark premium SaaS */
-    --sb-color-primary: #7356C3;            /* Button Gradient Start */
-    --sb-color-primary-hover: #8166D3;      /* Button Gradient End */
-    --sb-color-primary-active: #6555AB;     /* Primary Purple */
-    --sb-color-primary-50: rgba(115, 86, 195, 0.08);
-    --sb-color-primary-100: #2C2638;        /* Card Surface */
-    --sb-color-primary-light: #2C2638;
+    /* Primary – teal accent palette for dark premium SaaS */
+    --sb-color-primary: #14B8A6;
+    --sb-color-primary-hover: #2DD4BF;
+    --sb-color-primary-active: #0D9488;
+    --sb-color-primary-50: rgba(20, 184, 166, 0.08);
+    --sb-color-primary-100: #163A36;
+    --sb-color-primary-light: #163A36;
     --sb-color-on-primary: #FCFCFC;
 
     /* Secondary – muted elevation surfaces, dark theme */
@@ -162,7 +162,7 @@
     --sb-color-on-secondary: #FCFCFC;
 
     /* Focus accent for interactive elements */
-    --sb-focus-ring-color: #8E73D8;         /* Focus Border */
+    --sb-focus-ring-color: #5EEAD4;
 
     /* Outer page background gradient (surrounds the app shell) */
     --sb-color-page: linear-gradient(180deg, #6A6479 0%, #615C70 50%, #6A6578 100%);
@@ -171,14 +171,14 @@
     --sufi-color-rail: #160E23;                 /* Background (Dark) — darkest */
     --sufi-color-rail-text: var(--sb-color-text-muted);
     --sufi-color-rail-hover: var(--sb-color-surface-variant);
-    --sufi-color-rail-active: rgba(115, 86, 195, 0.22); /* violet-tinted active */
+    --sufi-color-rail-active: rgba(20, 184, 166, 0.22); /* teal-tinted active */
     --sufi-color-rail-active-text: #FCFCFC;
     --sufi-color-panel: var(--sb-color-surface);/* Main Surface (lighter than rail) */
     --sufi-color-panel-text: var(--sb-color-text);  /* theme-aware text on panel */
     --sufi-color-panel-text-muted: var(--sb-color-text-muted);
     --sufi-color-panel-border: var(--sb-color-border);
     --sufi-color-panel-hover: rgba(255, 255, 255, 0.06); /* hover on dark panel */
-    --sufi-color-panel-active: rgba(115, 86, 195, 0.22); /* violet active on dark */
+    --sufi-color-panel-active: rgba(20, 184, 166, 0.22); /* teal active on dark */
     --sufi-color-tooltip: #160E23;              /* tooltip surface — palette dark */
 }
 
@@ -239,7 +239,7 @@ h6:focus-visible:not(a) {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: var(--sb-color-surface, #ffffff);
+    background-color: var(--sb-color-surface);
 }
 
 .sufi-app-shell__header {
@@ -298,7 +298,7 @@ h6:focus-visible:not(a) {
 .sufi-app-shell__main {
     flex: 1;
     overflow-y: auto;
-    background-color: var(--sb-color-surface, #ffffff);
+    background-color: var(--sb-color-surface);
 }
 
 .sufi-app-shell__footer {
@@ -548,6 +548,11 @@ body:has(.sufi-app-shell--dual-sidebar) {
 
 /* Footer variant for TopMenuLayout */
 .sufi-footer--top-menu {
+    left: 0;
+}
+
+/* Footer variant for EmptyLayout — full width, no sidebar offset */
+.sufi-footer--empty {
     left: 0;
 }
 
@@ -848,7 +853,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
     align-items: center;
     justify-content: space-between;
     padding: var(--sb-space-3) var(--sb-space-6);
-    background-color: var(--sb-color-background, #f5f8fa);
+    background-color: var(--sb-color-background);
     border-bottom: 1px solid var(--sb-color-border);
 }
 
@@ -889,7 +894,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--sb-space-4) var(--sb-space-2);
+    padding: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -897,8 +902,12 @@ body:has(.sufi-app-shell--dual-sidebar) {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    padding: var(--sb-space-4) var(--sb-space-2);
+    box-sizing: border-box;
     text-decoration: none;
     color: inherit;
+    cursor: pointer;
 }
 
 .sufi-icon-rail__nav {
@@ -1205,7 +1214,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
 
 .sufi-icon-rail-item:hover {
     background-color: var(--sufi-icon-rail-hover);
-    color: var(--sb-color-white, #ffffff);
+    color: var(--sb-color-white);
 }
 
 .sufi-icon-rail-item--active,
@@ -2263,7 +2272,14 @@ body:has(.sufi-app-shell--dual-sidebar) {
 .sufi-menu-item__submenu-content {
     overflow: hidden;
     min-height: 0;
+    /* Padding only when expanded — otherwise collapsed 0fr rows still leak ~8px */
+    padding: 0;
+    visibility: hidden;
+}
+
+.sufi-menu-item--expanded > .sufi-menu-item__submenu > .sufi-menu-item__submenu-content {
     padding: var(--sb-space-1) 0;
+    visibility: visible;
 }
 
 /* Nested menu items styling */
@@ -2308,7 +2324,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
 }
 
 /* ============================================
-   SufiAbpErrorPage – formal HTTP error pages (404, 403, 500)
+   SufiErrorPage – formal HTTP error pages (404, 403, 500)
    ============================================
    Centered card with icon, title, message, actions.
    Uses same design language as error modal.
@@ -2325,7 +2341,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
     max-width: 28rem;
     width: 100%;
     padding: var(--sb-space-8, 2rem) var(--sb-space-10, 2.5rem);
-    background: var(--sb-color-surface, #fff);
+    background: var(--sb-color-surface);
     border-radius: var(--sb-radius-xl, 1rem);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -2340,13 +2356,13 @@ body:has(.sufi-app-shell--dual-sidebar) {
 .sabp-error-page__title {
     font-size: var(--sb-font-size-xl, 1.25rem);
     font-weight: 600;
-    color: var(--sb-color-text, #1e293b);
+    color: var(--sb-color-text);
     margin: 0 0 var(--sb-space-2, 0.5rem) 0;
 }
 
 .sabp-error-page__message {
     font-size: var(--sb-font-size-sm, 0.875rem);
-    color: var(--sb-color-text-muted, #64748b);
+    color: var(--sb-color-text-muted);
     margin: 0 0 var(--sb-space-6, 1.5rem) 0;
     line-height: 1.5;
 }

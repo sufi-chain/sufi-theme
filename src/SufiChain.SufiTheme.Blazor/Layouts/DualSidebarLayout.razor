@@ -34,7 +34,7 @@
                             }
                             @if (BlazorOptions.Value.ShowBreadcrumbs && PageLayout.BreadcrumbItems.Any())
                             {
-                                <SufiAbpBreadcrumbs ShowHome="false" />
+                                <SufiBreadcrumbs ShowHome="false" />
                             }
                         </div>
                     </StartContent>
@@ -48,7 +48,7 @@
                 <IconRail>
                     <SufiIconRail Dark="@BlazorOptions.Value.IconRailDarkMode">
                         <Header>
-                            <a href="/" class="sufi-icon-rail__logo">
+                            <a href="@BlazorOptions.Value.IconRailHomeUrl" class="sufi-icon-rail__logo" title="@BrandingProvider.AppName">
                                 @if (!string.IsNullOrEmpty(BrandingProvider.LogoUrl))
                                 {
                                     <img src="@BrandingProvider.LogoUrl" alt="@BrandingProvider.AppName" style="height: 32px; width: 32px; object-fit: contain;" />
@@ -138,22 +138,22 @@
                         }
                         @if (BlazorOptions.Value.ShowBreadcrumbs && PageLayout.BreadcrumbItems.Any())
                         {
-                            <SufiAbpBreadcrumbs ShowHome="false" />
+                            <SufiBreadcrumbs ShowHome="false" />
                         }
                     </div>
                 }
-                <SufiAbpPageAlert />
-                <SufiAbpLayoutHook Name="@LayoutHooks.Body.First" />
+                <SufiPageAlert />
+                <SufiLayoutHook Name="@LayoutHooks.Body.First" />
                 
-                @* SufiAbpPageToolbar only registers toolbar content, title/breadcrumbs are in top bar (desktop) or above (mobile) *@
-                <SufiAbpPageToolbar />
+                @* SufiPageToolbar only registers toolbar content, title/breadcrumbs are in top bar (desktop) or above (mobile) *@
+                <SufiPageToolbar />
                 
                 <div class="sufi-content-body">
                     @Body
                 </div>
                 
-                <SufiAbpLayoutHook Name="@LayoutHooks.Body.Last" />
-                <SufiAbpDynamicLayoutComponent />
+                <SufiLayoutHook Name="@LayoutHooks.Body.Last" />
+                <SufiDynamicLayoutComponent />
                 
                 @* Footer inside content area *@
                 @if (BlazorOptions.Value.ShowFooter)
@@ -186,7 +186,7 @@
                 }
             </RightShortcuts>
         </MobileBottomMenu>
-        @* Mobile: top drawer for Page Actions (SufiAbpPageToolbar content) *@
+        @* Mobile: top drawer for Page Actions (SufiPageToolbar content) *@
         @if (PageLayout.ToolbarContent is RenderFragment toolbarFragment)
         {
             <SbDrawer @bind-Open="_mobileActionsDrawerOpen" Title="@L["PageActions"].Value"
@@ -196,7 +196,7 @@
         }
     }
     @* Global Message/Confirm Dialog Host *@
-    <SufiAbpOverlayHost />
+    <SufiOverlayHost />
 </SbThemeProvider>
 
 @code {
@@ -241,10 +241,9 @@
 
     protected override Task OnInitializedLayoutAsync()
     {
-        // Select IconRail item from current URL so reload/direct navigation shows correct active menu
+        // Select IconRail item from current URL so reload/direct navigation shows correct active menu.
+        // Stays null on routes without a rail item (e.g. dashboard via logo).
         SyncSelectedMenuItemFromUrl();
-        if (_selectedMenuItem == null)
-            _selectedMenuItem = MenuItems.FirstOrDefault(m => m.Items.Any());
         // Close mobile sidebar when navigation occurs (e.g. user clicked a menu link)
         NavigationManager.LocationChanged += CloseMobileSidebarOnNavigate;
         return Task.CompletedTask;
@@ -259,28 +258,80 @@
 
     /// <summary>
     /// Sets <see cref="_selectedMenuItem"/> to the top-level menu item that contains the current URL
-    /// (e.g. /admin/... → Administration, /sufi-blazor-demo/... → Sufi Blazor Demo).
+    /// (e.g. /panel/admin/... → Administration, /panel/portal/... → Portal).
     /// </summary>
     private void SyncSelectedMenuItemFromUrl()
     {
-        var forUrl = GetTopLevelMenuItemForCurrentUrl();
-        if (forUrl != null)
-            _selectedMenuItem = forUrl;
+        // Clear when the current URL is not under any rail item (e.g. dashboard via logo).
+        _selectedMenuItem = GetTopLevelMenuItemForCurrentUrl();
     }
 
     /// <summary>
     /// Finds the top-level IconRail menu item whose URL or any descendant URL matches the current path.
+    /// Prefers Administration / Portal when the path is under /panel/{admin|portal}/...
     /// </summary>
     private ApplicationMenuItem? GetTopLevelMenuItemForCurrentUrl()
     {
         var path = GetCurrentPath();
         if (string.IsNullOrEmpty(path))
             return null;
+
+        if (IsPanelHomePath(path))
+            return null;
+
+        var matches = new List<ApplicationMenuItem>();
         foreach (var item in MenuItems)
         {
             if (MenuItemOrDescendantMatchesPath(item, path))
-                return item;
+                matches.Add(item);
         }
+
+        var zoneMenuName = GetPanelZoneMenuName(path);
+
+        // Zone routes (/panel/portal|admin/...) must keep the IconRail selection even when
+        // the exact page URL is not registered (e.g. host redirects calendar → calendar-pro).
+        // Returning null here dumps the full menu tree into the expand panel.
+        if (matches.Count == 0)
+        {
+            if (zoneMenuName == null)
+                return null;
+
+            return MenuItems.FirstOrDefault(m =>
+                string.Equals(m.Name, zoneMenuName, StringComparison.Ordinal));
+        }
+
+        if (zoneMenuName != null)
+        {
+            var zoneMatch = matches.FirstOrDefault(m =>
+                string.Equals(m.Name, zoneMenuName, StringComparison.Ordinal));
+            if (zoneMatch != null)
+                return zoneMatch;
+        }
+
+        return matches[0];
+    }
+
+    private static bool IsPanelHomePath(string path)
+    {
+        return path.Equals("/panel", StringComparison.OrdinalIgnoreCase)
+               || path.Equals("/panel/dashboard", StringComparison.OrdinalIgnoreCase)
+               || path.StartsWith("/panel/dashboard/", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string? GetPanelZoneMenuName(string path)
+    {
+        if (path.StartsWith("/panel/admin", StringComparison.OrdinalIgnoreCase) &&
+            (path.Length == "/panel/admin".Length || path["/panel/admin".Length] == '/'))
+        {
+            return ApplicationMenuExtensions.AdministrationMenuName;
+        }
+
+        if (path.StartsWith("/panel/portal", StringComparison.OrdinalIgnoreCase) &&
+            (path.Length == "/panel/portal".Length || path["/panel/portal".Length] == '/'))
+        {
+            return ApplicationMenuExtensions.PortalMenuName;
+        }
+
         return null;
     }
 

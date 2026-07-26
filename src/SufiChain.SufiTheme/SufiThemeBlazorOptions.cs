@@ -139,6 +139,12 @@ public class SufiThemeBlazorOptions
     public bool IconRailDarkMode { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets the URL opened when the dual-sidebar icon-rail logo/header is clicked.
+    /// Defaults to "/". Panel hosts typically set this to the dashboard route.
+    /// </summary>
+    public string IconRailHomeUrl { get; set; } = "/";
+
+    /// <summary>
     /// Gets or sets whether the expandable panel should expand on hover.
     /// Only applies to DualSidebar layout. Defaults to true.
     /// </summary>

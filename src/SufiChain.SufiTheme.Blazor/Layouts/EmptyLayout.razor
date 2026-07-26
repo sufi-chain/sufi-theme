@@ -1,18 +1,29 @@
 @inherits LayoutComponentBase
+@inject IOptions<SufiThemeBlazorOptions> BlazorOptions
 
-@* 
+@*
     EmptyLayout - Minimal layout without navigation
-    
+
     Uses SufiBlazor theme provider for consistent styling.
+    Footer matches other layouts via ShowFooter + SufiFooterCopyright.
 *@
 
 <SbThemeProvider Theme="@_currentTheme" Direction="@_direction">
-    <div style="min-height: 100vh; background-color: var(--sb-color-background);">
-        <SufiAbpPageAlert />
-        @Body
+    <div class="sufi-empty-layout">
+        <SufiPageAlert />
+        <div class="sufi-empty-layout__body">
+            @Body
+        </div>
+
+        @if (BlazorOptions.Value.ShowFooter)
+        {
+            <footer class="sufi-footer sufi-footer--inline sufi-footer--empty">
+                <SufiFooterCopyright />
+            </footer>
+        }
     </div>
     @* Global Message/Confirm Dialog Host *@
-    <SufiAbpOverlayHost />
+    <SufiOverlayHost />
 </SbThemeProvider>
 
 @code {

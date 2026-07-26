@@ -30,7 +30,7 @@
                         }
                         @if (BlazorOptions.Value.ShowBreadcrumbs && PageLayout.BreadcrumbItems.Any())
                         {
-                            <SufiAbpBreadcrumbs ShowHome="false" />
+                            <SufiBreadcrumbs ShowHome="false" />
                         }
                     </div>
                 </CenterContent>
@@ -77,18 +77,18 @@
 
         <ChildContent>
             <div class="sufi-content-wrapper">
-                <SufiAbpPageAlert />
-                <SufiAbpLayoutHook Name="@LayoutHooks.Body.First" />
+                <SufiPageAlert />
+                <SufiLayoutHook Name="@LayoutHooks.Body.First" />
                 
-                @* SufiAbpPageToolbar only registers toolbar content, title/breadcrumbs are in top bar *@
-                <SufiAbpPageToolbar />
+                @* SufiPageToolbar only registers toolbar content, title/breadcrumbs are in top bar *@
+                <SufiPageToolbar />
                 
                 <div class="sufi-content-body">
                     @Body
                 </div>
                 
-                <SufiAbpLayoutHook Name="@LayoutHooks.Body.Last" />
-                <SufiAbpDynamicLayoutComponent />
+                <SufiLayoutHook Name="@LayoutHooks.Body.Last" />
+                <SufiDynamicLayoutComponent />
             </div>
         </ChildContent>
     </SufiAppShell>
@@ -101,7 +101,7 @@
         </footer>
     }
     @* Global Message/Confirm Dialog Host *@
-    <SufiAbpOverlayHost />
+    <SufiOverlayHost />
 </SbThemeProvider>
 
 @code {

@@ -24,7 +24,7 @@
                 <SbIcon Name="chevron-down" Size="SbSize.Xs" />
             </span>
         </button>
-        <div class="sufi-menu-item__submenu">
+        <div class="sufi-menu-item__submenu" aria-hidden="@(!_isExpanded)">
             <div class="sufi-menu-item__submenu-content">
                 @foreach (var child in MenuItem.Items)
                 {

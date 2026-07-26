@@ -1,0 +1,33 @@
+.sufi-empty-layout {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-height: 100dvh;
+    height: 100dvh;
+    background-color: var(--sb-color-background);
+}
+
+.sufi-empty-layout__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Inline footer at the bottom of the empty shell (not fixed over content). */
+.sufi-empty-layout > .sufi-footer.sufi-footer--empty {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    z-index: auto;
+    flex: 0 0 auto;
+    margin-top: 0;
+    height: auto;
+    min-height: var(--sufi-footer-height, 50px);
+    padding: var(--sb-space-2, 0.5rem) var(--sb-space-4, 1rem);
+    padding-bottom: calc(var(--sb-space-2, 0.5rem) + env(safe-area-inset-bottom, 0px));
+    border-radius: 0;
+    border-top: 1px solid var(--sb-color-border);
+    background-color: var(--sb-color-surface);
+}
