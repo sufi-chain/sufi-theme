@@ -51,15 +51,22 @@
                     @foreach (var item in _userMenu.Items.Where(i => !IsLogoutItem(i)))
                     {
                         var menuItem = item;
-                        <SbMenuItem OnClick="() => NavigateToAsync(menuItem.Url, menuItem.Target)">
-                            <Icon>
-                                @if (!string.IsNullOrEmpty(menuItem.Icon) && SufiIcons.GetIcon(menuItem.Icon) != null)
-                                {
-                                    <SbIcon Name="@menuItem.Icon" />
-                                }
-                            </Icon>
-                            <ChildContent>@menuItem.DisplayName</ChildContent>
-                        </SbMenuItem>
+                        if (menuItem.IsDivider())
+                        {
+                            <SbDivider />
+                        }
+                        else
+                        {
+                            <SbMenuItem OnClick="() => NavigateToAsync(menuItem.Url, menuItem.Target)">
+                                <Icon>
+                                    @if (!string.IsNullOrEmpty(menuItem.Icon) && SufiIcons.GetIcon(menuItem.Icon) != null)
+                                    {
+                                        <SbIcon Name="@menuItem.Icon" />
+                                    }
+                                </Icon>
+                                <ChildContent>@menuItem.DisplayName</ChildContent>
+                            </SbMenuItem>
+                        }
                     }
                 }
                 <SbDivider />
