@@ -27,6 +27,12 @@ env:
     src/SufiChain.SufiTheme.Blazor.Server/SufiChain.SufiTheme.Blazor.Server.csproj
     src/SufiChain.SufiTheme.Blazor.WebAssembly.Bundling/SufiChain.SufiTheme.Blazor.WebAssembly.Bundling.csproj
     src/SufiChain.SufiTheme.Blazor.WebAssembly/SufiChain.SufiTheme.Blazor.WebAssembly.csproj
+  EXPECTED_PACKAGE_IDS: >-
+    SufiChain.SufiTheme
+    SufiChain.SufiTheme.Blazor
+    SufiChain.SufiTheme.Blazor.Server
+    SufiChain.SufiTheme.Blazor.WebAssembly.Bundling
+    SufiChain.SufiTheme.Blazor.WebAssembly
 
 concurrency:
   group: publish-nuget-org-${{ github.ref_name }}
@@ -35,6 +41,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: nuget-org
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -101,7 +108,11 @@ jobs:
               exit 1
             fi
             echo "Packing $project"
-            dotnet restore "$project" --verbosity minimal -p:NuGetAudit=false
+            dotnet restore "$project" \
+              --configfile NuGet.Config \
+              --verbosity minimal \
+              -p:NuGetAudit=false \
+              -p:UseSufiProjectReferences=false
             dotnet build "$project" \
               --configuration Release \
               --no-restore \
@@ -110,17 +121,27 @@ jobs:
               -p:PackageVersion="$VERSION" \
               -p:ContinuousIntegrationBuild=true \
               -p:BuildInParallel=true \
+              -p:UseSufiProjectReferences=false \
               -p:PackageOutputPath="$(pwd)/$package_dir" \
               -p:GeneratePackageOnBuild=true
           done
 
           find "$package_dir" -type f -name '*.nupkg' ! -name '*.symbols.nupkg' ! -name "*.${VERSION}.nupkg" -exec rm -f {} +
-          package_count="$(find "$package_dir" -type f -name "*.${VERSION}.nupkg" ! -name '*.symbols.nupkg' | wc -l | tr -d ' ')"
-          if [ "$package_count" = "0" ]; then
-            echo "No NuGet packages for resolved version $VERSION were produced in $package_dir." >&2
+          expected_count=0
+          for package_id in $EXPECTED_PACKAGE_IDS; do
+            expected_count=$((expected_count + 1))
+            package_path="$package_dir/${package_id}.${VERSION}.nupkg"
+            if [ ! -f "$package_path" ]; then
+              echo "Expected package was not produced: $package_path" >&2
+              exit 1
+            fi
+          done
+          package_count="$(find "$package_dir" -maxdepth 1 -type f -name "*.${VERSION}.nupkg" ! -name '*.symbols.nupkg' | wc -l | tr -d ' ')"
+          if [ "$package_count" != "$expected_count" ]; then
+            echo "Expected exactly $expected_count package(s), but found $package_count in $package_dir." >&2
             exit 1
           fi
-          echo "Packed $package_count package(s) for version $VERSION into $package_dir."
+          echo "Packed all $package_count expected package(s) for version $VERSION into $package_dir."
           find "$package_dir" -type f -name "*.${VERSION}.nupkg" ! -name '*.symbols.nupkg' | sort
 
       - name: Push packages to nuget.org
