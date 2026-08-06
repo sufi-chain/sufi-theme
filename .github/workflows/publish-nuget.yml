@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 env:
   DOTNET_NOLOGO: true
@@ -144,15 +145,21 @@ jobs:
           echo "Packed all $package_count expected package(s) for version $VERSION into $package_dir."
           find "$package_dir" -type f -name "*.${VERSION}.nupkg" ! -name '*.symbols.nupkg' | sort
 
+      - name: Log in to nuget.org with Trusted Publishing
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER }}
+
       - name: Push packages to nuget.org
         shell: bash
         env:
-          NUGET_ORG_API_KEY: ${{ secrets.NUGET_ORG_API_KEY }}
+          NUGET_ORG_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           set -euo pipefail
           if [ -z "${NUGET_ORG_API_KEY:-}" ]; then
-            echo "NUGET_ORG_API_KEY repository secret is required." >&2
+            echo "NuGet Trusted Publishing did not return a temporary API key." >&2
             exit 1
           fi
           package_dir="${PACKAGE_OUTPUT%/}/${VERSION}"
