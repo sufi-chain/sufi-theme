@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <SufiVersion>1.0.0</SufiVersion>
+    <SufiVersion>0.1.0-alpha.1.0</SufiVersion>
     <LangVersion>latest</LangVersion>
     <AbpVersion>10.3.0</AbpVersion>
     <SufiAbpVersion>0.1.0-alpha.1.0</SufiAbpVersion>
