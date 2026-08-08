@@ -2329,7 +2329,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
    Centered card with icon, title, message, actions.
    Uses same design language as error modal.
 */
-.sabp-error-page {
+.sufi-error-page {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2337,7 +2337,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
     padding: var(--sb-space-8, 2rem);
 }
 
-.sabp-error-page__card {
+.sufi-error-page__card {
     max-width: 28rem;
     width: 100%;
     padding: var(--sb-space-8, 2rem) var(--sb-space-10, 2.5rem);
@@ -2347,27 +2347,27 @@ body:has(.sufi-app-shell--dual-sidebar) {
     text-align: center;
 }
 
-.sabp-error-page__icon {
+.sufi-error-page__icon {
     margin-bottom: var(--sb-space-4, 1rem);
     display: flex;
     justify-content: center;
 }
 
-.sabp-error-page__title {
+.sufi-error-page__title {
     font-size: var(--sb-font-size-xl, 1.25rem);
     font-weight: 600;
     color: var(--sb-color-text);
     margin: 0 0 var(--sb-space-2, 0.5rem) 0;
 }
 
-.sabp-error-page__message {
+.sufi-error-page__message {
     font-size: var(--sb-font-size-sm, 0.875rem);
     color: var(--sb-color-text-muted);
     margin: 0 0 var(--sb-space-6, 1.5rem) 0;
     line-height: 1.5;
 }
 
-.sabp-error-page__actions {
+.sufi-error-page__actions {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
