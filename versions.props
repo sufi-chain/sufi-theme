@@ -4,7 +4,7 @@
     <SufiVersion>1.0.0</SufiVersion>
     <LangVersion>latest</LangVersion>
     <AbpVersion>10.3.0</AbpVersion>
-    <SufiAbpVersion>0.1.0-alpha.1.0.0</SufiAbpVersion>
+    <SufiAbpVersion>0.1.0-alpha.1.0</SufiAbpVersion>
     <MicrosoftAspNetCoreComponentsAuthorizationVersion>10.0.7</MicrosoftAspNetCoreComponentsAuthorizationVersion>
     <MicrosoftAspNetCoreComponentsWebVersion>10.0.7</MicrosoftAspNetCoreComponentsWebVersion>
     <MicrosoftAspNetCoreComponentsWebAssemblyVersion>10.0.7</MicrosoftAspNetCoreComponentsWebAssemblyVersion>
