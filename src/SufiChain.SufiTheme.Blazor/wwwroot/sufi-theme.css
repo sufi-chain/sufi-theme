@@ -852,9 +852,22 @@ body:has(.sufi-app-shell--dual-sidebar) {
     width: 35px;
 }
 
+/* Default/ghost chrome icons — match theme-switch / menu-btn (token-safe in light + dark) */
+.sufi-topbar-page-actions .sb-icon-button--ghost:not(.sb-icon-button--primary):not(.sb-icon-button--secondary):not(.sb-icon-button--success):not(.sb-icon-button--warning):not(.sb-icon-button--danger):not(.sb-icon-button--info):not(.sb-icon-button--muted) {
+    color: var(--sb-color-text-muted);
+    background-color: transparent;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.sufi-topbar-page-actions .sb-icon-button--ghost:not(.sb-icon-button--primary):not(.sb-icon-button--secondary):not(.sb-icon-button--success):not(.sb-icon-button--warning):not(.sb-icon-button--danger):not(.sb-icon-button--info):not(.sb-icon-button--muted):hover:not(:disabled) {
+    color: var(--sb-color-text);
+    background-color: var(--sb-color-surface-hover);
+}
+
 .sufi-topbar-page-actions .sb-menu-anchor {
     display: inline-flex;
     align-items: center;
+    color: inherit;
 }
 
 /* Secondary Page Header Bar (for TopMenuLayout) */
