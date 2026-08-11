@@ -847,6 +847,16 @@ body:has(.sufi-app-shell--dual-sidebar) {
     height: 35px;
 }
 
+.sufi-topbar-page-actions .sb-icon-button {
+    height: 35px;
+    width: 35px;
+}
+
+.sufi-topbar-page-actions .sb-menu-anchor {
+    display: inline-flex;
+    align-items: center;
+}
+
 /* Secondary Page Header Bar (for TopMenuLayout) */
 .sufi-page-header-bar {
     display: flex;
