@@ -105,86 +105,89 @@
 
 :root,
 .sb-theme-root {
-    /* Dual-sidebar semantic surfaces — dark sidebar column (rail + panel) */
-    --sufi-color-rail: #1F172B;                 /* Main Surface (dark column) */
-    --sufi-color-rail-text: #B4B1BD;            /* Secondary Text on rail */
+    /*
+       Light shell: retain the deep navy icon rail as a compact brand anchor,
+       while the expanded navigation panel follows the light surface system.
+    */
+    --sufi-color-rail: #050712;
+    --sufi-color-rail-text: #A8B2C7;
     --sufi-color-rail-hover: rgba(255, 255, 255, 0.06);
-    --sufi-color-rail-active: rgba(20, 184, 166, 0.22); /* teal-tinted active */
-    --sufi-color-rail-active-text: #FCFCFC;
-    --sufi-color-panel: #160E23;               /* Background (Dark) — expand panel / nav */
-    --sufi-color-panel-text: #FCFCFC;          /* light text on dark panel */
-    --sufi-color-panel-text-muted: #8B8797;    /* Placeholder on dark panel */
-    --sufi-color-panel-border: rgba(255, 255, 255, 0.08);
-    --sufi-color-panel-hover: rgba(255, 255, 255, 0.06);  /* hover on dark panel */
-    --sufi-color-panel-active: rgba(20, 184, 166, 0.22);  /* teal active on dark */
-    --sufi-color-tooltip: #160E23;              /* tooltip surface — palette dark */
+    --sufi-color-rail-active: rgb(124 58 237 / 22%);
+    --sufi-color-rail-active-text: #F7F8FC;
+    --sufi-color-panel: #FCFBFF;
+    --sufi-color-panel-text: #172033;
+    --sufi-color-panel-text-muted: #68758D;
+    --sufi-color-panel-border: #E4E0EE;
+    --sufi-color-panel-hover: rgb(124 58 237 / 6%);
+    --sufi-color-panel-active: rgb(124 58 237 / 10%);
+    --sufi-color-tooltip: #0B1020;
 
-    /* Primary — teal accent (shell nav column still uses rail/panel surfaces) */
-    --sb-color-primary: #0F766E;
-    --sb-color-primary-hover: #0D9488;
-    --sb-color-primary-active: #115E59;
-    --sb-color-primary-50: rgba(15, 118, 110, 0.08);
-    --sb-color-primary-100: #CCFBF1;
-    --sb-color-primary-light: #CCFBF1;
-    --sb-color-on-primary: #FCFCFC;
+    /* Primary — violet brand accent */
+    --sb-color-primary: #7C3AED;
+    --sb-color-primary-hover: #6D28D9;
+    --sb-color-primary-active: #5B21B6;
+    --sb-color-primary-50: rgb(124 58 237 / 8%);
+    --sb-color-primary-100: #EDE9FE;
+    --sb-color-primary-light: #EDE9FE;
+    --sb-color-on-primary: #FFFFFF;
 
-    /* Secondary – muted elevation surfaces, light theme */
-    --sb-color-secondary: #5A546A;
-    --sb-color-secondary-hover: #4C455C;
-    --sb-color-secondary-active: #3E364B;
-    --sb-color-secondary-50: rgba(90, 84, 106, 0.08);
-    --sb-color-secondary-100: #F0EFF2;
-    --sb-color-secondary-light: #F0EFF2;
-    --sb-color-on-secondary: #FCFCFC;
+    /* Secondary — indigo accent */
+    --sb-color-secondary: #4F46E5;
+    --sb-color-secondary-hover: #4338CA;
+    --sb-color-secondary-active: #3730A3;
+    --sb-color-secondary-50: rgb(79 70 229 / 8%);
+    --sb-color-secondary-100: #E0E7FF;
+    --sb-color-secondary-light: #E0E7FF;
+    --sb-color-on-secondary: #FFFFFF;
 
     /* Focus accent for interactive elements */
-    --sb-focus-ring-color: #2DD4BF;
+    --sb-focus-ring-color: #0891B2;
 }
 
-/* Dark theme: restrained dark monochromatic palette with teal accents */
+/* Dark theme: landing palette surfaces with violet and cyan accents */
 .sb-theme-dark {
-    /* Primary – teal accent palette for dark premium SaaS */
-    --sb-color-primary: #14B8A6;
-    --sb-color-primary-hover: #2DD4BF;
-    --sb-color-primary-active: #0D9488;
-    --sb-color-primary-50: rgba(20, 184, 166, 0.08);
-    --sb-color-primary-100: #163A36;
-    --sb-color-primary-light: #163A36;
-    --sb-color-on-primary: #FCFCFC;
+    /* Primary — violet brand accent */
+    --sb-color-primary: #7C3AED;
+    --sb-color-primary-hover: #A78BFA;
+    --sb-color-primary-active: #4F46E5;
+    --sb-color-primary-50: rgb(124 58 237 / 8%);
+    --sb-color-primary-100: rgb(124 58 237 / 22%);
+    --sb-color-primary-light: rgb(124 58 237 / 22%);
+    --sb-color-on-primary: #FFFFFF;
 
-    /* Secondary – muted elevation surfaces, dark theme */
-    --sb-color-secondary: #5A546A;          /* Secondary Surface */
-    --sb-color-secondary-hover: #4C455C;    /* Muted Surface */
-    --sb-color-secondary-active: #3E364B;   /* Elevated Surface */
-    --sb-color-secondary-50: rgba(90, 84, 106, 0.08);
-    --sb-color-secondary-100: #2C2638;      /* Card Surface */
-    --sb-color-secondary-light: #2C2638;
-    --sb-color-on-secondary: #FCFCFC;
+    /* Secondary — indigo accent */
+    --sb-color-secondary: #4F46E5;
+    --sb-color-secondary-hover: #6366F1;
+    --sb-color-secondary-active: #3730A3;
+    --sb-color-secondary-50: rgb(79 70 229 / 8%);
+    --sb-color-secondary-100: rgb(79 70 229 / 22%);
+    --sb-color-secondary-light: rgb(79 70 229 / 22%);
+    --sb-color-on-secondary: #FFFFFF;
 
     /* Focus accent for interactive elements */
-    --sb-focus-ring-color: #5EEAD4;
+    --sb-focus-ring-color: #22D3EE;
 
     /* Outer page background gradient (surrounds the app shell) */
-    --sb-color-page: linear-gradient(180deg, #6A6479 0%, #615C70 50%, #6A6578 100%);
+    --sb-color-page: linear-gradient(180deg, #050712 0%, #0B1020 50%, #11182A 100%);
 
     /* Dual-sidebar semantic surfaces — darkest rail over an elevated panel */
-    --sufi-color-rail: #160E23;                 /* Background (Dark) — darkest */
+    --sufi-color-rail: #050712;
     --sufi-color-rail-text: var(--sb-color-text-muted);
-    --sufi-color-rail-hover: var(--sb-color-surface-variant);
-    --sufi-color-rail-active: rgba(20, 184, 166, 0.22); /* teal-tinted active */
-    --sufi-color-rail-active-text: #FCFCFC;
-    --sufi-color-panel: var(--sb-color-surface);/* Main Surface (lighter than rail) */
-    --sufi-color-panel-text: var(--sb-color-text);  /* theme-aware text on panel */
+    --sufi-color-rail-hover: rgba(255, 255, 255, 0.06);
+    --sufi-color-rail-active: rgb(124 58 237 / 22%);
+    --sufi-color-rail-active-text: #F7F8FC;
+    --sufi-color-panel: #0B1020;
+    --sufi-color-panel-text: var(--sb-color-text);
     --sufi-color-panel-text-muted: var(--sb-color-text-muted);
     --sufi-color-panel-border: var(--sb-color-border);
-    --sufi-color-panel-hover: rgba(255, 255, 255, 0.06); /* hover on dark panel */
-    --sufi-color-panel-active: rgba(20, 184, 166, 0.22); /* teal active on dark */
-    --sufi-color-tooltip: #160E23;              /* tooltip surface — palette dark */
+    --sufi-color-panel-hover: rgba(255, 255, 255, 0.06);
+    --sufi-color-panel-active: rgb(124 58 237 / 22%);
+    --sufi-color-tooltip: #0B1020;
 }
 
 * {
     scrollbar-width: thin;
-    scrollbar-color: #706B79 transparent;
+    scrollbar-color: var(--sb-color-text-muted) transparent;
 }
 
 body {
@@ -193,7 +196,7 @@ body {
     font-size: var(--sb-font-size-md);
     line-height: var(--sb-line-height-normal);
     color: var(--sb-color-text);
-    background-color: var(--sb-color-surface);
+    background-color: var(--sb-color-background);
 }
 
 .text-muted {
