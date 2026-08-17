@@ -9,10 +9,11 @@ Layout variants in SufiTheme and when each fits a host.
 | `SideMenuLayout` | Default application shell with collapsible sidebar, top bar, breadcrumbs, and optional footer |
 | `TopMenuLayout` | Smaller navigation surface that lives in the header |
 | `DualSidebarLayout` | Two-level navigation: icon rail + expandable panel |
+| `MobileLayout` | Full-screen mobile workspace with bottom shortcuts and drawer navigation |
 | `AccountLayout` | Authentication and account pages (defined in Sufi Platform UI) |
 | `EmptyLayout` | Full-screen, embedded, or print-oriented pages |
 
-Configure the default with `SufiThemeBlazorOptions.Layout = SufiLayouts.SideMenu` (or `TopMenu` / `DualSidebar`). See [Configuration](configuration.md).
+Configure the default with `SufiThemeBlazorOptions.Layout = SufiLayouts.SideMenu` (or `TopMenu` / `DualSidebar` / `Mobile`). See [Configuration](configuration.md).
 
 ## DualSidebar specifics
 
@@ -52,6 +53,7 @@ For public-facing **navigation**, use `IPublicMenuProvider`. See [Public navigat
 - `SideMenuLayout` — most admin / back-office hosts
 - `TopMenuLayout` — simpler products with shallow navigation
 - `DualSidebarLayout` — dense module catalogs and dual-level IA
+- `MobileLayout` — dedicated mobile-first workspaces that need maximum content space and persistent navigation
 - `AccountLayout` — sign-in, register, recovery
 - `EmptyLayout` — pages that must not inherit app chrome
 

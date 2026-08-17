@@ -8,7 +8,7 @@
     Reduces header clutter and makes the menu action highly visible.
 *@
 
-<nav class="sufi-mobile-bottom-menu @Class" aria-label="Mobile navigation">
+<nav class="sufi-mobile-bottom-menu @Class" aria-label="@AriaLabel">
     <div class="sufi-mobile-bottom-menu__side sufi-mobile-bottom-menu__side--left">
         @LeftShortcuts
     </div>
@@ -31,6 +31,12 @@
     /// </summary>
     [Parameter]
     public EventCallback OnOpenMenu { get; set; }
+
+    /// <summary>
+    /// Accessible label for the mobile navigation landmark.
+    /// </summary>
+    [Parameter]
+    public string AriaLabel { get; set; } = "Mobile navigation";
 
     /// <summary>
     /// Aria-label for the center menu button. Defaults to "Open main menu".

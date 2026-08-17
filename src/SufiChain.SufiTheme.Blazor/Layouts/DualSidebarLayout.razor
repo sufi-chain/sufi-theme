@@ -168,11 +168,13 @@
     @* Mobile: fixed bottom bar with center menu button and shortcuts (replaces header hamburger) *@
     @if (_isMobile)
     {
-        <MobileBottomMenu OnOpenMenu="ToggleMobileSidebar" OpenMenuAriaLabel="@L["Menu"].Value">
+        <MobileBottomMenu OnOpenMenu="ToggleMobileSidebar"
+                          AriaLabel="@L["MobileNavigation"].Value"
+                          OpenMenuAriaLabel="@L["Menu"].Value">
             <LeftShortcuts>
                 @foreach (var shortcut in GetMobileShortcuts().Take(2))
                 {
-                    <a href="@shortcut.Url" class="sufi-mobile-bottom-menu__shortcut" aria-label="@shortcut.DisplayName">
+                    <a href="@shortcut.Url" class="sufi-mobile-bottom-menu__shortcut" aria-label="@L[shortcut.DisplayName].Value">
                         <SbIcon Name="@shortcut.Icon" Size="SbSize.Lg" />
                     </a>
                 }
@@ -180,7 +182,7 @@
             <RightShortcuts>
                 @foreach (var shortcut in GetMobileShortcuts().Skip(2).Take(2))
                 {
-                    <a href="@shortcut.Url" class="sufi-mobile-bottom-menu__shortcut" aria-label="@shortcut.DisplayName">
+                    <a href="@shortcut.Url" class="sufi-mobile-bottom-menu__shortcut" aria-label="@L[shortcut.DisplayName].Value">
                         <SbIcon Name="@shortcut.Icon" Size="SbSize.Lg" />
                     </a>
                 }

@@ -9,6 +9,7 @@ Chrome components under `SufiChain.SufiTheme.Blazor`. Platform-owned pieces are 
 | `SideMenuLayout` | Classic sidebar + top bar shell |
 | `TopMenuLayout` | Header-first navigation |
 | `DualSidebarLayout` | Icon rail + expandable panel |
+| `MobileLayout` | Full-screen mobile workspace with bottom shortcuts and drawer navigation |
 | `EmptyLayout` | Minimal wrapper (no chrome) |
 | `SufiLayoutBase` | Shared layout base |
 

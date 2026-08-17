@@ -1,0 +1,108 @@
+@inherits SufiLayoutBase
+
+@*
+    MobileLayout - Full-screen mobile workspace shell.
+
+    Keeps feature content large while retaining:
+    - host-provided bottom shortcuts,
+    - the contributor-based application menu,
+    - page toolbar actions,
+    - theme, localization, RTL, alerts, and overlay services.
+*@
+
+<SbThemeProvider Theme="@CurrentTheme" Direction="@Direction">
+    <div class="sufi-mobile-layout">
+        @if (PageLayout.ToolbarContent != null)
+        {
+            <header class="sufi-mobile-layout__actions">
+                <SbButton Variant="SbButtonVariant.Outline"
+                          Size="SbSize.Sm"
+                          OnClick="OpenActions"
+                          aria-label="@L["PageActions"].Value">
+                    <StartIcon>
+                        <SbIcon Name="more-vertical" Size="SbSize.Sm" />
+                    </StartIcon>
+                    <ChildContent>@L["PageActions"]</ChildContent>
+                </SbButton>
+            </header>
+        }
+
+        <div class="sufi-mobile-layout__viewport">
+            <SufiPageAlert />
+            <SufiLayoutHook Name="@LayoutHooks.Body.First" />
+
+            <SufiPageToolbar />
+
+            <main class="sufi-mobile-layout__content">
+                @Body
+            </main>
+
+            <SufiLayoutHook Name="@LayoutHooks.Body.Last" />
+            <SufiDynamicLayoutComponent />
+        </div>
+
+        <MobileBottomMenu OnOpenMenu="OpenMenu"
+                          AriaLabel="@L["MobileNavigation"].Value"
+                          OpenMenuAriaLabel="@L["Menu"].Value">
+            <LeftShortcuts>
+                @foreach (var shortcut in MobileShortcuts.Take(2))
+                {
+                    <a href="@shortcut.Url"
+                       class="sufi-mobile-bottom-menu__shortcut"
+                       aria-label="@L[shortcut.DisplayName].Value">
+                        <SbIcon Name="@shortcut.Icon" Size="SbSize.Lg" />
+                    </a>
+                }
+            </LeftShortcuts>
+            <RightShortcuts>
+                @foreach (var shortcut in MobileShortcuts.Skip(2).Take(2))
+                {
+                    <a href="@shortcut.Url"
+                       class="sufi-mobile-bottom-menu__shortcut"
+                       aria-label="@L[shortcut.DisplayName].Value">
+                        <SbIcon Name="@shortcut.Icon" Size="SbSize.Lg" />
+                    </a>
+                }
+            </RightShortcuts>
+        </MobileBottomMenu>
+
+        <SbDrawer @bind-Open="_menuOpen"
+                  Placement="SbDrawerPlacement.Start"
+                  Width="min(88vw, 22rem)"
+                  Title="@L["Menu"].Value"
+                  Class="sufi-mobile-layout__menu-drawer">
+            <SbNavMenu>
+                @foreach (var menuItem in MenuItems)
+                {
+                    <MenuItemRenderer @key="menuItem.Name"
+                                      MenuItem="@menuItem"
+                                      GroupStartsCollapsed="@(menuItem.IsCollapsed == false)" />
+                }
+            </SbNavMenu>
+
+            <div class="sufi-mobile-layout__system-actions">
+                @if (ToolbarItems.Any())
+                {
+                    @foreach (var item in ToolbarItems)
+                    {
+                        <DynamicComponent Type="@item.ComponentType" />
+                    }
+                }
+                <SidebarUserAvatar Placement="SbPlacement.TopEnd" />
+            </div>
+        </SbDrawer>
+
+        @if (PageLayout.ToolbarContent is RenderFragment toolbarFragment)
+        {
+            <SbDrawer @bind-Open="_actionsOpen"
+                      Placement="SbDrawerPlacement.Top"
+                      Height="max-content"
+                      Title="@L["PageActions"].Value"
+                      Class="sufi-mobile-actions-drawer">
+                @toolbarFragment
+            </SbDrawer>
+        }
+    </div>
+
+    <SufiOverlayHost />
+</SbThemeProvider>

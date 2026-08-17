@@ -6,7 +6,7 @@ Host-level knobs for SufiTheme. Configure in the host module with `Configure<Suf
 
 | Option | Type | Default | Purpose |
 | --- | --- | --- | --- |
-| `Layout` | `Type` | `SufiLayouts.SideMenu` | Default application layout component (`SideMenu`, `TopMenu`, `DualSidebar`, or custom) |
+| `Layout` | `Type` | `SufiLayouts.SideMenu` | Default application layout component (`SideMenu`, `TopMenu`, `DualSidebar`, `Mobile`, or custom) |
 | `MobileMenuSelector` | `Func<…>` | First 2 items | Filters/transforms main menu for mobile bottom nav |
 | `ShowSidebarToggle` | `bool` | `true` | Sidebar collapse button in the main header |
 | `CollapsedSidebar` | `bool` | `false` | Sidebar collapsed by default on desktop |
@@ -34,7 +34,7 @@ Configure<SufiThemeBlazorOptions>(options =>
 });
 ```
 
-`SufiLayouts` maps name constants to layout types: `SideMenu`, `TopMenu`, `DualSidebar`.
+`SufiLayouts` exposes registered layout types: `SideMenu`, `TopMenu`, `DualSidebar`, `Account`, `Empty`, and `Mobile`.
 
 ## `SufiThemeOptions` (style registry)
 

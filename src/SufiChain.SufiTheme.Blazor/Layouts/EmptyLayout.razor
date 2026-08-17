@@ -32,7 +32,6 @@
 
     protected override void OnInitialized()
     {
-        // Detect RTL
         var culture = System.Globalization.CultureInfo.CurrentUICulture;
         _direction = culture.TextInfo.IsRightToLeft ? SbDirection.Rtl : SbDirection.Ltr;
     }

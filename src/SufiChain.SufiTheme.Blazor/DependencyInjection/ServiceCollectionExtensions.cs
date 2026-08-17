@@ -52,6 +52,7 @@ public static class ServiceCollectionExtensions
         SufiLayouts.DualSidebar = typeof(DualSidebarLayout);
         SufiLayouts.Account = typeof(AccountLayout);
         SufiLayouts.Empty = typeof(EmptyLayout);
+        SufiLayouts.Mobile = typeof(MobileLayout);
 
         // Add core theme services
         services.AddSufiTheme(configureThemeOptions, configureBlazorOptions);

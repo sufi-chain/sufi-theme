@@ -1,0 +1,174 @@
+.sufi-mobile-layout {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow: hidden;
+    background-color: var(--sb-color-background);
+}
+
+.sufi-mobile-layout__actions {
+    position: relative;
+    z-index: var(--sb-z-sticky, 20);
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    min-height: 3.25rem;
+    padding:
+        max(var(--sb-space-2, 0.5rem), env(safe-area-inset-top, 0px))
+        max(var(--sb-space-3, 0.75rem), env(safe-area-inset-right, 0px))
+        var(--sb-space-2, 0.5rem)
+        max(var(--sb-space-3, 0.75rem), env(safe-area-inset-left, 0px));
+    border-bottom: 1px solid var(--sb-color-border);
+    background-color: var(--sb-color-surface);
+}
+
+.sufi-mobile-layout__actions ::deep .sb-button {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    touch-action: manipulation;
+}
+
+.sufi-mobile-layout__viewport {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.sufi-mobile-layout__content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}
+
+.sufi-mobile-layout ::deep .sufi-mobile-bottom-menu {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: var(--sb-z-fixed, 100);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sb-space-2, 0.5rem);
+    box-sizing: border-box;
+    height: calc(3.75rem + env(safe-area-inset-bottom, 0px));
+    padding:
+        var(--sb-space-3, 0.75rem)
+        max(var(--sb-space-4, 1rem), env(safe-area-inset-right, 0px))
+        max(var(--sb-space-3, 0.75rem), env(safe-area-inset-bottom, 0px))
+        max(var(--sb-space-4, 1rem), env(safe-area-inset-left, 0px));
+    overflow: visible;
+    border-top: 1px solid var(--sb-color-border);
+    background-color: var(--sb-color-surface);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.sufi-mobile-layout ::deep .sufi-mobile-bottom-menu__side {
+    display: flex;
+    flex: 1 1 0;
+    align-items: center;
+    gap: var(--sb-space-2, 0.5rem);
+    min-width: 0;
+}
+
+.sufi-mobile-layout ::deep .sufi-mobile-bottom-menu__side--left {
+    justify-content: flex-start;
+}
+
+.sufi-mobile-layout ::deep .sufi-mobile-bottom-menu__side--right {
+    justify-content: flex-end;
+}
+
+.sufi-mobile-layout ::deep .sufi-mobile-bottom-menu__center {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.sufi-mobile-layout ::deep .sufi-mobile-bottom-menu__menu-btn,
+.sufi-mobile-layout ::deep .sufi-mobile-bottom-menu__shortcut {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    border-radius: var(--sb-radius-full);
+    touch-action: manipulation;
+}
+
+.sufi-mobile-layout ::deep .sufi-mobile-bottom-menu__menu-btn {
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 0;
+    background-color: var(--sb-color-primary);
+    color: var(--sb-color-on-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1.25rem);
+}
+
+.sufi-mobile-layout ::deep .sufi-mobile-bottom-menu__shortcut {
+    width: 2.75rem;
+    height: 2.75rem;
+    color: var(--sb-color-text-muted);
+    text-decoration: none;
+}
+
+.sufi-mobile-layout ::deep .sufi-mobile-bottom-menu__menu-btn:focus-visible,
+.sufi-mobile-layout ::deep .sufi-mobile-bottom-menu__shortcut:focus-visible {
+    outline: none;
+    box-shadow: var(--sb-focus-ring, 0 0 0 3px rgba(20, 184, 166, 0.35));
+}
+
+.sufi-mobile-layout ::deep .sufi-mobile-layout__menu-drawer .sb-drawer__container {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.sufi-mobile-layout ::deep .sufi-mobile-layout__menu-drawer .sb-drawer__body {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: var(--sb-space-3, 0.75rem);
+}
+
+.sufi-mobile-layout ::deep .sufi-mobile-layout__menu-drawer .sb-nav-menu {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.sufi-mobile-layout__system-actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sb-space-2, 0.5rem);
+    min-height: 3.5rem;
+    margin-top: var(--sb-space-3, 0.75rem);
+    padding-top: var(--sb-space-3, 0.75rem);
+    border-top: 1px solid var(--sb-color-border);
+}
+
+.sufi-mobile-layout ::deep .sufi-mobile-actions-drawer .sb-drawer__container {
+    padding-top: env(safe-area-inset-top, 0px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sufi-mobile-layout ::deep .sufi-mobile-bottom-menu__menu-btn,
+    .sufi-mobile-layout ::deep .sufi-mobile-bottom-menu__shortcut {
+        transition: none;
+    }
+}
