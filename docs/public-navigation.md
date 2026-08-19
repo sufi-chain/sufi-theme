@@ -19,7 +19,7 @@ services.AddSingleton<IPublicMenuProvider, NullPublicMenuProvider>();
 
 ## Development host example
 
-`.dev/hosts/SufiChane.SufiPlatform` registers `SufiPlatformPublicMenuProvider` in `SufiPlatformModule`:
+`hosts/SufiChane.SufiPlatform` registers `SufiPlatformPublicMenuProvider` in `SufiPlatformModule`:
 
 ```csharp
 context.Services.Replace(

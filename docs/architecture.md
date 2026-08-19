@@ -33,7 +33,7 @@ There is **no** separate public layout file. `StandardLayouts.Public` resolves t
 
 ## Account layout
 
-`AccountLayout` lives in **Sufi Platform UI** (`SufiChain.SufiPlatform.UI.Blazor.Layouts`). SufiTheme registers it as `SufiLayouts.Account`. Hosts may replace it (for example `SufiPlatformAccountLayout` in `.dev/hosts/SufiChane.SufiPlatform`).
+`AccountLayout` lives in **Sufi Platform UI** (`SufiChain.SufiPlatform.UI.Blazor.Layouts`). SufiTheme registers it as `SufiLayouts.Account`. Hosts may replace it (for example `SufiPlatformAccountLayout` in `hosts/SufiChane.SufiPlatform`).
 
 ## Related
 
