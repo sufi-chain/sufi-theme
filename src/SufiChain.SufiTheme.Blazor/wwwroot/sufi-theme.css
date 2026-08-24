@@ -347,9 +347,9 @@ body:has(.sufi-app-shell--dual-sidebar) {
 }
 
 /* When sidebar panel is expanded (hover or pinned), header + content slide right with it */
-.sufi-dual-sidebar:hover ~ .sufi-app-shell__content-wrapper,
-.sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper,
-.sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper {
+.sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled):hover ~ .sufi-app-shell__content-wrapper,
+.sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper,
+.sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper {
     margin-left: calc(var(--sufi-sidebar-width, 60px) + var(--sufi-expand-panel-width, 260px) + var(--sufi-sidebar-content-gap, var(--sb-space-6)) - var(--sb-space-2));
 }
 
@@ -368,9 +368,9 @@ body:has(.sufi-app-shell--dual-sidebar) {
     transition: margin-right 0.25s ease;
 }
 
-[dir="rtl"] .sufi-dual-sidebar:hover ~ .sufi-app-shell__content-wrapper,
-[dir="rtl"] .sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper,
-[dir="rtl"] .sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper {
+[dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled):hover ~ .sufi-app-shell__content-wrapper,
+[dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper,
+[dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper {
     margin-left: 0;
     margin-right: calc(var(--sufi-sidebar-width, 60px) + var(--sufi-expand-panel-width, 260px) + var(--sufi-sidebar-content-gap, var(--sb-space-6)) - var(--sb-space-2));
 }
@@ -413,9 +413,9 @@ body:has(.sufi-app-shell--dual-sidebar) {
     min-height: min-content;
 }
 
-[dir="rtl"] .sufi-dual-sidebar:hover ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
-[dir="rtl"] .sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
-[dir="rtl"] .sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main {
+[dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled):hover ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
+[dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
+[dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main {
     right: calc(var(--sufi-sidebar-width, 60px) + var(--sufi-expand-panel-width, 260px) + var(--sb-space-6));
 }
 
@@ -454,9 +454,9 @@ body:has(.sufi-app-shell--dual-sidebar) {
     min-height: min-content;
 }
 
-[dir="ltr"] .sufi-dual-sidebar:hover ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
-[dir="ltr"] .sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
-[dir="ltr"] .sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main {
+[dir="ltr"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled):hover ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
+[dir="ltr"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
+[dir="ltr"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main {
     left: calc(var(--sufi-sidebar-width, 60px) + var(--sufi-expand-panel-width, 260px) + var(--sb-space-6));
 }
 
@@ -538,8 +538,8 @@ body:has(.sufi-app-shell--dual-sidebar) {
 }
 
 /* Adjust footer position when sidebar is expanded/pinned */
-.sufi-dual-sidebar--pinned~.sufi-app-shell__main .sufi-footer:not(.sufi-footer--inline),
-.sufi-dual-sidebar:hover~.sufi-app-shell__main .sufi-footer:not(.sufi-footer--inline) {
+.sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--pinned~.sufi-app-shell__main .sufi-footer:not(.sufi-footer--inline),
+.sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled):hover~.sufi-app-shell__main .sufi-footer:not(.sufi-footer--inline) {
     left: calc(var(--sufi-sidebar-width) + var(--sufi-expand-panel-width));
 }
 
@@ -1835,16 +1835,16 @@ body:has(.sufi-app-shell--dual-sidebar) {
     }
 
     /* Override desktop hover/expanded/pinned margin so header stays fixed when menu is open or interacted with */
-    .sufi-dual-sidebar:hover ~ .sufi-app-shell__content-wrapper,
-    .sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper,
-    .sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper,
+    .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled):hover ~ .sufi-app-shell__content-wrapper,
+    .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper,
+    .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper,
     .sufi-dual-sidebar--open ~ .sufi-app-shell__content-wrapper {
         margin-left: 0;
     }
 
-    [dir="rtl"] .sufi-dual-sidebar:hover ~ .sufi-app-shell__content-wrapper,
-    [dir="rtl"] .sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper,
-    [dir="rtl"] .sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper,
+    [dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled):hover ~ .sufi-app-shell__content-wrapper,
+    [dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper,
+    [dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper,
     [dir="rtl"] .sufi-dual-sidebar--open ~ .sufi-app-shell__content-wrapper {
         margin-right: 0;
     }
@@ -1860,12 +1860,12 @@ body:has(.sufi-app-shell--dual-sidebar) {
     }
 
     /* Keep main full width on mobile when sidebar is expanded/pinned (drawer open) – don’t apply desktop left/right */
-    [dir="ltr"] .sufi-dual-sidebar:hover ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
-    [dir="ltr"] .sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
-    [dir="ltr"] .sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
-    [dir="rtl"] .sufi-dual-sidebar:hover ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
-    [dir="rtl"] .sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
-    [dir="rtl"] .sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main {
+    [dir="ltr"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled):hover ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
+    [dir="ltr"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
+    [dir="ltr"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
+    [dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled):hover ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
+    [dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
+    [dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main {
         left: var(--sb-space-4);
         right: var(--sb-space-4);
     }

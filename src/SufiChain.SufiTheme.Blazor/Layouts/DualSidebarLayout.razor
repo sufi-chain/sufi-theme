@@ -43,7 +43,7 @@
         </TopBar>
 
         <DualSidebar>
-            <SufiDualSidebar ExpandOnHover="@BlazorOptions.Value.ExpandOnHover" Pinned="@_sidebarPinned" PinnedChanged="OnSidebarPinnedChanged"
+            <SufiDualSidebar ExpandOnHover="@BlazorOptions.Value.ExpandOnHover" CanExpand="@(_selectedMenuItem?.Items.Any() == true)" Pinned="@_sidebarPinned" PinnedChanged="OnSidebarPinnedChanged"
                              Open="@(_isMobile && _mobileSidebarOpen)">
                 <IconRail>
                     <SufiIconRail Dark="@BlazorOptions.Value.IconRailDarkMode">
@@ -81,18 +81,18 @@
                     </SufiIconRail>
                 </IconRail>
                 <ExpandPanel>
-                    <SufiExpandPanel>
-                        <Header>
-                            <div class="sufi-expand-panel__header-content">
-                                <span class="sufi-expand-panel__title">@BrandingProvider.AppName</span>
-                                <SbButton Variant="SbButtonVariant.Ghost" Size="SbSize.Sm" OnClick="ToggleSidebarPin" title="@(_sidebarPinned ? "Unpin sidebar" : "Pin sidebar")">
-                                    <SbIcon Name="@(_sidebarPinned ? "unpin" : "thumbtack")" Size="SbSize.Sm" />
-                                </SbButton>
-                            </div>
-                        </Header>
-                        <ChildContent>
-                            @if (_selectedMenuItem != null && _selectedMenuItem.Items.Any())
-                            {
+                    @if (_selectedMenuItem?.Items.Any() == true)
+                    {
+                        <SufiExpandPanel>
+                            <Header>
+                                <div class="sufi-expand-panel__header-content">
+                                    <span class="sufi-expand-panel__title">@BrandingProvider.AppName</span>
+                                    <SbButton Variant="SbButtonVariant.Ghost" Size="SbSize.Sm" OnClick="ToggleSidebarPin" title="@(_sidebarPinned ? "Unpin sidebar" : "Pin sidebar")">
+                                        <SbIcon Name="@(_sidebarPinned ? "unpin" : "thumbtack")" Size="SbSize.Sm" />
+                                    </SbButton>
+                                </div>
+                            </Header>
+                            <ChildContent>
                                 <div class="sufi-nav-group">
                                     <span class="sufi-nav-group__label">@_selectedMenuItem.DisplayName</span>
                                     <SbNavMenu>
@@ -102,21 +102,12 @@
                                         }
                                     </SbNavMenu>
                                 </div>
-                            }
-                            else
-                            {
-                                <SbNavMenu>
-                                    @foreach (var menuItem in MenuItems)
-                                    {
-                                        <MenuItemRenderer @key="menuItem.Name" MenuItem="@menuItem" />
-                                    }
-                                </SbNavMenu>
-                            }
-                        </ChildContent>
-                        @* <Footer>
-                            <SidebarUserProfile />
-                        </Footer> *@
-                    </SufiExpandPanel>
+                            </ChildContent>
+                            @* <Footer>
+                                <SidebarUserProfile />
+                            </Footer> *@
+                        </SufiExpandPanel>
+                    }
                 </ExpandPanel>
             </SufiDualSidebar>
         </DualSidebar>
@@ -501,6 +492,10 @@
     private void SelectMenuItem(ApplicationMenuItem menuItem)
     {
         _selectedMenuItem = menuItem;
+        if (!menuItem.Items.Any() && !string.IsNullOrWhiteSpace(menuItem.Url))
+        {
+            NavigationManager.NavigateTo(menuItem.Url);
+        }
         StateHasChanged();
     }
 

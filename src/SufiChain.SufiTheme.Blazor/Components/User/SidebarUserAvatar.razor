@@ -95,6 +95,7 @@
 
     private ApplicationMenu? _userMenu;
     private bool _menuOpen;
+    private bool _disposed;
 
     protected override async Task OnInitializedAsync()
     {
@@ -104,8 +105,27 @@
 
     private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
     {
-        _userMenu = await MenuManager.GetAsync(StandardMenus.User);
-        await InvokeAsync(StateHasChanged);
+        if (_disposed)
+        {
+            return;
+        }
+
+        try
+        {
+            _userMenu = await MenuManager.GetAsync(StandardMenus.User);
+            if (!_disposed)
+            {
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (ObjectDisposedException)
+        {
+            // Navigation can dispose the DI scope while this callback is awaiting.
+        }
+        catch (InvalidOperationException) when (_disposed)
+        {
+            // Renderer/scope teardown can race with LocationChanged.
+        }
     }
 
     private void OnMenuOpenChanged(bool open)
@@ -169,6 +189,7 @@
 
     public void Dispose()
     {
+        _disposed = true;
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
 }

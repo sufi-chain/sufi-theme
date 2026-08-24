@@ -10,7 +10,7 @@
     - Mobile drawer fallback
 *@
 
-<div class="sufi-dual-sidebar @(_isExpanded ? "sufi-dual-sidebar--expanded" : "") @(_isPinned ? "sufi-dual-sidebar--pinned" : "") @(Open ? "sufi-dual-sidebar--open" : "") @Class"
+<div class="sufi-dual-sidebar @(_isExpanded && CanExpand ? "sufi-dual-sidebar--expanded" : "") @(_isPinned && CanExpand ? "sufi-dual-sidebar--pinned" : "") @(!CanExpand ? "sufi-dual-sidebar--disabled" : "") @(Open ? "sufi-dual-sidebar--open" : "") @Class"
      @onmouseenter="OnMouseEnter"
      @onmouseleave="OnMouseLeave">
     
@@ -22,7 +22,7 @@
             </div>
         }
         
-        @if (ExpandPanel != null)
+        @if (ExpandPanel != null && CanExpand)
         {
             <div class="sufi-dual-sidebar__panel @(_isExpanded || _isPinned ? "sufi-dual-sidebar__panel--visible" : "")">
                 @ExpandPanel
@@ -52,6 +52,12 @@
     /// </summary>
     [Parameter]
     public bool ExpandOnHover { get; set; } = true;
+
+    /// <summary>
+    /// Whether the expandable panel is available for the current menu selection.
+    /// </summary>
+    [Parameter]
+    public bool CanExpand { get; set; } = true;
     
     /// <summary>
     /// Whether the panel is pinned open.
@@ -81,11 +87,16 @@
     protected override void OnParametersSet()
     {
         _isPinned = Pinned;
+        if (!CanExpand)
+        {
+            _isExpanded = false;
+            _isPinned = false;
+        }
     }
-    
+
     private void OnMouseEnter()
     {
-        if (ExpandOnHover && !_isPinned)
+        if (CanExpand && ExpandOnHover && !_isPinned)
         {
             _isExpanded = true;
         }
@@ -93,7 +104,7 @@
     
     private void OnMouseLeave()
     {
-        if (!_isPinned)
+        if (CanExpand && !_isPinned)
         {
             _isExpanded = false;
         }
@@ -104,6 +115,11 @@
     /// </summary>
     public async Task TogglePinAsync()
     {
+        if (!CanExpand)
+        {
+            return;
+        }
+
         _isPinned = !_isPinned;
         _isExpanded = _isPinned;
         await PinnedChanged.InvokeAsync(_isPinned);
@@ -114,6 +130,11 @@
     /// </summary>
     public void Expand()
     {
+        if (!CanExpand)
+        {
+            return;
+        }
+
         _isExpanded = true;
         StateHasChanged();
     }
