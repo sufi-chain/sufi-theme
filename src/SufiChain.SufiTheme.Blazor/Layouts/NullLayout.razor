@@ -1,0 +1,56 @@
+@inherits LayoutComponentBase
+@inject IThemeSwitchService ThemeSwitchService
+@implements IDisposable
+
+@*
+    NullLayout - Minimal content-only layout without navigation or footer.
+
+    The page rendered inside this layout owns any page-specific theme override.
+    The layout itself follows the shared user theme for reusable minimal pages.
+*@
+
+<SbThemeProvider Theme="@_currentTheme" Direction="@_direction">
+    <div class="sufi-null-layout">
+        <SufiPageAlert />
+        <main class="sufi-null-layout__body">
+            @Body
+        </main>
+    </div>
+    <SufiOverlayHost />
+</SbThemeProvider>
+
+@code {
+    private SbTheme _currentTheme = SbTheme.Light;
+    private SbDirection _direction = SbDirection.Ltr;
+
+    protected override void OnInitialized()
+    {
+        var culture = System.Globalization.CultureInfo.CurrentUICulture;
+        _direction = culture.TextInfo.IsRightToLeft ? SbDirection.Rtl : SbDirection.Ltr;
+        ThemeSwitchService.ThemeChanged += OnThemeChanged;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await ThemeSwitchService.GetStoredThemeAsync();
+            _currentTheme = ThemeSwitchService.IsDarkMode ? SbTheme.Dark : SbTheme.Light;
+        }
+        catch
+        {
+            _currentTheme = SbTheme.Light;
+        }
+    }
+
+    private void OnThemeChanged(ThemeMode mode)
+    {
+        _currentTheme = ThemeSwitchService.IsDarkMode ? SbTheme.Dark : SbTheme.Light;
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        ThemeSwitchService.ThemeChanged -= OnThemeChanged;
+    }
+}

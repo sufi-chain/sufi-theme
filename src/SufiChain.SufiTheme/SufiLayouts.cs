@@ -38,6 +38,7 @@ public static class SufiLayouts
     private static Type? _dualSidebarLayout;
     private static Type? _accountLayout;
     private static Type? _emptyLayout;
+    private static Type? _nullLayout;
     private static Type? _mobileLayout;
 
     /// <summary>
@@ -93,6 +94,17 @@ public static class SufiLayouts
         get => _emptyLayout ?? throw new InvalidOperationException(
             "EmptyLayout type has not been registered. Ensure SufiChain.SufiTheme.Blazor is properly configured.");
         set => _emptyLayout = value;
+    }
+
+    /// <summary>
+    /// Gets or sets the Null layout type (content-only layout without navigation or footer).
+    /// Set by the Blazor theme package during initialization.
+    /// </summary>
+    public static Type Null
+    {
+        get => _nullLayout ?? throw new InvalidOperationException(
+            "NullLayout type has not been registered. Ensure SufiChain.SufiTheme.Blazor is properly configured.");
+        set => _nullLayout = value;
     }
 
     /// <summary>

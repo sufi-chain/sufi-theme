@@ -1,5 +1,7 @@
 @inherits LayoutComponentBase
 @inject IOptions<SufiThemeBlazorOptions> BlazorOptions
+@inject IThemeSwitchService ThemeSwitchService
+@implements IDisposable
 
 @*
     EmptyLayout - Minimal layout without navigation
@@ -34,5 +36,31 @@
     {
         var culture = System.Globalization.CultureInfo.CurrentUICulture;
         _direction = culture.TextInfo.IsRightToLeft ? SbDirection.Rtl : SbDirection.Ltr;
+        ThemeSwitchService.ThemeChanged += OnThemeChanged;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await ThemeSwitchService.GetStoredThemeAsync();
+            _currentTheme = ThemeSwitchService.IsDarkMode ? SbTheme.Dark : SbTheme.Light;
+        }
+        catch
+        {
+            // Keep the neutral light fallback when browser storage is unavailable.
+            _currentTheme = SbTheme.Light;
+        }
+    }
+
+    private void OnThemeChanged(ThemeMode mode)
+    {
+        _currentTheme = ThemeSwitchService.IsDarkMode ? SbTheme.Dark : SbTheme.Light;
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        ThemeSwitchService.ThemeChanged -= OnThemeChanged;
     }
 }
