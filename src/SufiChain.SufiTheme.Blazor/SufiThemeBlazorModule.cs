@@ -23,7 +23,7 @@ public class SufiThemeBlazorModule : AbpModule
         context.Services.AddSufiThemeBlazor();
 
         // Register RTE font-family dropdown (Dirooz, Samim, Gandom, Sahel FD)
-        context.Services.AddRteToolbarContributor<FontFamilyToolbarContributor>();
+        context.Services.AddEditorToolbarContributor<FontFamilyToolbarContributor>();
 
         // Register the theme class as transient
         context.Services.AddTransient<SufiBlazorTheme>();

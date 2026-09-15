@@ -43,7 +43,7 @@ public class SufiThemeBlazorServerModule : AbpModule
         // Override tenant selector visibility with ABP-backed implementation
         context.Services.Replace(ServiceDescriptor.Scoped<ITenantSelectorVisibilityService, AbpTenantSelectorVisibilityService>());
 
-        // Bridge ABP current user and authorization for menu/toolbar permission filtering
+        // Bridge ABP current user, current tenant, and authorization for menu/toolbar filtering
         context.Services.Replace(ServiceDescriptor.Scoped<ICurrentUserAccessor, AbpCurrentUserAccessorAdapter>());
         context.Services.Replace(ServiceDescriptor.Scoped<ISufiPermissionChecker, SufiThemeAuthorizationPermissionChecker>());
 
@@ -52,6 +52,7 @@ public class SufiThemeBlazorServerModule : AbpModule
 
         // Register Sufi Platform UI Blazor services (messages, notifications, tenant switch, etc.)
         context.Services.AddSufiUIBlazor();
+        context.Services.AddSufiBlazorServerCurrentTenant();
 
         // Blazor Server: isolate overlay components (toasts, block UI) per circuit/user session
         context.Services.AddSufiBlazorServerCircuitServices();
@@ -72,28 +73,32 @@ public class SufiThemeBlazorServerModule : AbpModule
         Configure<BundleOptions>(options =>
         {
             // SufiBlazor design system (primitives, tokens, utility classes)
-            options.StyleBundles.Add(BlazorSufiThemeBundles.Styles.Global, 
+            options.StyleBundles.Add(BlazorSufiThemeBundles.Styles.Global,
+                "/_content/SufiChain.SufiBlazor/persian-palette.css");
+            options.StyleBundles.Add(BlazorSufiThemeBundles.Styles.Global,
                 "/_content/SufiChain.SufiBlazor/sufiblazor.css");
             // SufiTheme layout styles
-            options.StyleBundles.Add(BlazorSufiThemeBundles.Styles.Global, 
+            options.StyleBundles.Add(BlazorSufiThemeBundles.Styles.Global,
                 "/_content/SufiChain.SufiTheme.Blazor/sufi-theme.css");
 
-            options.ScriptBundles.Add(BlazorSufiThemeBundles.Scripts.Global, 
+            options.ScriptBundles.Add(BlazorSufiThemeBundles.Scripts.Global,
                 "/_content/SufiChain.SufiBlazor/sufiblazor.js");
-            options.ScriptBundles.Add(BlazorSufiThemeBundles.Scripts.Global, 
+            options.ScriptBundles.Add(BlazorSufiThemeBundles.Scripts.Global,
                 "/_content/SufiChain.SufiTheme.Blazor/sufi-theme-viewport.js");
             // sufi-theme.js is optional/on-demand (ES module); menu expand/collapse is Blazor + CSS only
 
-            // Quill.js for SbRichTextEditor (on-demand, not in global bundle)
-            options.StyleBundles.Add(BlazorSufiThemeBundles.SufiBlazor.Quill, 
-                "/_content/SufiChain.SufiBlazor/vendor/quill.snow.css");
-            options.ScriptBundles.Add(BlazorSufiThemeBundles.SufiBlazor.Quill, 
-                "/_content/SufiChain.SufiBlazor/vendor/quill.min.js");
+            options.StyleBundles.Add(BlazorSufiThemeBundles.Styles.Global,
+                "/_content/SufiChain.SufiBlazor/sufiblazor-editors.css");
 
-            options.StyleBundles.Add(BlazorSufiThemeBundles.SufiBlazor.MarkdownEditor,
-                "/_content/SufiChain.SufiBlazor/vendor/easymde/easymde.min.css");
-            options.ScriptBundles.Add(BlazorSufiThemeBundles.SufiBlazor.MarkdownEditor,
-                "/_content/SufiChain.SufiBlazor/vendor/easymde/easymde.min.js");
+            // Editor runtimes (on-demand ES modules; CSS for hosts that still use named bundles)
+            options.StyleBundles.Add(BlazorSufiThemeBundles.SufiBlazor.RichText,
+                "/_content/SufiChain.SufiBlazor/sufiblazor-editors.css");
+            options.StyleBundles.Add(BlazorSufiThemeBundles.SufiBlazor.Code,
+                "/_content/SufiChain.SufiBlazor/sufiblazor-editors.css");
+            options.StyleBundles.Add(BlazorSufiThemeBundles.SufiBlazor.Diff,
+                "/_content/SufiChain.SufiBlazor/sufiblazor-editors.css");
+            options.StyleBundles.Add(BlazorSufiThemeBundles.SufiBlazor.Viewer,
+                "/_content/SufiChain.SufiBlazor/sufiblazor-editors.css");
         });
     }
 }

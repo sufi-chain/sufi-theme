@@ -16,27 +16,30 @@ public class SufiThemeBlazorWebAssemblyBundlingModule : AbpModule
         Configure<BundleOptions>(options =>
         {
             // SufiBlazor design system (primitives, tokens, utility classes)
-            options.StyleBundles.Add(BlazorSufiThemeBundles.Styles.Global, 
+            options.StyleBundles.Add(BlazorSufiThemeBundles.Styles.Global,
+                "/_content/SufiChain.SufiBlazor/persian-palette.css");
+            options.StyleBundles.Add(BlazorSufiThemeBundles.Styles.Global,
                 "/_content/SufiChain.SufiBlazor/sufiblazor.css");
             // SufiTheme layout styles
-            options.StyleBundles.Add(BlazorSufiThemeBundles.Styles.Global, 
+            options.StyleBundles.Add(BlazorSufiThemeBundles.Styles.Global,
                 "/_content/SufiChain.SufiTheme.Blazor/sufi-theme.css");
 
-            options.ScriptBundles.Add(BlazorSufiThemeBundles.Scripts.Global, 
+            options.ScriptBundles.Add(BlazorSufiThemeBundles.Scripts.Global,
                 "/_content/SufiChain.SufiBlazor/sufiblazor.js");
-            options.ScriptBundles.Add(BlazorSufiThemeBundles.Scripts.Global, 
+            options.ScriptBundles.Add(BlazorSufiThemeBundles.Scripts.Global,
                 "/_content/SufiChain.SufiTheme.Blazor/sufi-theme-viewport.js");
 
-            // Quill.js for SbRichTextEditor (on-demand, not in global bundle)
-            options.StyleBundles.Add(BlazorSufiThemeBundles.SufiBlazor.Quill, 
-                "/_content/SufiChain.SufiBlazor/vendor/quill.snow.css");
-            options.ScriptBundles.Add(BlazorSufiThemeBundles.SufiBlazor.Quill, 
-                "/_content/SufiChain.SufiBlazor/vendor/quill.min.js");
+            options.StyleBundles.Add(BlazorSufiThemeBundles.Styles.Global,
+                "/_content/SufiChain.SufiBlazor/sufiblazor-editors.css");
 
-            options.StyleBundles.Add(BlazorSufiThemeBundles.SufiBlazor.MarkdownEditor,
-                "/_content/SufiChain.SufiBlazor/vendor/easymde/easymde.min.css");
-            options.ScriptBundles.Add(BlazorSufiThemeBundles.SufiBlazor.MarkdownEditor,
-                "/_content/SufiChain.SufiBlazor/vendor/easymde/easymde.min.js");
+            options.StyleBundles.Add(BlazorSufiThemeBundles.SufiBlazor.RichText,
+                "/_content/SufiChain.SufiBlazor/sufiblazor-editors.css");
+            options.StyleBundles.Add(BlazorSufiThemeBundles.SufiBlazor.Code,
+                "/_content/SufiChain.SufiBlazor/sufiblazor-editors.css");
+            options.StyleBundles.Add(BlazorSufiThemeBundles.SufiBlazor.Diff,
+                "/_content/SufiChain.SufiBlazor/sufiblazor-editors.css");
+            options.StyleBundles.Add(BlazorSufiThemeBundles.SufiBlazor.Viewer,
+                "/_content/SufiChain.SufiBlazor/sufiblazor-editors.css");
         });
     }
 }
@@ -57,11 +60,13 @@ public static class BlazorSufiThemeBundles
     }
 
     /// <summary>
-    /// SufiBlazor vendor bundles (Quill, etc.) for on-demand loading.
+    /// SufiBlazor editor style bundles for on-demand loading.
     /// </summary>
     public static class SufiBlazor
     {
-        public const string Quill = "SufiBlazor.Quill";
-        public const string MarkdownEditor = "SufiBlazor.MarkdownEditor";
+        public const string RichText = "SufiBlazor.RichText";
+        public const string Code = "SufiBlazor.Code";
+        public const string Diff = "SufiBlazor.Diff";
+        public const string Viewer = "SufiBlazor.Viewer";
     }
 }

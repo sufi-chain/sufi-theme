@@ -17,11 +17,13 @@ public static class BlazorSufiThemeBundles
     }
 
     /// <summary>
-    /// SufiBlazor vendor bundles (Quill, etc.) for on-demand loading.
+    /// SufiBlazor editor style bundles for on-demand loading.
     /// </summary>
     public static class SufiBlazor
     {
-        public const string Quill = "SufiBlazor.Quill";
-        public const string MarkdownEditor = "SufiBlazor.MarkdownEditor";
+        public const string RichText = "SufiBlazor.RichText";
+        public const string Code = "SufiBlazor.Code";
+        public const string Diff = "SufiBlazor.Diff";
+        public const string Viewer = "SufiBlazor.Viewer";
     }
 }

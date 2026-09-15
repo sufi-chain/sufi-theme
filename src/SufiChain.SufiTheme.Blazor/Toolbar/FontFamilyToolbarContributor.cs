@@ -6,29 +6,25 @@ using SufiChain.SufiBlazor.Contracts.Editors;
 namespace SufiChain.SufiTheme.Blazor.Toolbar;
 
 /// <summary>
-/// Contributes a font-family dropdown to the rich text editor toolbar.
-/// Provides the four Persian fonts (Dirooz FD, Samim FD, Gandom FD, Sahel FD)
-/// defined in sufi-theme.css so users can override the default font for selected content.
-/// Only visible when the culture is RTL (e.g. Farsi, Arabic), since these fonts are for RTL scripts.
+/// Contributes a font-family dropdown to the unified editor toolbar.
+/// Visible for RTL cultures so users can apply Dirooz, Samim, Gandom, or Sahel FD.
 /// </summary>
-public class FontFamilyToolbarContributor : IRteToolbarContributor
+public class FontFamilyToolbarContributor : IEditorToolbarContributor
 {
-    /// <summary>
-    /// Items appear after default formatting (bold, italic, etc.).
-    /// </summary>
     public int Order => 105;
+    public SbEditorSurface Surfaces => SbEditorSurface.Toolbar;
 
-    public Task ConfigureToolbarAsync(RteToolbarContext context)
+    public Task ConfigureAsync(EditorToolbarContext context)
     {
-        context.Items.Add(new RteToolbarContributedItem
+        context.Items.Add(new EditorToolbarItem
         {
             Id = "font",
             Group = "formatting",
-            Order = 5, // After bold, italic, underline, strike
+            Order = 5,
             Type = SbEditorToolbarItemType.Select,
-            Format = "font",
             Tooltip = "Font",
-            IsVisible = () => CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft,
+            LabelKey = "Editor:Font",
+            IsVisible = _ => CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft,
             Options = new List<SbEditorToolbarOption>
             {
                 new() { Label = "Default", LabelKey = "Rte:FontDefault", Value = false },
@@ -36,6 +32,13 @@ public class FontFamilyToolbarContributor : IRteToolbarContributor
                 new() { Label = "Samim FD", Value = "samim-fd" },
                 new() { Label = "Gandom FD", Value = "gandom-fd" },
                 new() { Label = "Sahel FD", Value = "sahel-fd" },
+            },
+            OnClickAsync = async action =>
+            {
+                await action.Document.ApplyMarkAsync("textStyle", new Dictionary<string, object?>
+                {
+                    ["fontFamily"] = action.State?.ActiveMarkAttrs.GetValueOrDefault("fontFamily")
+                });
             }
         });
 
