@@ -81,11 +81,11 @@
     font-display: swap;
 }
 
-/* Quill RTE font overrides – toolbar font dropdown applies these to selected content */
-.ql-font-dirooz-fd { font-family: "Dirooz FD", sans-serif !important; }
-.ql-font-samim-fd { font-family: "Samim FD", sans-serif !important; }
-.ql-font-gandom-fd { font-family: "Gandom FD", sans-serif !important; }
-.ql-font-sahel-fd { font-family: "Sahel FD", sans-serif !important; }
+/* Editor font-family marks from the RTL font dropdown */
+.sb-editor [style*="dirooz-fd"] { font-family: "Dirooz FD", sans-serif !important; }
+.sb-editor [style*="samim-fd"] { font-family: "Samim FD", sans-serif !important; }
+.sb-editor [style*="gandom-fd"] { font-family: "Gandom FD", sans-serif !important; }
+.sb-editor [style*="sahel-fd"] { font-family: "Sahel FD", sans-serif !important; }
 
 /* Use local Vazir FD for RTL languages so body gets Farsi Digits when lang=fa etc. */
 :lang(fa),
@@ -95,94 +95,32 @@
     --sb-font-family-farsi: "Vazir FD", "Vazirmatn", "Noto Sans Arabic", Tahoma, Arial, sans-serif;
 }
 
-/* ============================================
-   Brand color override (Primary & Secondary)
-   ============================================
-   Override design tokens so the SufiTheme uses your brand colors.
-   Replace the hex values below with your primary and secondary colors.
-   Keep hover/active slightly darker and -50/-100/-light as light tints.
-*/
-
+/* Shell roles inherit the canonical Persian SufiBlazor palette. */
 :root,
 .sb-theme-root {
-    /*
-       Light shell: retain the deep navy icon rail as a compact brand anchor,
-       while the expanded navigation panel follows the light surface system.
-    */
-    --sufi-color-rail: #050712;
-    --sufi-color-rail-text: #A8B2C7;
-    --sufi-color-rail-hover: rgba(255, 255, 255, 0.06);
-    --sufi-color-rail-active: rgb(124 58 237 / 22%);
-    --sufi-color-rail-active-text: #F7F8FC;
-    --sufi-color-panel: #FCFBFF;
-    --sufi-color-panel-text: #172033;
-    --sufi-color-panel-text-muted: #68758D;
-    --sufi-color-panel-border: #E4E0EE;
-    --sufi-color-panel-hover: rgb(124 58 237 / 6%);
-    --sufi-color-panel-active: rgb(124 58 237 / 10%);
-    --sufi-color-tooltip: #0B1020;
-
-    /* Primary — violet brand accent */
-    --sb-color-primary: #7C3AED;
-    --sb-color-primary-hover: #6D28D9;
-    --sb-color-primary-active: #5B21B6;
-    --sb-color-primary-50: rgb(124 58 237 / 8%);
-    --sb-color-primary-100: #EDE9FE;
-    --sb-color-primary-light: #EDE9FE;
-    --sb-color-on-primary: #FFFFFF;
-
-    /* Secondary — indigo accent */
-    --sb-color-secondary: #4F46E5;
-    --sb-color-secondary-hover: #4338CA;
-    --sb-color-secondary-active: #3730A3;
-    --sb-color-secondary-50: rgb(79 70 229 / 8%);
-    --sb-color-secondary-100: #E0E7FF;
-    --sb-color-secondary-light: #E0E7FF;
-    --sb-color-on-secondary: #FFFFFF;
-
-    /* Focus accent for interactive elements */
-    --sb-focus-ring-color: #0891B2;
-}
-
-/* Dark theme: landing palette surfaces with violet and cyan accents */
-.sb-theme-dark {
-    /* Primary — violet brand accent */
-    --sb-color-primary: #7C3AED;
-    --sb-color-primary-hover: #A78BFA;
-    --sb-color-primary-active: #4F46E5;
-    --sb-color-primary-50: rgb(124 58 237 / 8%);
-    --sb-color-primary-100: rgb(124 58 237 / 22%);
-    --sb-color-primary-light: rgb(124 58 237 / 22%);
-    --sb-color-on-primary: #FFFFFF;
-
-    /* Secondary — indigo accent */
-    --sb-color-secondary: #4F46E5;
-    --sb-color-secondary-hover: #6366F1;
-    --sb-color-secondary-active: #3730A3;
-    --sb-color-secondary-50: rgb(79 70 229 / 8%);
-    --sb-color-secondary-100: rgb(79 70 229 / 22%);
-    --sb-color-secondary-light: rgb(79 70 229 / 22%);
-    --sb-color-on-secondary: #FFFFFF;
-
-    /* Focus accent for interactive elements */
-    --sb-focus-ring-color: #22D3EE;
-
-    /* Outer page background gradient (surrounds the app shell) */
-    --sb-color-page: linear-gradient(180deg, #050712 0%, #0B1020 50%, #11182A 100%);
-
-    /* Dual-sidebar semantic surfaces — darkest rail over an elevated panel */
-    --sufi-color-rail: #050712;
-    --sufi-color-rail-text: var(--sb-color-text-muted);
-    --sufi-color-rail-hover: rgba(255, 255, 255, 0.06);
-    --sufi-color-rail-active: rgb(124 58 237 / 22%);
-    --sufi-color-rail-active-text: #F7F8FC;
-    --sufi-color-panel: #0B1020;
+    --sufi-color-rail: var(--sb-color-sidebar-dark);
+    --sufi-color-rail-text: var(--sb-color-dark-muted);
+    --sufi-color-rail-hover: rgb(188 212 230 / 8%);
+    --sufi-color-rail-active: rgb(0 103 165 / 32%);
+    --sufi-color-rail-active-text: var(--sb-color-on-dark);
+    --sufi-color-panel: var(--sb-color-surface);
     --sufi-color-panel-text: var(--sb-color-text);
     --sufi-color-panel-text-muted: var(--sb-color-text-muted);
     --sufi-color-panel-border: var(--sb-color-border);
-    --sufi-color-panel-hover: rgba(255, 255, 255, 0.06);
-    --sufi-color-panel-active: rgb(124 58 237 / 22%);
-    --sufi-color-tooltip: #0B1020;
+    --sufi-color-panel-hover: var(--sb-color-surface-hover);
+    --sufi-color-panel-active: var(--sb-color-primary-light);
+    --sufi-color-tooltip: var(--sb-color-sidebar-dark);
+}
+
+.sb-theme-dark {
+    --sb-color-page: linear-gradient(180deg, var(--sb-color-background), var(--sb-color-surface));
+    --sufi-color-rail: var(--sb-color-sidebar-dark);
+    --sufi-color-panel: var(--sb-color-surface);
+    --sufi-color-panel-text: var(--sb-color-text);
+    --sufi-color-panel-text-muted: var(--sb-color-text-muted);
+    --sufi-color-panel-border: var(--sb-color-border);
+    --sufi-color-panel-hover: var(--sb-color-surface-hover);
+    --sufi-color-panel-active: var(--sb-color-primary-light);
 }
 
 * {
@@ -1199,7 +1137,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: var(--sb-color-primary);
+    color: var(--sb-color-primary-text);
     margin-inline-start: auto;
     transition: transform 0.15s ease;
 }
@@ -1740,7 +1678,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
 }
 
 .breadcrumb-item a:hover {
-    color: var(--sb-color-primary);
+    color: var(--sb-color-primary-text);
     text-decoration: none;
 }
 
@@ -1853,10 +1791,18 @@ body:has(.sufi-app-shell--dual-sidebar) {
     [dir="ltr"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main,
     [dir="rtl"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main {
         padding: 0;
-        left: var(--sb-space-4);
-        right: var(--sb-space-4);
+        left: var(--sb-space-2);
+        right: var(--sb-space-2);
         top: 56px;
         bottom: calc(60px + var(--sb-space-2));
+        border-radius: var(--sb-radius-sm, 0.25rem);
+    }
+
+    /* Size to content. min-height: 100% + footer margin-top: auto left a dead band
+       above the bottom menu (main already ends at 60px + space-2). */
+    [dir="ltr"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main > .sufi-app-shell__content > .sufi-content-wrapper,
+    [dir="rtl"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main > .sufi-app-shell__content > .sufi-content-wrapper {
+        min-height: min-content;
     }
 
     /* Keep main full width on mobile when sidebar is expanded/pinned (drawer open) – don’t apply desktop left/right */
@@ -1866,8 +1812,8 @@ body:has(.sufi-app-shell--dual-sidebar) {
     [dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled):hover ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
     [dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--expanded ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main,
     [dir="rtl"] .sufi-dual-sidebar:not(.sufi-dual-sidebar--disabled).sufi-dual-sidebar--pinned ~ .sufi-app-shell__content-wrapper .sufi-app-shell__main {
-        left: var(--sb-space-4);
-        right: var(--sb-space-4);
+        left: var(--sb-space-2);
+        right: var(--sb-space-2);
     }
 
     /* Backdrop when mobile sidebar is open (Metronic-style) */
@@ -1922,7 +1868,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
         text-overflow: ellipsis;
     }
 
-    /* Mobile header: two rows – row1 = logo + Page Actions button, row2 = title + breadcrumbs */
+    /* Mobile header: logo + Page Actions button */
     .sufi-mobile-header {
         display: flex;
         flex-direction: column;
@@ -1974,20 +1920,6 @@ body:has(.sufi-app-shell--dual-sidebar) {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
-
-    /* Mobile: page title + breadcrumbs in scrollable content (first in content wrapper) */
-    .sufi-content-wrapper__mobile-page-header {
-        padding: 0 0 var(--sb-space-2);
-        min-width: 0;
-    }
-
-    .sufi-content-wrapper__mobile-page-title {
-        font-size: var(--sb-font-size-xl);
-        font-weight: var(--sb-font-weight-semibold);
-        color: var(--sb-color-text);
-        margin: 0 0 var(--sb-space-1);
-        line-height: 1.25;
     }
 
     /* Mobile top drawer: size to content (no fixed height), avoid empty space */
@@ -2124,17 +2056,18 @@ body:has(.sufi-app-shell--dual-sidebar) {
     }
 
     .sufi-mobile-bottom-menu__shortcut:hover {
-        color: var(--sb-color-primary);
+        color: var(--sb-color-primary-text);
         background-color: var(--sb-color-surface-hover);
     }
 
-    /* Reserve space above the fixed bottom menu so content is not hidden */
+    /* Compact mobile content. Dual-sidebar __main already ends above the
+       60px bottom menu; do not add another 80px or the page grows a dead gap. */
     .sufi-content-wrapper {
-        padding: var(--sb-space-4, 1rem) var(--sb-space-4, 1rem);
+        padding: var(--sb-space-2, 0.5rem);
     }
 
     .sufi-content-wrapper--mobile-bottom-menu {
-        padding-bottom: calc(80px + env(safe-area-inset-bottom));
+        padding-bottom: var(--sb-space-3, 0.75rem);
     }
 
     .sufi-app-shell__sidebar {

@@ -17,7 +17,7 @@
         <TopBar>
             @if (_isMobile)
             {
-                @* Mobile: single fixed row – logo + Page Actions only; title + breadcrumbs scroll with content below *@
+                @* Mobile: single fixed row – logo + Page Actions only. Title and breadcrumbs are not shown in-content. *@
                 <MobileHeader Logo="@_mobileLogoFragment"
                               ShowPageActionsButton="@(PageLayout.ToolbarContent != null)"
                               PageActionsLabel="@L["PageActions"].Value"
@@ -119,24 +119,15 @@
                 {
                     <div class="sufi-dual-sidebar-backdrop" @onclick="ToggleMobileSidebar" aria-hidden="true"></div>
                 }
-                @* Mobile: page title + breadcrumbs scroll with content (not in fixed header) *@
-                @if (_isMobile)
+                @* Mobile: keep a screen-reader heading; visual title/breadcrumbs stay on desktop. *@
+                @if (_isMobile && !string.IsNullOrEmpty(PageLayout.Title))
                 {
-                    <div class="sufi-content-wrapper__mobile-page-header">
-                        @if (!string.IsNullOrEmpty(PageLayout.Title))
-                        {
-                            <h1 class="sufi-content-wrapper__mobile-page-title">@PageLayout.Title</h1>
-                        }
-                        @if (BlazorOptions.Value.ShowBreadcrumbs && PageLayout.BreadcrumbItems.Any())
-                        {
-                            <SufiBreadcrumbs ShowHome="false" />
-                        }
-                    </div>
+                    <h1 class="sb-sr-only">@PageLayout.Title</h1>
                 }
                 <SufiPageAlert />
                 <SufiLayoutHook Name="@LayoutHooks.Body.First" />
                 
-                @* SufiPageToolbar only registers toolbar content, title/breadcrumbs are in top bar (desktop) or above (mobile) *@
+                @* SufiPageToolbar only registers toolbar content; title/breadcrumbs are in the desktop top bar. *@
                 <SufiPageToolbar />
                 
                 <div class="sufi-content-body">

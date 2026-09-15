@@ -1,8 +1,8 @@
 @namespace SufiChain.SufiTheme.Blazor.Components.Layout
 @*
-    MobileHeader - Two-row mobile top bar for DualSidebarLayout.
-    Row 1: logo (left) + optional "Page Actions" button (right) that opens a drawer.
-    Row 2: page title + breadcrumbs at full width.
+    MobileHeader - Compact mobile top bar for DualSidebarLayout.
+    Logo (start) + optional "Page Actions" button (end) that opens a drawer.
+    Page title and breadcrumbs are not rendered here; DualSidebar keeps a screen-reader heading in content.
 *@
 
 <div class="sufi-mobile-header">
@@ -56,7 +56,7 @@
     public EventCallback OnPageActionsClick { get; set; }
 
     /// <summary>
-    /// Second row content: page title + breadcrumbs.
+    /// Optional second-row content. DualSidebarLayout does not supply this on mobile.
     /// </summary>
     [Parameter]
     public RenderFragment? Row2Content { get; set; }

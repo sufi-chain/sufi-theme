@@ -44,6 +44,7 @@ For public-facing **navigation**, use `IPublicMenuProvider`. See [Public navigat
 ## Common behavior
 
 - Responsive navigation, including mobile header / bottom menu
+- DualSidebar mobile hides visual page title and breadcrumbs in the content area (screen-reader heading remains) and uses compact content padding
 - Dark mode and RTL through `SbThemeProvider`
 - Menu rendering through `IMenuManager`
 - Shared layout hooks and toolbar composition

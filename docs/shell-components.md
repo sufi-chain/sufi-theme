@@ -26,7 +26,7 @@ Account: `AccountLayout` from Sufi Platform UI (registered as `SufiLayouts.Accou
 | `SufiExpandPanel` | DualSidebar expandable panel |
 | `SufiTopBar` | Main top bar (toolbars, page toolbar slot) |
 | `SufiFooterCopyright` | Footer copyright |
-| `MobileHeader` | Mobile header |
+| `MobileHeader` | Mobile header (logo + page actions; DualSidebar does not show title/breadcrumbs in this bar) |
 | `MobileBottomMenu` | Mobile bottom navigation |
 | `MobileTopBarLogo` | Mobile logo slot |
 
