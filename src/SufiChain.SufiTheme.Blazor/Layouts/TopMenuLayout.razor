@@ -1,7 +1,7 @@
 @inherits SufiLayoutBase
 @using Microsoft.Extensions.Localization
 @using SufiChain.SufiPlatform.UI.Localization
-@inject IStringLocalizer<SufiFrameworkResource> L
+@inject IStringLocalizer<SufiFrameworkResource> FrameworkL
 
 @* 
     TopMenuLayout - Uses SufiBlazor Design System
@@ -102,7 +102,7 @@
         }
 
         @* Mobile Menu Drawer *@
-        <SbDrawer Open="@_mobileMenuOpen" OpenChanged="@OnMobileMenuChanged" Placement="SbDrawerPlacement.Start" Title="@L["Menu"]">
+        <SbDrawer Open="@_mobileMenuOpen" OpenChanged="@OnMobileMenuChanged" Placement="SbDrawerPlacement.Start" Title="@FrameworkL["Menu"]">
             <SbNavMenu>
                 @foreach (var menuItem in MenuItems)
                 {
