@@ -1,8 +1,9 @@
+@inject IStringLocalizer<SufiFrameworkResource> L
 @using SufiChain.SufiPlatform.UI.Theming
 @inject IThemeSwitchService ThemeSwitchService
 @implements IDisposable
 
-<button class="theme-switch-btn" @onclick="ToggleThemeAsync" title="@TooltipText" type="button">
+<button class="theme-switch-btn" @onclick="ToggleThemeAsync" title="@TooltipText" aria-label="@TooltipText" type="button">
     <span class="theme-icon">
         @if (IsDarkMode)
         {
@@ -17,7 +18,7 @@
 
 @code {
     private bool IsDarkMode => ThemeSwitchService.IsDarkMode;
-    private string TooltipText => IsDarkMode ? "Switch to light mode" : "Switch to dark mode";
+    private string TooltipText => IsDarkMode ? L["Theme:SwitchToLightMode"].Value : L["Theme:SwitchToDarkMode"].Value;
 
     protected override async Task OnInitializedAsync()
     {

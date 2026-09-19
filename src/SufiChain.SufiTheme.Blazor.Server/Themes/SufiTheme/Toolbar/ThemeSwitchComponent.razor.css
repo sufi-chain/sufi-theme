@@ -1,0 +1,2 @@
+.theme-switch-btn { min-inline-size: 2.75rem; min-block-size: 2.75rem; }
+.theme-switch-btn:focus-visible { outline: 2px solid var(--sb-color-primary); outline-offset: 2px; }

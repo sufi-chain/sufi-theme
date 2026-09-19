@@ -1,3 +1,4 @@
+@inject IStringLocalizer<SufiFrameworkResource> L
 @inject ILanguageProvider LanguageProvider
 @inject NavigationManager NavigationManager
 @inject ICookieService CookieService
@@ -9,7 +10,9 @@
         <AnchorContent>
             <SbButton Variant="SbButtonVariant.Ghost" Size="SbSize.Sm" 
                       OnClick="ToggleMenu"
-                      title="@(_currentLanguage != null ? $"Language: {_currentLanguage.DisplayName}" : "Language")">
+                      aria-haspopup="menu" aria-expanded="@(_menuOpen ? "true" : "false")"
+                      aria-label="@(_currentLanguage != null ? $"{L["Language"]}: {_currentLanguage.DisplayName}" : L["Language"].Value)"
+                      title="@(_currentLanguage != null ? $"{L["Language"]}: {_currentLanguage.DisplayName}" : L["Language"].Value)">
                 <SbIcon Name="globe" Size="SbSize.Md" />
             </SbButton>
         </AnchorContent>
