@@ -776,6 +776,14 @@ body:has(.sufi-app-shell--dual-sidebar) {
     line-height: 1.2;
 }
 
+.sufi-topbar-page-subtitle {
+    margin: 0;
+    max-width: min(42rem, 100%);
+    font-size: var(--sb-font-size-xs, 0.75rem);
+    line-height: 1.35;
+    color: var(--sb-color-text-muted);
+}
+
 /* Topbar Page Actions */
 .sufi-topbar-page-actions {
     display: flex;

@@ -87,6 +87,10 @@
                     {
                         <span class="sufi-topbar-page-title">@PageLayout.Title</span>
                     }
+                    @if (!string.IsNullOrWhiteSpace(PageLayout.Subtitle))
+                    {
+                        <span class="sufi-topbar-page-subtitle">@PageLayout.Subtitle</span>
+                    }
                     @if (BlazorOptions.Value.ShowBreadcrumbs && PageLayout.BreadcrumbItems.Any())
                     {
                         <SufiBreadcrumbs ShowHome="false" />

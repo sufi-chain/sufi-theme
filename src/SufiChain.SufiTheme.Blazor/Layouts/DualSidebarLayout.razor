@@ -32,6 +32,10 @@
                             {
                                 <h1 class="sufi-topbar-page-title">@PageLayout.Title</h1>
                             }
+                            @if (!string.IsNullOrWhiteSpace(PageLayout.Subtitle))
+                            {
+                                <p class="sufi-topbar-page-subtitle">@PageLayout.Subtitle</p>
+                            }
                             @if (BlazorOptions.Value.ShowBreadcrumbs && PageLayout.BreadcrumbItems.Any())
                             {
                                 <SufiBreadcrumbs ShowHome="false" />
