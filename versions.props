@@ -3,11 +3,11 @@
   <PropertyGroup>
     <SufiVersion>0.1.0-alpha.1.0</SufiVersion>
     <LangVersion>latest</LangVersion>
-    <AbpVersion>10.3.0</AbpVersion>
+    <AbpVersion>10.6.1</AbpVersion>
     <SufiAbpVersion>0.1.0-alpha.1.0</SufiAbpVersion>
-    <MicrosoftAspNetCoreComponentsAuthorizationVersion>10.0.7</MicrosoftAspNetCoreComponentsAuthorizationVersion>
-    <MicrosoftAspNetCoreComponentsWebVersion>10.0.7</MicrosoftAspNetCoreComponentsWebVersion>
-    <MicrosoftAspNetCoreComponentsWebAssemblyVersion>10.0.7</MicrosoftAspNetCoreComponentsWebAssemblyVersion>
+    <MicrosoftAspNetCoreComponentsAuthorizationVersion>10.0.9</MicrosoftAspNetCoreComponentsAuthorizationVersion>
+    <MicrosoftAspNetCoreComponentsWebVersion>10.0.9</MicrosoftAspNetCoreComponentsWebVersion>
+    <MicrosoftAspNetCoreComponentsWebAssemblyVersion>10.0.9</MicrosoftAspNetCoreComponentsWebAssemblyVersion>
   </PropertyGroup>
 
 </Project>
