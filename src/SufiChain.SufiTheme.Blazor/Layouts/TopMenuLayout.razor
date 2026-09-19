@@ -79,7 +79,7 @@
         </SufiTopBar>
 
         @* Secondary Page Header Bar - Title + Breadcrumbs + Page Actions *@
-        @if (!string.IsNullOrEmpty(PageLayout.Title) || PageLayout.BreadcrumbItems.Any() || PageLayout.ToolbarContent != null)
+        @if (!string.IsNullOrEmpty(PageLayout.Title) || ShouldShowPageBreadcrumbs || PageLayout.ToolbarContent != null)
         {
             <div class="sufi-page-header-bar">
                 <div class="sufi-topbar-page-header">
@@ -91,7 +91,7 @@
                     {
                         <span class="sufi-topbar-page-subtitle">@PageLayout.Subtitle</span>
                     }
-                    @if (BlazorOptions.Value.ShowBreadcrumbs && PageLayout.BreadcrumbItems.Any())
+                    @if (ShouldShowPageBreadcrumbs)
                     {
                         <SufiBreadcrumbs ShowHome="false" />
                     }

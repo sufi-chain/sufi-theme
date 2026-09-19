@@ -73,6 +73,36 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
     /// </summary>
     protected string CopyrightText => BrandingProvider.CopyrightText ?? BlazorOptions.Value.CopyrightText;
 
+    /// <summary>
+    /// Whether the header should show breadcrumbs. A single-item trail that repeats
+    /// the page title is hidden.
+    /// </summary>
+    protected bool ShouldShowPageBreadcrumbs
+    {
+        get
+        {
+            if (!BlazorOptions.Value.ShowBreadcrumbs)
+            {
+                return false;
+            }
+
+            var items = PageLayout.BreadcrumbItems;
+            if (items.Count == 0)
+            {
+                return false;
+            }
+
+            if (items.Count == 1
+                && !string.IsNullOrWhiteSpace(PageLayout.Title)
+                && string.Equals(items[0].Text?.Trim(), PageLayout.Title.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
     private string? _currentUrl;
     private bool _needsBreadcrumbUpdate;
 

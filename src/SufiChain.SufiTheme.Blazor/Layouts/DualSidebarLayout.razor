@@ -36,7 +36,7 @@
                             {
                                 <p class="sufi-topbar-page-subtitle">@PageLayout.Subtitle</p>
                             }
-                            @if (BlazorOptions.Value.ShowBreadcrumbs && PageLayout.BreadcrumbItems.Any())
+                            @if (ShouldShowPageBreadcrumbs)
                             {
                                 <SufiBreadcrumbs ShowHome="false" />
                             }
