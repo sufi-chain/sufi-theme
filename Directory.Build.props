@@ -12,6 +12,7 @@
     <Company>Sufi Chain Intelligent Solutions</Company>
     <Authors>SufiChain Team</Authors>
     <Product>SufiTheme</Product>
+    <Version>$(SufiThemeVersion)</Version>
     <PackageProjectUrl>https://sufichain.com</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sufi-chain/sufi-theme.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
