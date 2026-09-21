@@ -1,0 +1,55 @@
+@namespace SufiChain.SufiTheme.Blazor.Components.Public
+@using Microsoft.Extensions.Localization
+@using SufiChain.SufiPlatform.UI.Branding
+@using SufiChain.SufiPlatform.UI.Localization
+@using SufiChain.SufiPlatform.UI.Navigation
+@inject IBrandingProvider BrandingProvider
+@inject IStringLocalizer<SufiFrameworkResource> L
+
+<a class="skip-link" href="#main-content">@L["SkipToContent"]</a>
+
+<header class="site-header">
+    <div class="shell header-inner">
+        <a class="brand" href="/" aria-label="@L["SkipToContent"]">
+            <span class="brand-symbol">
+                @if (!string.IsNullOrWhiteSpace(BrandingProvider.LogoUrl))
+                {
+                    <img src="@BrandingProvider.LogoUrl" alt="" width="40" height="40" />
+                }
+                else
+                {
+                    <img src="/landing/s-icon-800x800.png" alt="" width="40" height="40" />
+                }
+            </span>
+            <span class="brand-copy">
+                <strong>@BrandingProvider.AppName</strong>
+                <small>@L["BrandTagline"]</small>
+            </span>
+        </a>
+
+        <nav class="primary-nav" aria-label="@L["PrimaryNavigation"]">
+            @foreach (var menuItem in MenuItems)
+            {
+                <a href="@(menuItem.Url ?? "#")" class="@ActiveClass(menuItem.Url)">@menuItem.DisplayName</a>
+            }
+        </nav>
+
+        <details class="mobile-nav">
+            <summary class="nav-toggle">
+                <span class="sr-only">@L["OpenNavigation"]</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+            </summary>
+            <nav class="mobile-nav-panel" aria-label="@L["PrimaryNavigation"]">
+                @foreach (var menuItem in MenuItems)
+                {
+                    <a href="@(menuItem.Url ?? "#")">@menuItem.DisplayName</a>
+                }
+            </nav>
+        </details>
+
+        <div class="header-actions">
+            <PublicLanguageIsland />
+            <PublicAuthIsland />
+        </div>
+    </div>
+</header>

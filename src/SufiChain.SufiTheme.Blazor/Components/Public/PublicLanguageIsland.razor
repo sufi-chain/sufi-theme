@@ -1,0 +1,26 @@
+@namespace SufiChain.SufiTheme.Blazor.Components.Public
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using SufiChain.SufiPlatform.UI.Browser
+@using SufiChain.SufiPlatform.UI.Localization
+@rendermode RenderMode.InteractiveServer
+@inject ILanguageProvider LanguageProvider
+@inject IPreferredLanguageService PreferredLanguageService
+@inject ICookieService CookieService
+@inject IJSRuntime JSRuntime
+@inject IStringLocalizer<SufiFrameworkResource> L
+
+<label class="language-picker">
+    <span class="sr-only">@L["ChooseLanguage"]</span>
+    <select value="@_currentCulture"
+            @onchange="OnLanguageChangedAsync"
+            aria-label="@L["ChooseLanguage"]">
+        @if (_languages != null)
+        {
+            @foreach (var language in _languages)
+            {
+                <option value="@language.CultureName">@language.DisplayName</option>
+            }
+        }
+    </select>
+</label>

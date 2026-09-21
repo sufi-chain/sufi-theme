@@ -1,0 +1,36 @@
+@namespace SufiChain.SufiTheme.Blazor.Components.Public
+@using Microsoft.Extensions.Localization
+@using SufiChain.SufiPlatform.UI.Branding
+@using SufiChain.SufiPlatform.UI.Localization
+@inject IBrandingProvider BrandingProvider
+@inject IStringLocalizer<SufiFrameworkResource> L
+
+<footer class="site-footer">
+    <div class="shell footer-layout">
+        <div>
+            <strong>@BrandingProvider.AppName</strong>
+            <p>@Description</p>
+        </div>
+        <p>@Notice</p>
+        <div class="footer-contact">
+            <strong>@ContactLabel</strong>
+            <a href="mailto:info@sufichain.com">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="m4 7 8 6 8-6"></path></svg>
+                <bdi>info@sufichain.com</bdi>
+            </a>
+            <a href="https://t.me/sufichain" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m21 3-5 18-5-7-8-4L21 3Z"></path><path d="m11 14 5-6"></path></svg>
+                <bdi>@@sufichain</bdi>
+            </a>
+        </div>
+        <span>@Release</span>
+        <div class="origin-banner">
+            <img class="origin-emblem" src="/landing/iran-origin.svg" width="160" height="144" alt="" aria-hidden="true" loading="lazy" />
+            <div class="origin-copy">
+                <strong lang="en" dir="ltr">Made in Iran</strong>
+                <span lang="fa" dir="rtl">ساخت ایران</span>
+                <i class="origin-tricolor" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,26 @@
+@namespace SufiChain.SufiTheme.Blazor.Components.Public
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using SufiChain.SufiPlatform.UI.Localization
+@using SufiChain.SufiTheme.Blazor.Components.User
+@rendermode RenderMode.InteractiveServer
+@inject IStringLocalizer<SufiFrameworkResource> L
+
+<CascadingAuthenticationState>
+    <AuthorizeView>
+        <Authorized>
+            <a class="text-action" href="/panel/dashboard">
+                <span>@L["GoToConsole"]</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M14 7l5 5-5 5"></path></svg>
+            </a>
+            <SidebarUserAvatar Placement="SbPlacement.BottomEnd" />
+        </Authorized>
+        <NotAuthorized>
+            <a class="text-action" href="/account/login">
+                <span>@L["SignIn"]</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M14 7l5 5-5 5"></path></svg>
+            </a>
+        </NotAuthorized>
+    </AuthorizeView>
+</CascadingAuthenticationState>

@@ -116,12 +116,23 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
         _currentUrl = NavigationManager.Uri;
         NavigationManager.LocationChanged += OnLocationChanged;
 
-        // Load menu items (DB-driven public menu when a provider supplies one, else contributor-based main menu)
-        MenuItems = await LoadMenuItemsAsync();
+        try
+        {
+            // Load menu items (DB-driven public menu when a provider supplies one, else contributor-based main menu)
+            MenuItems = await LoadMenuItemsAsync();
 
-        // Load toolbar items
-        var toolbar = await ToolbarManager.GetAsync(SufiToolbars.Main);
-        ToolbarItems = toolbar.Items.ToList();
+            // Load toolbar items
+            var toolbar = await ToolbarManager.GetAsync(SufiToolbars.Main);
+            ToolbarItems = toolbar.Items.ToList();
+        }
+        catch (ObjectDisposedException)
+        {
+            return;
+        }
+        catch (OperationCanceledException)
+        {
+            return;
+        }
 
         // Detect RTL from current culture
         var culture = System.Globalization.CultureInfo.CurrentUICulture;
@@ -199,11 +210,20 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
             _needsBreadcrumbUpdate = true;
             _ = InvokeAsync(async () =>
             {
-                await Task.Yield();
-                // Public (DB-driven) menus are URL-contextual (e.g. KB category menu depends on the project slug),
-                // so reload menu items on navigation. Contributor-based menus are static and unaffected.
-                MenuItems = await LoadMenuItemsAsync();
-                StateHasChanged();
+                try
+                {
+                    await Task.Yield();
+                    // Public (DB-driven) menus are URL-contextual (e.g. KB category menu depends on the project slug),
+                    // so reload menu items on navigation. Contributor-based menus are static and unaffected.
+                    MenuItems = await LoadMenuItemsAsync();
+                    StateHasChanged();
+                }
+                catch (ObjectDisposedException)
+                {
+                }
+                catch (OperationCanceledException)
+                {
+                }
             });
         }
     }
