@@ -1,0 +1,28 @@
+@namespace SufiChain.SufiTheme.Blazor.Components
+@using Microsoft.Extensions.Localization
+@using SufiChain.SufiPlatform.UI.Localization
+@inject IStringLocalizer<SufiFrameworkResource> L
+
+<div class="sufi-route-pending" role="status" aria-live="polite" aria-busy="true">
+    <div class="sufi-route-pending__content">
+        <div class="sufi-route-pending__spinner" aria-hidden="true"></div>
+        <p class="sufi-route-pending__label">@DisplayMessage</p>
+    </div>
+</div>
+
+@code {
+    /// <summary>
+    /// Visible status text. When empty, <see cref="ResourceKey"/> is localized.
+    /// </summary>
+    [Parameter]
+    public string? Message { get; set; }
+
+    /// <summary>
+    /// Localization key used when <see cref="Message"/> is empty.
+    /// </summary>
+    [Parameter]
+    public string ResourceKey { get; set; } = "Authorizing";
+
+    private string DisplayMessage =>
+        string.IsNullOrWhiteSpace(Message) ? L[ResourceKey] : Message;
+}

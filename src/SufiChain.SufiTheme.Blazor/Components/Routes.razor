@@ -8,6 +8,9 @@
 <Router AppAssembly="@typeof(Routes).Assembly" AdditionalAssemblies="@AdditionalAssemblies">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@DefaultLayout">
+            <Authorizing>
+                <SufiRoutePending ResourceKey="Authorizing" />
+            </Authorizing>
             <NotAuthorized>
                 @if (context.User.Identity?.IsAuthenticated != true)
                 {
