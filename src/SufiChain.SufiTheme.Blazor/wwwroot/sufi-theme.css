@@ -585,6 +585,8 @@ body:has(.sufi-app-shell--dual-sidebar) {
     justify-content: center;
     width: 40px;
     height: 40px;
+    min-width: 40px;
+    min-height: 40px;
     padding: 0;
     border: none;
     border-radius: var(--sb-radius-md);
@@ -1170,6 +1172,9 @@ body:has(.sufi-app-shell--dual-sidebar) {
     justify-content: center;
     width: 40px;
     height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0;
     border-radius: var(--sb-radius-md);
     color: var(--sufi-icon-rail-text);
     background: transparent;
@@ -1177,6 +1182,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
     cursor: pointer;
     transition: all 0.15s ease;
     position: relative;
+    overflow: visible;
 }
 
 .sufi-icon-rail-item .sb-icon--md {
@@ -1184,11 +1190,21 @@ body:has(.sufi-app-shell--dual-sidebar) {
     height: 18px;
 }
 
+/*
+ * SbIconButton ghost hover uses --sb-color-surface-variant (light gray).
+ * On the dark rail that washes out the light icon; keep the translucent
+ * rail hover token and an on-dark icon color instead.
+ */
+.sufi-icon-rail-item.sb-icon-button--ghost:hover:not(:disabled),
 .sufi-icon-rail-item:hover {
     background-color: var(--sufi-icon-rail-hover);
-    color: var(--sb-color-white);
+    color: var(--sufi-color-rail-active-text, var(--sb-color-on-dark, #fff));
 }
 
+.sufi-icon-rail-item--active.sb-icon-button--ghost,
+.sufi-icon-rail-item--active.sb-icon-button--ghost:hover:not(:disabled),
+.sufi-icon-rail-item.active.sb-icon-button--ghost,
+.sufi-icon-rail-item.active.sb-icon-button--ghost:hover:not(:disabled),
 .sufi-icon-rail-item--active,
 .sufi-icon-rail-item.active {
     background-color: var(--sufi-color-rail-active);
@@ -1439,6 +1455,9 @@ body:has(.sufi-app-shell--dual-sidebar) {
     justify-content: center;
     width: 40px;
     height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0;
     border-radius: var(--sb-radius-full);
     background-color: var(--sb-color-secondary);
     color: var(--sb-color-on-primary);
@@ -1448,6 +1467,20 @@ body:has(.sufi-app-shell--dual-sidebar) {
     font-size: var(--sb-font-size-sm);
     font-weight: var(--sb-font-weight-semibold);
     transition: background-color 0.15s ease;
+    overflow: visible;
+    white-space: normal;
+}
+
+/* SbButton wraps ChildContent; keep the status pip anchored to the circle */
+.sufi-sidebar-user-avatar__button.sb-button .sb-button__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    white-space: normal;
+    text-overflow: clip;
 }
 
 .sufi-sidebar-user-avatar__button:hover {
@@ -2032,6 +2065,9 @@ body:has(.sufi-app-shell--dual-sidebar) {
         justify-content: center;
         width: 56px;
         height: 56px;
+        min-width: 56px;
+        min-height: 56px;
+        padding: 0;
         border-radius: var(--sb-radius-full);
         border: none;
         background-color: var(--sb-color-primary);
@@ -2115,10 +2151,14 @@ body:has(.sufi-app-shell--dual-sidebar) {
     padding-right: calc(var(--sb-space-3) + var(--menu-indent));
 }
 
-.sufi-menu-item__header {
+.sufi-menu-item__header,
+.sufi-menu-item__header.sb-button {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     width: 100%;
+    height: auto;
+    min-height: 40px;
     padding: var(--sb-space-2) var(--sb-space-3);
     padding-left: calc(var(--sb-space-3) + var(--menu-indent));
     background: transparent;
@@ -2128,12 +2168,26 @@ body:has(.sufi-app-shell--dual-sidebar) {
     font-size: var(--sb-font-size-sm);
     font-weight: var(--sb-font-weight-medium);
     text-align: left;
+    white-space: normal;
     cursor: pointer;
     transition: background-color 0.15s ease, color 0.15s ease;
     gap: var(--sb-space-2);
 }
 
-[dir="rtl"] .sufi-menu-item__header {
+/* SbButton wraps ChildContent in .sb-button__content (display:block); restore row layout for icon/text/chevron */
+.sufi-menu-item__header .sb-button__content {
+    display: flex;
+    align-items: center;
+    gap: var(--sb-space-2);
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+[dir="rtl"] .sufi-menu-item__header,
+[dir="rtl"] .sufi-menu-item__header.sb-button {
     padding-left: var(--sb-space-3);
     padding-right: calc(var(--sb-space-3) + var(--menu-indent));
     text-align: right;

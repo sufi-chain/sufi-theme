@@ -28,17 +28,23 @@
     {
         <SbMenu Open="@_menuOpen" OpenChanged="@OnMenuOpenChanged" Placement="@Placement" Class="sufi-sidebar-user-avatar__menu">
             <AnchorContent>
-                <button type="button" class="sufi-sidebar-user-avatar__button" @onclick="ToggleMenu" title="@CurrentUser.UserName">
-                    <span class="sufi-sidebar-user-avatar__initials">@GetInitials()</span>
+                <SbButton Type="button"
+                          Variant="SbButtonVariant.Ghost"
+                          Color="SbColor.Default"
+                          Class="sufi-sidebar-user-avatar__button"
+                          OnClick="ToggleMenu"
+                          title="@GetDisplayName()"
+                          aria-label="@GetDisplayName()">
+                    <span class="sufi-sidebar-user-avatar__initials" aria-hidden="true">@GetInitials()</span>
                     <span class="sufi-sidebar-user-avatar__status"></span>
-                </button>
+                </SbButton>
             </AnchorContent>
             <ChildContent>
                 @* Profile header: avatar, name, email *@
                 <div class="sufi-sidebar-user-menu__header">
                     <div class="sufi-sidebar-user-menu__avatar">@GetInitials()</div>
                     <div class="sufi-sidebar-user-menu__info">
-                        <span class="sufi-sidebar-user-menu__name">@CurrentUser.UserName</span>
+                        <span class="sufi-sidebar-user-menu__name">@GetDisplayName()</span>
                         @if (!string.IsNullOrEmpty(CurrentUser.Email))
                         {
                             <span class="sufi-sidebar-user-menu__email">@CurrentUser.Email</span>
@@ -79,9 +85,13 @@
     }
     else
     {
-        <button type="button" class="sufi-sidebar-user-avatar__button" @onclick="Login" title="Login">
+        <SbIconButton Type="button"
+                      Class="sufi-sidebar-user-avatar__button"
+                      OnClick="Login"
+                      Title="Login"
+                      AriaLabel="Login">
             <SbIcon Name="user" Size="SbSize.Md" />
-        </button>
+        </SbIconButton>
     }
 </div>
 
@@ -142,19 +152,31 @@
         return false;
     }
 
+    private string GetDisplayName()
+    {
+        var name = string.Join(' ', new[] { CurrentUser.Name, CurrentUser.SurName }.Where(part => !string.IsNullOrWhiteSpace(part)));
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            return name;
+        }
+
+        return CurrentUser.UserName ?? CurrentUser.Email ?? "?";
+    }
+
     private string GetInitials()
     {
-        if (string.IsNullOrEmpty(CurrentUser.UserName))
+        var source = GetDisplayName();
+        if (string.IsNullOrEmpty(source) || source == "?")
             return "?";
             
-        var parts = CurrentUser.UserName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var parts = source.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         if (parts.Length >= 2)
         {
             return $"{parts[0][0]}{parts[1][0]}".ToUpperInvariant();
         }
-        return CurrentUser.UserName.Length >= 2 
-            ? CurrentUser.UserName[..2].ToUpperInvariant() 
-            : CurrentUser.UserName.ToUpperInvariant();
+        return source.Length >= 2
+            ? source[..2].ToUpperInvariant()
+            : source.ToUpperInvariant();
     }
 
     private void ToggleMenu()

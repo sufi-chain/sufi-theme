@@ -21,9 +21,14 @@
     
     @if (Collapsible)
     {
-        <button type="button" class="sufi-sidebar__toggle" @onclick="ToggleCollapse" aria-label="@(_isCollapsed ? "Expand" : "Collapse")">
+        <SbButton Type="button"
+                  Variant="SbButtonVariant.Ghost"
+                  Color="SbColor.Default"
+                  Class="sufi-sidebar__toggle"
+                  OnClick="ToggleCollapse"
+                  aria-label="@(_isCollapsed ? "Expand" : "Collapse")">
             @(_isCollapsed ? "→" : "←")
-        </button>
+        </SbButton>
     }
 </div>
 

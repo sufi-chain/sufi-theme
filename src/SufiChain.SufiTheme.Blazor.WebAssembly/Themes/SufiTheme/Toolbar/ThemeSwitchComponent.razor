@@ -3,7 +3,11 @@
 @inject IThemeSwitchService ThemeSwitchService
 @implements IDisposable
 
-<button class="theme-switch-btn" @onclick="ToggleThemeAsync" title="@TooltipText" aria-label="@TooltipText" type="button">
+<SbIconButton Class="theme-switch-btn"
+              OnClick="ToggleThemeAsync"
+              Title="@TooltipText"
+              AriaLabel="@TooltipText"
+              Type="button">
     <span class="theme-icon">
         @if (IsDarkMode)
         {
@@ -14,7 +18,7 @@
             <SbIcon Name="moon" Size="SbSize.Md" />
         }
     </span>
-</button>
+</SbIconButton>
 
 @code {
     private bool IsDarkMode => ThemeSwitchService.IsDarkMode;

@@ -8,10 +8,11 @@
     - Click handler for selection
 *@
 
-<button type="button" 
-        class="sufi-icon-rail-item @(IsSelected ? "sufi-icon-rail-item--active" : "")" 
-        @onclick="HandleClick"
-        title="@MenuItem.DisplayName">
+<SbIconButton Type="button"
+              Class="@($"sufi-icon-rail-item {(IsSelected ? "sufi-icon-rail-item--active" : "")}")"
+              OnClick="HandleClick"
+              Title="@MenuItem.DisplayName"
+              AriaLabel="@MenuItem.DisplayName">
     @if (!string.IsNullOrEmpty(MenuItem.Icon))
     {
         <SbIcon Name="@MenuItem.Icon" Size="SbSize.Md" />
@@ -21,7 +22,7 @@
         <SbIcon Name="circle" Size="SbSize.Md" />
     }
     <span class="sufi-icon-rail-item__tooltip">@MenuItem.DisplayName</span>
-</button>
+</SbIconButton>
 
 @code {
     /// <summary>

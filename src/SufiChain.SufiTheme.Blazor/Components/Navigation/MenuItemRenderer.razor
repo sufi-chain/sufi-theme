@@ -8,7 +8,11 @@
 {
     @* Menu item with children - render as expandable dropdown; use --row when same level as leaf siblings for alignment *@
     <div class="sufi-menu-item sufi-menu-item--parent @(_isExpanded ? "sufi-menu-item--expanded" : "") @(Level == 0 ? "sufi-menu-item--row" : "")" style="--menu-level: @Level" data-sufi-menu-v="2">
-        <button type="button" class="sufi-menu-item__header" @onclick="ToggleExpanded">
+        <SbButton Type="button"
+                  Variant="SbButtonVariant.Ghost"
+                  Color="SbColor.Default"
+                  Class="sufi-menu-item__header"
+                  OnClick="ToggleExpanded">
             <span class="sufi-menu-item__icon @(string.IsNullOrEmpty(MenuItem.Icon) && string.IsNullOrEmpty(MenuItem.CustomContent) ? "sufi-menu-item__icon--placeholder" : "")">
                 @if (!string.IsNullOrEmpty(MenuItem.CustomContent))
                 {
@@ -23,7 +27,7 @@
             <span class="sufi-menu-item__chevron">
                 <SbIcon Name="chevron-down" Size="SbSize.Xs" />
             </span>
-        </button>
+        </SbButton>
         <div class="sufi-menu-item__submenu" aria-hidden="@(!_isExpanded)">
             <div class="sufi-menu-item__submenu-content">
                 @foreach (var child in MenuItem.Items)

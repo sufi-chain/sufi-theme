@@ -13,9 +13,12 @@
         }
         else if (ShowMenuButton)
         {
-            <button type="button" class="sufi-topbar__menu-btn" @onclick="OnMenuClick" aria-label="Toggle menu">
+            <SbIconButton Type="button"
+                          Class="sufi-topbar__menu-btn"
+                          OnClick="@(() => OnMenuClick.InvokeAsync())"
+                          AriaLabel="Toggle menu">
                 <SbIcon Name="menu" Size="SbSize.Lg" />
-            </button>
+            </SbIconButton>
         }
         
         @if (Logo != null)

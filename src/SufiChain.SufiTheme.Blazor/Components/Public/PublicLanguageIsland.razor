@@ -9,18 +9,15 @@
 @inject ICookieService CookieService
 @inject IJSRuntime JSRuntime
 @inject IStringLocalizer<SufiFrameworkResource> L
+@using SufiChain.SufiBlazor.Components.Forms
 
-<label class="language-picker">
-    <span class="sr-only">@L["ChooseLanguage"]</span>
-    <select value="@_currentCulture"
-            @onchange="OnLanguageChangedAsync"
-            aria-label="@L["ChooseLanguage"]">
-        @if (_languages != null)
-        {
-            @foreach (var language in _languages)
-            {
-                <option value="@language.CultureName">@language.DisplayName</option>
-            }
-        }
-    </select>
-</label>
+<div class="language-picker">
+    <SbSelect TItem="LanguageInfo"
+              TValue="string"
+              Items="@_languages"
+              Value="@_currentCulture"
+              ValueChanged="@OnLanguageChangedAsync"
+              TextField="@(language => language.DisplayName)"
+              ValueField="@(language => language.CultureName)"
+              Label="@L["ChooseLanguage"]" />
+</div>

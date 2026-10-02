@@ -21,9 +21,8 @@ public partial class PublicLanguageIsland
         _currentCulture = current?.CultureName ?? string.Empty;
     }
 
-    private async Task OnLanguageChangedAsync(ChangeEventArgs args)
+    private async Task OnLanguageChangedAsync(string? cultureName)
     {
-        var cultureName = args.Value?.ToString();
         if (string.IsNullOrWhiteSpace(cultureName) || _languages == null)
         {
             return;

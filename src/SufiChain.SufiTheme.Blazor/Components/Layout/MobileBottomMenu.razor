@@ -13,12 +13,12 @@
         @LeftShortcuts
     </div>
     <div class="sufi-mobile-bottom-menu__center">
-        <button type="button"
-                class="sufi-mobile-bottom-menu__menu-btn"
-                @onclick="OnOpenMenu"
-                aria-label="@OpenMenuAriaLabel">
+        <SbIconButton Type="button"
+                      Class="sufi-mobile-bottom-menu__menu-btn"
+                      OnClick="@(() => OnOpenMenu.InvokeAsync())"
+                      AriaLabel="@OpenMenuAriaLabel">
             <SbIcon Name="menu" Size="SbSize.Xl" />
-        </button>
+        </SbIconButton>
     </div>
     <div class="sufi-mobile-bottom-menu__side sufi-mobile-bottom-menu__side--right">
         @RightShortcuts
