@@ -106,9 +106,16 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
     private string? _currentUrl;
     private bool _needsBreadcrumbUpdate;
 
+    [CascadingParameter(Name = "SufiResolvedThemeIsDark")]
+    public bool? ResolvedThemeIsDark { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        
+        if (ResolvedThemeIsDark is bool isDark)
+        {
+            CurrentTheme = isDark ? SbTheme.Dark : SbTheme.Light;
+        }
+
         // Subscribe to PageLayout changes to update UI when page sets title/toolbar
         PageLayout.PropertyChanged += OnPageLayoutChanged;
 
@@ -154,11 +161,14 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
         try
         {
             await ThemeSwitchService.GetStoredThemeAsync();
-            CurrentTheme = ThemeSwitchService.IsDarkMode ? SbTheme.Dark : SbTheme.Light;
+            if (ThemeSwitchService.IsPreferenceResolved)
+            {
+                CurrentTheme = ThemeSwitchService.IsDarkMode ? SbTheme.Dark : SbTheme.Light;
+            }
         }
         catch
         {
-            CurrentTheme = SbTheme.Light;
+            // Keep the theme already chosen from the saved preference.
         }
     }
 

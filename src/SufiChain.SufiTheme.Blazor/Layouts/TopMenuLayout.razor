@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/_content/SufiChain.SufiTheme.Blazor/public-site-layout.css?v=public-ssr-1" />
 </HeadContent>
 
-<SbThemeProvider Theme="SbTheme.Dark" Direction="@Direction">
+<SbThemeProvider Theme="@CurrentTheme" Direction="@Direction">
     <div class="public-site-shell">
         <PublicSiteHeader MenuItems="MenuItems" CurrentPath="@CurrentPath" />
 
