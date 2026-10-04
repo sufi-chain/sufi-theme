@@ -30,7 +30,7 @@
         <nav class="primary-nav" aria-label="@L["PrimaryNavigation"]">
             @foreach (var menuItem in MenuItems)
             {
-                <a href="@(menuItem.Url ?? "#")" class="@ActiveClass(menuItem.Url)">@menuItem.DisplayName</a>
+                <a href="@(menuItem.Url ?? "#")" class="@ActiveClass(menuItem.Url)" target="@LinkTarget(menuItem)" rel="@LinkRel(menuItem)">@menuItem.DisplayName</a>
             }
         </nav>
 
@@ -42,7 +42,7 @@
             <nav class="mobile-nav-panel" aria-label="@L["PrimaryNavigation"]">
                 @foreach (var menuItem in MenuItems)
                 {
-                    <a href="@(menuItem.Url ?? "#")">@menuItem.DisplayName</a>
+                    <a href="@(menuItem.Url ?? "#")" target="@LinkTarget(menuItem)" rel="@LinkRel(menuItem)">@menuItem.DisplayName</a>
                 }
             </nav>
         </details>
