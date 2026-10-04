@@ -26,6 +26,38 @@
     box-sizing: border-box;
 }
 
+/* Phone stack, from the viewport bottom: safe area, 3.75rem nav, then the assistant lane.
+   Content ends at --sufi-phone-content-bottom so the launcher does not cover the last row,
+   a sticky Save bar, or a bottom toast. Widths of 768px and above keep the wide shell. */
+:root {
+    --sufi-mobile-nav-height: 3.75rem;
+    --sufi-assistant-size: 3.5rem;
+    --sufi-assistant-gap: 0.75rem;
+    --sufi-mobile-nav-block: calc(var(--sufi-mobile-nav-height) + env(safe-area-inset-bottom, 0px));
+    --sufi-assistant-lane: calc(var(--sufi-assistant-size) + var(--sufi-assistant-gap));
+    --sufi-phone-content-bottom: calc(var(--sufi-mobile-nav-block) + var(--sufi-assistant-lane));
+    --sufi-assistant-toast-bottom: calc(var(--sufi-assistant-size) + 1.25rem + var(--sufi-assistant-gap) + env(safe-area-inset-bottom, 0px));
+}
+
+/* Bottom toasts clear the assistant on the wide shell. The phone query raises them again. */
+.sb-toast-host--bottom-right,
+.sb-toast-host--bottom-left,
+.sb-toast-host--bottom-center {
+    bottom: var(--sufi-assistant-toast-bottom);
+}
+
+.sb-toast-host--bottom-right {
+    right: auto;
+    left: auto;
+    inset-inline-end: max(1.25rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+}
+
+.sb-toast-host--bottom-left {
+    right: auto;
+    left: auto;
+    inset-inline-start: max(1.25rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+}
+
 /* ============================================
    RTL / Farsi fonts (Vazir FD – Farsi Digits) + 4 Free fonts for the editor
    ============================================
@@ -1782,7 +1814,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
         position: fixed;
         left: 0;
         top: 0;
-        bottom: 60px;
+        bottom: var(--sufi-mobile-nav-block);
         z-index: var(--sb-z-fixed);
         transform: translateX(-100%);
         transition: transform var(--sb-duration-normal) var(--sb-easing-default);
@@ -1796,7 +1828,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
     [dir="rtl"] .sufi-dual-sidebar {
         left: auto;
         right: 0;
-        bottom: 60px;
+        bottom: var(--sufi-mobile-nav-block);
         transform: translateX(100%);
     }
 
@@ -1828,19 +1860,20 @@ body:has(.sufi-app-shell--dual-sidebar) {
         margin-right: 0;
     }
 
-    /* On mobile, main content fills viewport (no sidebar offset); top clears single-row header, bottom clears bottom menu */
+    /* On mobile, main content fills the viewport. The bottom edge stops above the
+       assistant lane, which itself stops above the bottom navigation and the safe area. */
     [dir="ltr"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main,
     [dir="rtl"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main {
         padding: 0;
         left: var(--sb-space-2);
         right: var(--sb-space-2);
         top: 56px;
-        bottom: calc(60px + var(--sb-space-2));
+        bottom: var(--sufi-phone-content-bottom);
         border-radius: var(--sb-radius-sm, 0.25rem);
     }
 
-    /* Size to content. min-height: 100% + footer margin-top: auto left a dead band
-       above the bottom menu (main already ends at 60px + space-2). */
+    /* Size to content. The reserved lane is outside this box, so do not add a second
+       copy of the nav height inside the wrapper. */
     [dir="ltr"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main > .sufi-app-shell__content > .sufi-content-wrapper,
     [dir="rtl"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main > .sufi-app-shell__content > .sufi-content-wrapper {
         min-height: min-content;
@@ -2018,20 +2051,21 @@ body:has(.sufi-app-shell--dual-sidebar) {
     /* Mobile bottom menu – fixed bar with center "open menu" button and shortcut slots */
     .sufi-mobile-bottom-menu {
         position: fixed;
-        left: 0;
-        right: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
         bottom: 0;
         z-index: var(--sb-z-fixed, 100);
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: var(--sb-space-2);
-        padding: var(--sb-space-3) var(--sb-space-4);
-        padding-bottom: max(var(--sb-space-3), env(safe-area-inset-bottom));
+        box-sizing: border-box;
+        height: var(--sufi-mobile-nav-block);
+        padding-block: 0 env(safe-area-inset-bottom, 0px);
+        padding-inline: max(var(--sb-space-4), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
         background-color: var(--sb-color-surface);
         border-top: 1px solid var(--sb-color-border);
         box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.06);
-        height: 60px;
         overflow: visible;
     }
 
@@ -2104,14 +2138,32 @@ body:has(.sufi-app-shell--dual-sidebar) {
         background-color: var(--sb-color-surface-hover);
     }
 
-    /* Compact mobile content. Dual-sidebar __main already ends above the
-       60px bottom menu; do not add another 80px or the page grows a dead gap. */
+    /* Compact mobile content. The assistant lane is outside __main. */
     .sufi-content-wrapper {
         padding: var(--sb-space-2, 0.5rem);
     }
 
     .sufi-content-wrapper--mobile-bottom-menu {
         padding-bottom: var(--sb-space-3, 0.75rem);
+    }
+
+    /* Bottom toasts sit above the assistant lane, on the same inline edge as the launcher. */
+    .sb-toast-host--bottom-right,
+    .sb-toast-host--bottom-left,
+    .sb-toast-host--bottom-center {
+        bottom: var(--sufi-phone-content-bottom);
+    }
+
+    .sb-toast-host--bottom-right {
+        right: auto;
+        left: auto;
+        inset-inline-end: max(var(--sb-space-3), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+    }
+
+    .sb-toast-host--bottom-left {
+        right: auto;
+        left: auto;
+        inset-inline-start: max(var(--sb-space-3), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
     }
 
     .sufi-app-shell__sidebar {
@@ -2126,6 +2178,21 @@ body:has(.sufi-app-shell--dual-sidebar) {
 
     .sufi-app-shell__sidebar--open {
         transform: translateX(0);
+    }
+}
+
+/* Landscape phones are wider than 768px, so they keep the wide shell.
+   A short viewport still ends above the assistant so the last row stays visible. */
+@media (max-width: 932px) and (max-height: 500px) {
+    [dir="ltr"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main,
+    [dir="rtl"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main {
+        bottom: calc(var(--sb-space-2, 0.5rem) + var(--sufi-assistant-lane) + env(safe-area-inset-bottom, 0px));
+    }
+
+    .sb-toast-host--bottom-right,
+    .sb-toast-host--bottom-left,
+    .sb-toast-host--bottom-center {
+        bottom: calc(var(--sufi-assistant-lane) + env(safe-area-inset-bottom, 0px));
     }
 }
 
