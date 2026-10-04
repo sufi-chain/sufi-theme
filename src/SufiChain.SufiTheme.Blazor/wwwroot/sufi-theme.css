@@ -139,6 +139,15 @@
     --sufi-color-panel-border: var(--sb-color-border);
     --sufi-color-panel-hover: var(--sb-color-surface-hover);
     --sufi-color-panel-active: var(--sb-color-primary-light);
+
+    /* The light rail tokens on :root are already computed. Repeat them here so a dark root wins. */
+    --sb-settings-rail-bg: var(--sufi-color-panel);
+    --sb-settings-rail-text: var(--sufi-color-panel-text);
+    --sb-settings-rail-hover: var(--sufi-color-panel-hover);
+    --sb-settings-rail-active: var(--sb-color-primary);
+    --sb-settings-rail-active-bg: var(--sufi-color-panel-active);
+    --sb-settings-rail-active-text: var(--sb-color-primary);
+    --sb-settings-rail-indicator: var(--sb-color-primary);
 }
 
 * {
