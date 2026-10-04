@@ -2187,11 +2187,14 @@ body:has(.sufi-app-shell--dual-sidebar) {
         padding-bottom: var(--sb-space-3, 0.75rem);
     }
 
-    /* Bottom toasts sit above the assistant lane, on the same inline edge as the launcher. */
+    /* Bottom toasts and the settings toast sit above the assistant lane.
+       The settings toast uses the same token through inset-block-end, which is the property it sets. */
     .sb-toast-host--bottom-right,
     .sb-toast-host--bottom-left,
-    .sb-toast-host--bottom-center {
+    .sb-toast-host--bottom-center,
+    .sb-settings-toast {
         bottom: var(--sufi-phone-content-bottom);
+        inset-block-end: var(--sufi-phone-content-bottom);
     }
 
     .sb-toast-host--bottom-right {
