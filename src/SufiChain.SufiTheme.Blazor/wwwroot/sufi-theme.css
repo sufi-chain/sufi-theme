@@ -336,7 +336,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
     padding-left: 0;
     padding-right: 0;
     position: fixed;
-    top: calc(60px + var(--sb-space-2));
+    top: calc(var(--sufi-shell-header-offset, 60px) + var(--sb-space-2));
     left: var(--sb-space-6);
     /* gap between main and sidebar so right border-radius is visible */
     right: calc(var(--sufi-sidebar-width, 60px) + var(--sb-space-6));
@@ -355,8 +355,6 @@ body:has(.sufi-app-shell--dual-sidebar) {
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 0.5rem;
-    container-type: size;
-    container-name: sufi-shell-scroll;
     --sb-app-header-height: 0px;
 }
 
@@ -383,7 +381,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
     padding-right: 0;
     padding-left: 0;
     position: fixed;
-    top: calc(60px + var(--sb-space-2));
+    top: calc(var(--sufi-shell-header-offset, 60px) + var(--sb-space-2));
     /* gap between sidebar and main so left border-radius is visible */
     left: calc(var(--sufi-sidebar-width, 60px) + var(--sb-space-6));
     right: var(--sb-space-6);
@@ -401,14 +399,16 @@ body:has(.sufi-app-shell--dual-sidebar) {
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 0.5rem;
-    container-type: size;
-    container-name: sufi-shell-scroll;
     --sb-app-header-height: 0px;
+}
+
+.sufi-app-shell--dual-sidebar {
+    --sufi-shell-header-offset: 60px;
 }
 
 .sufi-app-shell--dual-sidebar .sb-settings-rail {
     inset-block-start: 0;
-    max-block-size: 100cqb;
+    max-block-size: calc(100dvh - var(--sufi-shell-header-offset, 60px) - (2 * var(--sb-space-2)));
 }
 
 [dir="ltr"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main > .sufi-app-shell__content > .sufi-content-wrapper {
