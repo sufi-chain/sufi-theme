@@ -110,6 +110,24 @@
     --sufi-color-panel-hover: var(--sb-color-surface-hover);
     --sufi-color-panel-active: var(--sb-color-primary-light);
     --sufi-color-tooltip: var(--sb-color-sidebar-dark);
+
+    /* App shell top bar. Settings stick below it. 3.125rem matches .sufi-topbar min-height. */
+    --sb-app-header-height: 3.125rem;
+
+    /* Hoist the icon-rail tokens so an in-page settings rail can read them. */
+    --sufi-icon-rail-bg: transparent;
+    --sufi-icon-rail-text: var(--sufi-color-rail-text);
+    --sufi-icon-rail-hover: var(--sufi-color-rail-hover);
+    --sufi-icon-rail-active: var(--sb-color-primary);
+
+    /* In-page settings rail uses the light panel, with the primary colour as the indicator. */
+    --sb-settings-rail-bg: var(--sufi-color-panel);
+    --sb-settings-rail-text: var(--sufi-color-panel-text);
+    --sb-settings-rail-hover: var(--sufi-color-panel-hover);
+    --sb-settings-rail-active: var(--sb-color-primary);
+    --sb-settings-rail-active-bg: var(--sufi-color-panel-active);
+    --sb-settings-rail-active-text: var(--sb-color-primary);
+    --sb-settings-rail-indicator: var(--sb-color-primary);
 }
 
 .sb-theme-dark {
@@ -318,7 +336,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
     padding-left: 0;
     padding-right: 0;
     position: fixed;
-    top: calc(60px + var(--sb-space-2));
+    top: calc(var(--sufi-shell-header-offset, 60px) + var(--sb-space-2));
     left: var(--sb-space-6);
     /* gap between main and sidebar so right border-radius is visible */
     right: calc(var(--sufi-sidebar-width, 60px) + var(--sb-space-6));
@@ -337,6 +355,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 0.5rem;
+    --sb-app-header-height: 0px;
 }
 
 /* Let content wrapper grow with content so footer flows to end; scroll is on parent above */
@@ -362,7 +381,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
     padding-right: 0;
     padding-left: 0;
     position: fixed;
-    top: calc(60px + var(--sb-space-2));
+    top: calc(var(--sufi-shell-header-offset, 60px) + var(--sb-space-2));
     /* gap between sidebar and main so left border-radius is visible */
     left: calc(var(--sufi-sidebar-width, 60px) + var(--sb-space-6));
     right: var(--sb-space-6);
@@ -380,6 +399,16 @@ body:has(.sufi-app-shell--dual-sidebar) {
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 0.5rem;
+    --sb-app-header-height: 0px;
+}
+
+.sufi-app-shell--dual-sidebar {
+    --sufi-shell-header-offset: 60px;
+}
+
+.sufi-app-shell--dual-sidebar .sb-settings-rail {
+    inset-block-start: 0;
+    max-block-size: calc(100dvh - var(--sufi-shell-header-offset, 60px) - (2 * var(--sb-space-2)));
 }
 
 [dir="ltr"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main > .sufi-app-shell__content > .sufi-content-wrapper {
