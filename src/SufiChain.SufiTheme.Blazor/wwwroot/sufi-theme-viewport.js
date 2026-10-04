@@ -7,7 +7,7 @@
     var listeners = new Map();
 
     function getIsMobile(bp) {
-        return typeof window !== 'undefined' && window.innerWidth < (bp || 768);
+        return typeof window !== 'undefined' && window.innerWidth <= (bp || 768);
     }
 
     window.SufiThemeViewportInit = function (dotNetRef, breakpointPx, id) {

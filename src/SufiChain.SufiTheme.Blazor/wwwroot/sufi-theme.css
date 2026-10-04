@@ -28,7 +28,7 @@
 
 /* Phone stack, from the viewport bottom: safe area, 3.75rem nav, then the assistant lane.
    Content ends at --sufi-phone-content-bottom so the launcher does not cover the last row,
-   a sticky Save bar, or a bottom toast. Widths of 768px and above keep the wide shell. */
+   a sticky Save bar, or a bottom toast. 768px counts as phone (D-20). Wider widths keep the wide shell. */
 :root {
     --sufi-mobile-nav-height: 3.75rem;
     --sufi-assistant-size: 3.5rem;

@@ -10,17 +10,17 @@
 const _viewportListeners = new Map();
 
 /**
- * Initialize viewport breakpoint detection. Returns current isMobile (innerWidth < breakpointPx).
+ * Initialize viewport breakpoint detection. Returns current isMobile (innerWidth <= breakpointPx).
  * When viewport crosses the breakpoint, invokes dotNetRef.invokeMethodAsync('OnViewportBreakpointChanged', isMobile).
  * @param {DotNetObjectReference} dotNetRef - Blazor component reference
  * @param {number} breakpointPx - Width threshold (default 768)
  * @param {string} id - Unique id for this listener (for disposal)
- * @returns {boolean} true if current viewport is below breakpoint (mobile)
+ * @returns {boolean} true if current viewport is at or below the breakpoint (mobile)
  */
 export function initViewportBreakpoint(dotNetRef, breakpointPx, id) {
     const bp = breakpointPx ?? 768;
     function getIsMobile() {
-        return typeof window !== 'undefined' && window.innerWidth < bp;
+        return typeof window !== 'undefined' && window.innerWidth <= bp;
     }
     let current = getIsMobile();
     function onResize() {
