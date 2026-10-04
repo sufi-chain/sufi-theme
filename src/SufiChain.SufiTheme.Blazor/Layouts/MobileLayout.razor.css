@@ -57,8 +57,6 @@
     inset-inline-start: 0;
     inset-inline-end: 0;
     bottom: 0;
-    left: auto;
-    right: auto;
     z-index: var(--sb-z-fixed, 100);
     display: flex;
     align-items: center;

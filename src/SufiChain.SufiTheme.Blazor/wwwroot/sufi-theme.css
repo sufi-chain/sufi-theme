@@ -37,13 +37,24 @@
     --sufi-assistant-lane: calc(var(--sufi-assistant-size) + var(--sufi-assistant-gap));
     --sufi-phone-content-bottom: calc(var(--sufi-mobile-nav-block) + var(--sufi-assistant-lane));
     --sufi-assistant-toast-bottom: calc(var(--sufi-assistant-size) + 1.25rem + var(--sufi-assistant-gap) + env(safe-area-inset-bottom, 0px));
+    /* Panel bottom (5.75rem) plus the composer row, so an open desktop panel is not covered. */
+    --sufi-assistant-open-toast-bottom: calc(5.75rem + 4.5rem + env(safe-area-inset-bottom, 0px));
 }
 
-/* Bottom toasts clear the assistant on the wide shell. The phone query raises them again. */
+/* Bottom toasts clear the assistant on the wide shell. The phone query raises them again.
+   An open panel lifts them above the composer. */
 .sb-toast-host--bottom-right,
 .sb-toast-host--bottom-left,
 .sb-toast-host--bottom-center {
     bottom: var(--sufi-assistant-toast-bottom);
+}
+
+@media (min-width: 769px) {
+    body:has(.hooshvare-chat-widget__panel:not([hidden]):not(.hooshvare-chat-widget__panel--dormant)) .sb-toast-host--bottom-right,
+    body:has(.hooshvare-chat-widget__panel:not([hidden]):not(.hooshvare-chat-widget__panel--dormant)) .sb-toast-host--bottom-left,
+    body:has(.hooshvare-chat-widget__panel:not([hidden]):not(.hooshvare-chat-widget__panel--dormant)) .sb-toast-host--bottom-center {
+        bottom: var(--sufi-assistant-open-toast-bottom);
+    }
 }
 
 .sb-toast-host--bottom-right {
@@ -2181,9 +2192,9 @@ body:has(.sufi-app-shell--dual-sidebar) {
     }
 }
 
-/* Landscape phones are wider than 768px, so they keep the wide shell.
-   A short viewport still ends above the assistant so the last row stays visible. */
-@media (max-width: 932px) and (max-height: 500px) {
+/* Short wide viewports (769–932px) keep the wide shell and still end above the assistant.
+   Narrower landscape phones stay on the phone rules. Toasts use the wide-shell offset. */
+@media (min-width: 769px) and (max-width: 932px) and (max-height: 500px) {
     [dir="ltr"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main,
     [dir="rtl"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main {
         bottom: calc(var(--sb-space-2, 0.5rem) + var(--sufi-assistant-lane) + env(safe-area-inset-bottom, 0px));
@@ -2192,7 +2203,7 @@ body:has(.sufi-app-shell--dual-sidebar) {
     .sb-toast-host--bottom-right,
     .sb-toast-host--bottom-left,
     .sb-toast-host--bottom-center {
-        bottom: calc(var(--sufi-assistant-lane) + env(safe-area-inset-bottom, 0px));
+        bottom: var(--sufi-assistant-toast-bottom);
     }
 }
 
