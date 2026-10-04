@@ -120,14 +120,14 @@
     --sufi-icon-rail-hover: var(--sufi-color-rail-hover);
     --sufi-icon-rail-active: var(--sb-color-primary);
 
-    /* Map the in-page settings rail onto the app-shell icon rail. */
-    --sb-settings-rail-bg: var(--sufi-color-rail);
-    --sb-settings-rail-text: var(--sufi-icon-rail-text);
-    --sb-settings-rail-hover: var(--sufi-icon-rail-hover);
-    --sb-settings-rail-active: var(--sufi-icon-rail-active);
-    --sb-settings-rail-active-bg: var(--sufi-color-rail-active);
-    --sb-settings-rail-active-text: var(--sufi-color-rail-active-text);
-    --sb-settings-rail-indicator: var(--sufi-icon-rail-active);
+    /* In-page settings rail uses the light panel, with the primary colour as the indicator. */
+    --sb-settings-rail-bg: var(--sufi-color-panel);
+    --sb-settings-rail-text: var(--sufi-color-panel-text);
+    --sb-settings-rail-hover: var(--sufi-color-panel-hover);
+    --sb-settings-rail-active: var(--sb-color-primary);
+    --sb-settings-rail-active-bg: var(--sufi-color-panel-active);
+    --sb-settings-rail-active-text: var(--sb-color-primary);
+    --sb-settings-rail-indicator: var(--sb-color-primary);
 }
 
 .sb-theme-dark {
@@ -355,6 +355,9 @@ body:has(.sufi-app-shell--dual-sidebar) {
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 0.5rem;
+    container-type: size;
+    container-name: sufi-shell-scroll;
+    --sb-app-header-height: 0px;
 }
 
 /* Let content wrapper grow with content so footer flows to end; scroll is on parent above */
@@ -398,6 +401,14 @@ body:has(.sufi-app-shell--dual-sidebar) {
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 0.5rem;
+    container-type: size;
+    container-name: sufi-shell-scroll;
+    --sb-app-header-height: 0px;
+}
+
+.sufi-app-shell--dual-sidebar .sb-settings-rail {
+    inset-block-start: 0;
+    max-block-size: 100cqb;
 }
 
 [dir="ltr"] .sufi-app-shell--dual-sidebar .sufi-app-shell__main > .sufi-app-shell__content > .sufi-content-wrapper {
