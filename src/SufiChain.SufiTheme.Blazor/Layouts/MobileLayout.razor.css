@@ -41,7 +41,7 @@
     overflow: auto;
     overflow-x: hidden;
     overscroll-behavior: contain;
-    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: var(--sufi-phone-content-bottom, calc(3.75rem + 3.5rem + 0.75rem + env(safe-area-inset-bottom, 0px)));
 }
 
 .sufi-mobile-layout__content {
@@ -54,21 +54,18 @@
 
 .sufi-mobile-layout ::deep .sufi-mobile-bottom-menu {
     position: fixed;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     bottom: 0;
-    left: 0;
     z-index: var(--sb-z-fixed, 100);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--sb-space-2, 0.5rem);
     box-sizing: border-box;
-    height: calc(3.75rem + env(safe-area-inset-bottom, 0px));
-    padding:
-        var(--sb-space-3, 0.75rem)
-        max(var(--sb-space-4, 1rem), env(safe-area-inset-right, 0px))
-        max(var(--sb-space-3, 0.75rem), env(safe-area-inset-bottom, 0px))
-        max(var(--sb-space-4, 1rem), env(safe-area-inset-left, 0px));
+    height: var(--sufi-mobile-nav-block, calc(3.75rem + env(safe-area-inset-bottom, 0px)));
+    padding-block: 0 env(safe-area-inset-bottom, 0px);
+    padding-inline: max(var(--sb-space-4, 1rem), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
     overflow: visible;
     border-top: 1px solid var(--sb-color-border);
     background-color: var(--sb-color-surface);
