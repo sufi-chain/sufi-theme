@@ -1,3 +1,4 @@
+@using System.Reflection
 @using SufiChain.SufiPlatform.UI.Branding
 @using SufiChain.SufiPlatform.UI.Localization
 @using Microsoft.Extensions.Localization
@@ -8,7 +9,28 @@
                                                                       target="_blank"
                                                                       rel="noopener noreferrer"
                                                                       class="sufi-footer__link">@L["PlatformBrandName"]</a>
+@if (!string.IsNullOrWhiteSpace(AppVersion))
+{
+    <span class="sufi-footer__version"> · @AppVersion</span>
+}
 
 @code {
     private const string PlatformUrl = "https://sufichain.com";
+
+    private static readonly string? AppVersion = ReadAppVersion();
+
+    private static string? ReadAppVersion()
+    {
+        var informational = Assembly.GetEntryAssembly()
+            ?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            ?.InformationalVersion;
+        if (string.IsNullOrWhiteSpace(informational))
+        {
+            return null;
+        }
+
+        var plus = informational.IndexOf('+', StringComparison.Ordinal);
+        var version = (plus >= 0 ? informational[..plus] : informational).Trim();
+        return string.IsNullOrWhiteSpace(version) ? null : version;
+    }
 }
