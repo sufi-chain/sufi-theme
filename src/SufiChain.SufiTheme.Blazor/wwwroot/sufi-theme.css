@@ -537,6 +537,20 @@ body:has(.sufi-app-shell--dual-sidebar) {
     border-top: none;
 }
 
+/* One flex item that stacks the copyright line and the version line. */
+.sufi-footer__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2;
+}
+
+.sufi-footer__version {
+    font-size: 0.8em;
+    opacity: 0.8;
+    unicode-bidi: isolate;
+}
+
 .sufi-footer__link {
     color: inherit;
     text-decoration: underline;

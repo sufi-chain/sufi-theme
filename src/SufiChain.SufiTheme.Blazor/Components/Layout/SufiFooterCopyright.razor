@@ -5,14 +5,19 @@
 @inject IBrandingProvider BrandingProvider
 @inject IStringLocalizer<SufiFrameworkResource> L
 
-© @DateTime.Now.Year @BrandingProvider.AppName — @L["PoweredWithLoveByLead"]<a href="@PlatformUrl"
-                                                                      target="_blank"
-                                                                      rel="noopener noreferrer"
-                                                                      class="sufi-footer__link">@L["PlatformBrandName"]</a>
-@if (!string.IsNullOrWhiteSpace(AppVersion))
-{
-    <span class="sufi-footer__version"> · @AppVersion</span>
-}
+<div class="sufi-footer__content">
+    <div class="sufi-footer__copyright">
+        © @DateTime.Now.Year @BrandingProvider.AppName — @L["PoweredWithLoveByLead"]<a href="@PlatformUrl"
+                                                                          target="_blank"
+                                                                          rel="noopener noreferrer"
+                                                                          class="sufi-footer__link">@L["PlatformBrandName"]</a>
+    </div>
+    @if (!string.IsNullOrWhiteSpace(AppVersion))
+    {
+        @* The version is a Latin token, so it is isolated left-to-right and stays readable in RTL pages. *@
+        <div class="sufi-footer__version" dir="ltr">@AppVersion</div>
+    }
+</div>
 
 @code {
     private const string PlatformUrl = "https://sufichain.com";
