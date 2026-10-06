@@ -30,12 +30,23 @@ export function initViewportBreakpoint(dotNetRef, breakpointPx, id) {
             dotNetRef.invokeMethodAsync('OnViewportBreakpointChanged', next);
         }
     }
+    function onOrientation() {
+        onResize();
+        if (typeof window !== 'undefined' && window.setTimeout) {
+            window.setTimeout(onResize, 150);
+        }
+    }
+    function detach() {
+        window.removeEventListener('resize', onResize);
+        window.removeEventListener('orientationchange', onOrientation);
+    }
     if (id && _viewportListeners.has(id)) {
-        window.removeEventListener('resize', _viewportListeners.get(id));
+        _viewportListeners.get(id)();
         _viewportListeners.delete(id);
     }
     window.addEventListener('resize', onResize);
-    _viewportListeners.set(id, onResize);
+    window.addEventListener('orientationchange', onOrientation);
+    _viewportListeners.set(id, detach);
     return current;
 }
 
@@ -44,9 +55,9 @@ export function initViewportBreakpoint(dotNetRef, breakpointPx, id) {
  * @param {string} id - Same id passed to initViewportBreakpoint
  */
 export function disposeViewportBreakpoint(id) {
-    const onResize = _viewportListeners.get(id);
-    if (onResize) {
-        window.removeEventListener('resize', onResize);
+    const detach = _viewportListeners.get(id);
+    if (typeof detach === 'function') {
+        detach();
         _viewportListeners.delete(id);
     }
 }

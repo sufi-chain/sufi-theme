@@ -20,12 +20,24 @@
                 dotNetRef.invokeMethodAsync('OnViewportBreakpointChanged', next);
             }
         }
+        // Rotation can report the previous width, then settle. Recheck after layout.
+        function onOrientation() {
+            onResize();
+            if (typeof window !== 'undefined' && window.setTimeout) {
+                window.setTimeout(onResize, 150);
+            }
+        }
+        function detach() {
+            window.removeEventListener('resize', onResize);
+            window.removeEventListener('orientationchange', onOrientation);
+        }
         if (id && listeners.has(id)) {
-            window.removeEventListener('resize', listeners.get(id));
+            listeners.get(id)();
             listeners.delete(id);
         }
         window.addEventListener('resize', onResize);
-        listeners.set(id, onResize);
+        window.addEventListener('orientationchange', onOrientation);
+        listeners.set(id, detach);
         if (typeof window !== 'undefined' && window.setTimeout) {
             window.setTimeout(function () {
                 var again = getIsMobile(bp);
@@ -39,9 +51,9 @@
     };
 
     window.SufiThemeViewportDispose = function (id) {
-        var onResize = listeners.get(id);
-        if (onResize) {
-            window.removeEventListener('resize', onResize);
+        var detach = listeners.get(id);
+        if (typeof detach === 'function') {
+            detach();
             listeners.delete(id);
         }
     };
