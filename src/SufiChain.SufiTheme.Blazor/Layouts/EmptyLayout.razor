@@ -48,15 +48,13 @@
         if (ResolvedThemeIsDark is bool isDark)
         {
             _currentTheme = isDark ? SbTheme.Dark : SbTheme.Light;
+            ThemeSwitchService.SeedResolved(isDark);
         }
 
         try
         {
             await ThemeSwitchService.GetStoredThemeAsync();
-            if (ThemeSwitchService.IsPreferenceResolved)
-            {
-                _currentTheme = ThemeSwitchService.IsDarkMode ? SbTheme.Dark : SbTheme.Light;
-            }
+            ApplyThemeFromServiceIfChanged();
         }
         catch
         {
@@ -64,9 +62,26 @@
         }
     }
 
+    private void ApplyThemeFromServiceIfChanged()
+    {
+        var theme = ThemeSwitchService.IsDarkMode ? SbTheme.Dark : SbTheme.Light;
+        if (_currentTheme == theme)
+        {
+            return;
+        }
+
+        _currentTheme = theme;
+    }
+
     private void OnThemeChanged(ThemeMode mode)
     {
-        _currentTheme = ThemeSwitchService.IsDarkMode ? SbTheme.Dark : SbTheme.Light;
+        var theme = ThemeSwitchService.IsDarkMode ? SbTheme.Dark : SbTheme.Light;
+        if (_currentTheme == theme)
+        {
+            return;
+        }
+
+        _currentTheme = theme;
         _ = InvokeAsync(StateHasChanged);
     }
 

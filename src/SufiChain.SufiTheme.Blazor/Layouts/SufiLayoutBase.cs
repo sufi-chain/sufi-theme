@@ -114,7 +114,11 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
         if (ResolvedThemeIsDark is bool isDark)
         {
             CurrentTheme = isDark ? SbTheme.Dark : SbTheme.Light;
+            ThemeSwitchService.SeedResolved(isDark);
         }
+
+        var culture = System.Globalization.CultureInfo.CurrentUICulture;
+        Direction = culture.TextInfo.IsRightToLeft ? SbDirection.Rtl : SbDirection.Ltr;
 
         // Subscribe to PageLayout changes to update UI when page sets title/toolbar
         PageLayout.PropertyChanged += OnPageLayoutChanged;
@@ -141,14 +145,9 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
             return;
         }
 
-        // Detect RTL from current culture
-        var culture = System.Globalization.CultureInfo.CurrentUICulture;
-        Direction = culture.TextInfo.IsRightToLeft ? SbDirection.Rtl : SbDirection.Ltr;
-
         // Allow derived layouts to perform additional initialization
         await OnInitializedLayoutAsync();
 
-        // Sync theme from ThemeSwitchService (handles prerender - JS may fail, defaults to Light)
         await SyncThemeFromServiceAsync();
         ThemeSwitchService.ThemeChanged += OnThemeChanged;
 
@@ -161,10 +160,7 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
         try
         {
             await ThemeSwitchService.GetStoredThemeAsync();
-            if (ThemeSwitchService.IsPreferenceResolved)
-            {
-                CurrentTheme = ThemeSwitchService.IsDarkMode ? SbTheme.Dark : SbTheme.Light;
-            }
+            ApplyThemeFromServiceIfChanged();
         }
         catch
         {
@@ -172,9 +168,26 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
         }
     }
 
+    private void ApplyThemeFromServiceIfChanged()
+    {
+        var theme = ThemeSwitchService.IsDarkMode ? SbTheme.Dark : SbTheme.Light;
+        if (CurrentTheme == theme)
+        {
+            return;
+        }
+
+        CurrentTheme = theme;
+    }
+
     private void OnThemeChanged(ThemeMode _)
     {
-        CurrentTheme = ThemeSwitchService.IsDarkMode ? SbTheme.Dark : SbTheme.Light;
+        var theme = ThemeSwitchService.IsDarkMode ? SbTheme.Dark : SbTheme.Light;
+        if (CurrentTheme == theme)
+        {
+            return;
+        }
+
+        CurrentTheme = theme;
         InvokeAsync(StateHasChanged);
     }
 
