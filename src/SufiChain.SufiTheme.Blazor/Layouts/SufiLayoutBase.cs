@@ -291,7 +291,7 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
 
     /// <summary>
     /// Fallback when menu breadcrumbs and page-defined breadcrumbs are both empty.
-    /// Does not replace breadcrumbs already set by the menu service or the page.
+    /// Uses the page title only — never a raw URL segment.
     /// </summary>
     private void EnsureMinimumBreadcrumb()
     {
@@ -300,45 +300,12 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
             return;
         }
 
-        var text = PageLayout.Title;
-        if (string.IsNullOrWhiteSpace(text))
+        if (string.IsNullOrWhiteSpace(PageLayout.Title))
         {
-            text = GetTitleFromUrlPath();
+            return;
         }
 
-        if (string.IsNullOrWhiteSpace(text))
-        {
-            text = BrandingProvider.AppName;
-        }
-
-        PageLayout.BreadcrumbItems.Add(new BreadcrumbItem(text));
-    }
-
-    private string GetTitleFromUrlPath()
-    {
-        var uri = NavigationManager.Uri;
-        if (string.IsNullOrEmpty(uri))
-        {
-            return string.Empty;
-        }
-
-        var path = uri.StartsWith('/')
-            ? uri.Split('?', '#')[0]
-            : (Uri.TryCreate(uri, UriKind.Absolute, out var absolute) ? absolute.AbsolutePath : uri);
-
-        path = path.Trim('/');
-        if (string.IsNullOrEmpty(path))
-        {
-            return string.Empty;
-        }
-
-        var segment = path.Split('/', StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
-        if (string.IsNullOrEmpty(segment))
-        {
-            return string.Empty;
-        }
-
-        return segment.Replace('-', ' ').Replace('_', ' ');
+        PageLayout.BreadcrumbItems.Add(new BreadcrumbItem(PageLayout.Title));
     }
 
     private void OnPageLayoutChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
