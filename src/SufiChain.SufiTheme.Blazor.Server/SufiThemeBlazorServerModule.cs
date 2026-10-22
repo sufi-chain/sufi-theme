@@ -11,9 +11,11 @@ using SufiChain.SufiPlatform.UI.Blazor.DependencyInjection;
 using SufiChain.SufiPlatform.UI.Blazor.Server.DependencyInjection;
 using SufiChain.SufiPlatform.UI.Branding;
 using SufiChain.SufiPlatform.UI.Bundling;
+using SufiChain.SufiPlatform.UI.Features;
 using SufiChain.SufiPlatform.UI.MultiTenancy;
 using SufiChain.SufiPlatform.UI.Routing;
 using SufiChain.SufiPlatform.UI.Services.DependencyInjection;
+using SufiChain.SufiPlatform.UI.Services.Features;
 using SufiChain.SufiPlatform.UI.Toolbars;
 using SufiChain.SufiPlatform.UI.Users;
 using Volo.Abp.Modularity;
@@ -46,6 +48,12 @@ public class SufiThemeBlazorServerModule : AbpModule
         // Bridge ABP current user, current tenant, and authorization for menu/toolbar filtering
         context.Services.Replace(ServiceDescriptor.Scoped<ICurrentUserAccessor, AbpCurrentUserAccessorAdapter>());
         context.Services.Replace(ServiceDescriptor.Scoped<ISufiPermissionChecker, SufiThemeAuthorizationPermissionChecker>());
+
+        // sufi-chain#490: menus must honour RequireFeatures, so replace the default
+        // always-enabled checker with ABP's live feature/edition/tenant state. Menu items marked
+        // with RequireFeatures then disappear once their feature is off, reappear after F5 when it
+        // is turned back on, and never need a re-login (feature values are read per menu build).
+        context.Services.Replace(ServiceDescriptor.Scoped<ISufiFeatureChecker, AbpFeatureCheckerAdapter>());
 
         // Register Sufi Platform UI services (menu, toolbar, branding, etc.)
         context.Services.AddSufiUIServices();
