@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -11,6 +12,7 @@ using SufiChain.SufiPlatform.UI.Localization;
 using SufiChain.SufiPlatform.UI.Navigation;
 using SufiChain.SufiPlatform.UI.Theming;
 using SufiChain.SufiPlatform.UI.Toolbars;
+using SufiChain.SufiPlatform.UI.Users;
 
 namespace SufiChain.SufiTheme.Blazor.Layouts;
 
@@ -53,6 +55,15 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
 
     [Inject]
     protected IPublicMenuProvider PublicMenuProvider { get; set; } = default!;
+
+    [Inject]
+    protected PersistentComponentState PersistentState { get; set; } = default!;
+
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
+
+    [Inject]
+    protected ICurrentUserAccessor MenuUser { get; set; } = default!;
 
     // Common state fields
     protected SbTheme CurrentTheme { get; set; } = SbTheme.Light;
@@ -105,12 +116,29 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
 
     private string? _currentUrl;
     private bool _needsBreadcrumbUpdate;
+    private PersistingComponentStateSubscription? _shellPersist;
+    private bool _authenticationStateSubscribed;
 
     [CascadingParameter(Name = "SufiResolvedThemeIsDark")]
     public bool? ResolvedThemeIsDark { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        // Before the first await. The interactive circuit otherwise paints an empty rail
+        // over the prerendered icons and the shell looks collapsed until this method finishes.
+        RestoreShellChrome();
+        try
+        {
+            _shellPersist = PersistentState.RegisterOnPersisting(PersistShellChrome);
+        }
+        catch (InvalidOperationException)
+        {
+            // Persistence is already registered for this render mode.
+        }
+
+        AuthenticationStateProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
+        _authenticationStateSubscribed = true;
+
         if (ResolvedThemeIsDark is bool isDark)
         {
             CurrentTheme = isDark ? SbTheme.Dark : SbTheme.Light;
@@ -129,12 +157,7 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
 
         try
         {
-            // Load menu items (DB-driven public menu when a provider supplies one, else contributor-based main menu)
-            MenuItems = await LoadMenuItemsAsync();
-
-            // Load toolbar items
-            var toolbar = await ToolbarManager.GetAsync(SufiToolbars.Main);
-            ToolbarItems = toolbar.Items.ToList();
+            await ReloadShellChromeAsync();
         }
         catch (ObjectDisposedException)
         {
@@ -238,7 +261,8 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
                     await Task.Yield();
                     // Public (DB-driven) menus are URL-contextual (e.g. KB category menu depends on the project slug),
                     // so reload menu items on navigation. Contributor-based menus are static and unaffected.
-                    MenuItems = await LoadMenuItemsAsync();
+                    // Keep the visible rail when the reload is an anonymous principal miss.
+                    await ReloadShellChromeAsync();
                     StateHasChanged();
                 }
                 catch (ObjectDisposedException)
@@ -249,6 +273,89 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
                 }
             });
         }
+    }
+
+    private void RestoreShellChrome()
+    {
+        try
+        {
+            if (!PersistentState.TryTakeFromJson<ShellChromeSnapshot>(ShellMenuContinuity.PersistenceKey, out var snapshot)
+                || snapshot == null)
+            {
+                return;
+            }
+
+            var menu = ShellMenuContinuity.RestoreMenu(snapshot.Menu);
+            if (menu.Count > 0)
+            {
+                MenuItems = menu;
+            }
+
+            var toolbar = ShellMenuContinuity.RestoreToolbar(snapshot.Toolbar);
+            if (toolbar.Count > 0)
+            {
+                ToolbarItems = toolbar;
+            }
+        }
+        catch (InvalidOperationException)
+        {
+            // No persisted shell for this render.
+        }
+    }
+
+    private Task PersistShellChrome()
+    {
+        if (MenuItems.Count == 0 && ToolbarItems.Count == 0)
+        {
+            return Task.CompletedTask;
+        }
+
+        PersistentState.PersistAsJson(
+            ShellMenuContinuity.PersistenceKey,
+            ShellMenuContinuity.Capture(MenuItems, ToolbarItems));
+        return Task.CompletedTask;
+    }
+
+    private async Task ReloadShellChromeAsync()
+    {
+        var loaded = await LoadMenuItemsAsync();
+        if (await ShouldKeepVisibleMenuAsync(loaded.Count))
+        {
+            return;
+        }
+
+        MenuItems = loaded;
+        var toolbar = await ToolbarManager.GetAsync(SufiToolbars.Main);
+        ToolbarItems = toolbar.Items.ToList();
+    }
+
+    private async Task<bool> ShouldKeepVisibleMenuAsync(int loadedCount)
+    {
+        var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        return ShellMenuContinuity.ShouldKeepVisibleMenu(
+            MenuItems.Count,
+            loadedCount,
+            state.User.Identity?.IsAuthenticated == true,
+            MenuUser.IsAuthenticated);
+    }
+
+    private void OnAuthenticationStateChanged(Task<AuthenticationState> task)
+    {
+        _ = InvokeAsync(async () =>
+        {
+            try
+            {
+                await task;
+                await ReloadShellChromeAsync();
+                StateHasChanged();
+            }
+            catch (ObjectDisposedException)
+            {
+            }
+            catch (OperationCanceledException)
+            {
+            }
+        });
     }
 
     private async Task<List<ApplicationMenuItem>> LoadMenuItemsAsync()
@@ -323,5 +430,11 @@ public abstract class SufiLayoutBase : LayoutComponentBase, IDisposable
         PageLayout.PropertyChanged -= OnPageLayoutChanged;
         NavigationManager.LocationChanged -= OnLocationChanged;
         ThemeSwitchService.ThemeChanged -= OnThemeChanged;
+        if (_authenticationStateSubscribed)
+        {
+            AuthenticationStateProvider.AuthenticationStateChanged -= OnAuthenticationStateChanged;
+        }
+
+        _shellPersist?.Dispose();
     }
 }
