@@ -173,6 +173,8 @@
     --sb-settings-rail-indicator: var(--sb-color-primary);
 }
 
+/* Same pre-paint document class as sufiblazor.css, so shell tokens follow it. */
+html.sufi-theme-dark .sb-theme-root,
 .sb-theme-dark {
     --sb-color-page: linear-gradient(180deg, var(--sb-color-background), var(--sb-color-surface));
     --sufi-color-rail: var(--sb-color-sidebar-dark);
@@ -212,6 +214,7 @@ body {
     font-size: var(--sb-font-size-xs);
 }
 /* Dark theme: outer page gradient surrounds the app shell */
+html.sufi-theme-dark body,
 body.sb-theme-dark,
 .sb-theme-dark body {
     background: var(--sb-color-page);
