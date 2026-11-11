@@ -1,9 +1,13 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.Extensions.Localization
 @using SufiChain.SufiPlatform.UI.Blazor.Components
+@using SufiChain.SufiPlatform.UI.Layout
 @using SufiChain.SufiPlatform.UI.Localization
 @using SufiChain.SufiTheme.Blazor.Layouts
 @inject IStringLocalizer<SufiFrameworkResource> L
+@inject NavigationManager Navigation
+@inject IPageLayoutNavigation LayoutNavigation
+@implements IDisposable
 
 <Router AppAssembly="@typeof(Routes).Assembly" AdditionalAssemblies="@AdditionalAssemblies">
     <Found Context="routeData">
@@ -35,6 +39,21 @@
 </Router>
 
 @code {
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += OnLayoutNavigation;
+    }
+
+    private void OnLayoutNavigation(object? sender, LocationChangedEventArgs e)
+    {
+        LayoutNavigation.BeginNavigation();
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLayoutNavigation;
+    }
+
     /// <summary>
     /// Additional assemblies to scan for routable components.
     /// </summary>

@@ -1,9 +1,12 @@
 @namespace SufiChain.SufiTheme.Blazor.Components.Layout
+@using Microsoft.Extensions.Options
 @using SufiChain.SufiPlatform.UI.Branding
 @using SufiChain.SufiBlazor.Components.Common
+@using SufiChain.SufiTheme
+@inject IOptions<SufiThemeBlazorOptions> ThemeOptions
 
 <div class="sufi-topbar-brand sufi-topbar-brand--with-name">
-    <a href="/" class="sufi-topbar-brand__link">
+    <a href="@ThemeOptions.Value.IconRailHomeUrl" class="sufi-topbar-brand__link" aria-label="@BrandLinkName">
         @if (!string.IsNullOrEmpty(BrandingProvider?.LogoUrl))
         {
             <img src="@BrandingProvider.LogoUrl" alt="@BrandingProvider.AppName" class="sufi-topbar-brand__logo" style="height: 28px; width: auto; object-fit: contain;" />
@@ -28,4 +31,7 @@
     /// </summary>
     [Parameter]
     public bool ShowAppName { get; set; }
+
+    private string? BrandLinkName =>
+        string.IsNullOrWhiteSpace(BrandingProvider?.AppName) ? null : BrandingProvider!.AppName;
 }

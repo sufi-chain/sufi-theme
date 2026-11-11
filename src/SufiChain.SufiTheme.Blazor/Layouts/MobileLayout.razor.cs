@@ -14,6 +14,26 @@ public partial class MobileLayout
             .Take(4)
             .ToList();
 
+    private bool IsShortcutCurrent(MobileMenuShortcut shortcut)
+    {
+        string path;
+        try
+        {
+            path = new Uri(NavigationManager.Uri).AbsolutePath;
+        }
+        catch (UriFormatException)
+        {
+            path = string.Empty;
+        }
+
+        return MobileShortcutSelection.IsCurrent(shortcut.Url, path);
+    }
+
+    private string ShortcutClass(MobileMenuShortcut shortcut) =>
+        IsShortcutCurrent(shortcut)
+            ? "sufi-mobile-bottom-menu__shortcut sufi-mobile-bottom-menu__shortcut--active"
+            : "sufi-mobile-bottom-menu__shortcut";
+
     protected override Task OnInitializedLayoutAsync()
     {
         NavigationManager.LocationChanged += CloseDrawersOnNavigate;
