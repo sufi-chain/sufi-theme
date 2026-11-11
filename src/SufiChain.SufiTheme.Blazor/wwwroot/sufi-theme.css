@@ -2203,6 +2203,12 @@ body:has(.sufi-app-shell--dual-sidebar) {
         background-color: var(--sb-color-surface-hover);
     }
 
+    .sufi-mobile-bottom-menu__shortcut--active,
+    .sufi-mobile-bottom-menu__shortcut--active:hover {
+        color: var(--sb-color-primary);
+        background-color: color-mix(in srgb, var(--sb-color-primary) 14%, transparent);
+    }
+
     /* Compact mobile content. The assistant lane is outside __main. */
     .sufi-content-wrapper {
         padding: var(--sb-space-2, 0.5rem);
