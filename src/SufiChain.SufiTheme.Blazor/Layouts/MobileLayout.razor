@@ -48,9 +48,12 @@
                 @foreach (var shortcut in MobileShortcuts.Take(2))
                 {
                     <a href="@shortcut.Url"
+                       data-enhance-nav="false"
                        class="@ShortcutClass(shortcut)"
                        aria-label="@L[shortcut.DisplayName].Value"
-                       aria-current="@(IsShortcutCurrent(shortcut) ? "page" : null)">
+                       aria-current="@(IsShortcutCurrent(shortcut) ? "page" : null)"
+                       @onclick="() => NavigateShortcut(shortcut.Url)"
+                       @onclick:preventDefault="true">
                         <SbIcon Name="@shortcut.Icon" Size="SbSize.Lg" />
                     </a>
                 }
@@ -59,9 +62,12 @@
                 @foreach (var shortcut in MobileShortcuts.Skip(2).Take(2))
                 {
                     <a href="@shortcut.Url"
+                       data-enhance-nav="false"
                        class="@ShortcutClass(shortcut)"
                        aria-label="@L[shortcut.DisplayName].Value"
-                       aria-current="@(IsShortcutCurrent(shortcut) ? "page" : null)">
+                       aria-current="@(IsShortcutCurrent(shortcut) ? "page" : null)"
+                       @onclick="() => NavigateShortcut(shortcut.Url)"
+                       @onclick:preventDefault="true">
                         <SbIcon Name="@shortcut.Icon" Size="SbSize.Lg" />
                     </a>
                 }

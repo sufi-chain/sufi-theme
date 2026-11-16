@@ -34,6 +34,18 @@ public partial class MobileLayout
             ? "sufi-mobile-bottom-menu__shortcut sufi-mobile-bottom-menu__shortcut--active"
             : "sufi-mobile-bottom-menu__shortcut";
 
+    private void NavigateShortcut(string? url)
+    {
+        if (string.IsNullOrWhiteSpace(url))
+        {
+            return;
+        }
+
+        // A plain anchor is an enhanced document load. That updates the URL and
+        // keeps the previous interactive view, so Home can leave Calendar on screen.
+        NavigationManager.NavigateTo(url);
+    }
+
     protected override Task OnInitializedLayoutAsync()
     {
         NavigationManager.LocationChanged += CloseDrawersOnNavigate;
