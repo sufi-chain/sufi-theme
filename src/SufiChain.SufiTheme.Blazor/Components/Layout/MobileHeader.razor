@@ -2,7 +2,7 @@
 @*
     MobileHeader - Compact mobile top bar for DualSidebarLayout.
     Logo (start) + optional "Page Actions" button (end) that opens a drawer.
-    Page title and breadcrumbs are not rendered here; DualSidebar keeps a screen-reader heading in content.
+    Row2Content is the visible page heading.
 *@
 
 <div class="sufi-mobile-header">
@@ -56,7 +56,7 @@
     public EventCallback OnPageActionsClick { get; set; }
 
     /// <summary>
-    /// Optional second-row content. DualSidebarLayout does not supply this on mobile.
+    /// Second-row content. DualSidebarLayout supplies the page title heading here.
     /// </summary>
     [Parameter]
     public RenderFragment? Row2Content { get; set; }
