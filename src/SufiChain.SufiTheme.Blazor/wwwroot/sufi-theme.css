@@ -214,10 +214,13 @@ body {
     font-size: var(--sb-font-size-xs);
 }
 /* Dark theme: outer page gradient surrounds the app shell */
+html.sufi-theme-dark,
 html.sufi-theme-dark body,
 body.sb-theme-dark,
 .sb-theme-dark body {
-    background: var(--sb-color-page);
+    background-color: #101F2C;
+    color: #F2F6F9;
+    color-scheme: dark;
 }
 /* ============================================
    Focus visible – reduce outline on non-interactive elements
@@ -1860,6 +1863,11 @@ body:has(.sufi-app-shell--dual-sidebar) {
    Responsive Styles
    ============================================ */
 
+/* Dual sidebar keeps the bar in the DOM at every width. Show it only on a phone. */
+.sufi-mobile-bottom-menu--responsive {
+    display: none;
+}
+
 @media (max-width: 768px) {
     .sufi-sidebar {
         position: fixed;
@@ -1888,6 +1896,11 @@ body:has(.sufi-app-shell--dual-sidebar) {
 
     .sufi-dual-sidebar--open {
         transform: translateX(0);
+    }
+
+    /* A closed rail must not sit on the phone as the bottom menu. */
+    .sufi-dual-sidebar:not(.sufi-dual-sidebar--open) {
+        visibility: hidden;
     }
 
     /* On mobile RTL: sidebar drawer slides from right */
@@ -2116,8 +2129,9 @@ body:has(.sufi-app-shell--dual-sidebar) {
         gap: var(--sb-space-2);
     }
 
-    /* Mobile bottom menu – fixed bar with center "open menu" button and shortcut slots */
-    .sufi-mobile-bottom-menu {
+    /* Mobile bottom menu – host shortcuts, then the first N main items, then the menu button. */
+    .sufi-mobile-bottom-menu,
+    .sufi-mobile-bottom-menu--responsive {
         position: fixed;
         inset-inline-start: 0;
         inset-inline-end: 0;
@@ -2130,11 +2144,22 @@ body:has(.sufi-app-shell--dual-sidebar) {
         box-sizing: border-box;
         height: var(--sufi-mobile-nav-block);
         padding-block: 0 env(safe-area-inset-bottom, 0px);
-        padding-inline: max(var(--sb-space-4), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+        padding-inline: max(var(--sb-space-2), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
         background-color: var(--sb-color-surface);
         border-top: 1px solid var(--sb-color-border);
         box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.06);
         overflow: visible;
+        max-width: 100%;
+    }
+
+    .sufi-mobile-bottom-menu__items {
+        display: flex;
+        align-items: center;
+        gap: var(--sb-space-1);
+        flex: 1;
+        min-width: 0;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
     }
 
     .sufi-mobile-bottom-menu__side {
