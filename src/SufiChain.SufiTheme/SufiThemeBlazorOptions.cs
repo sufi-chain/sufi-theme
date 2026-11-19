@@ -152,7 +152,8 @@ public class SufiThemeBlazorOptions
 
     /// <summary>
     /// Gets host-provided shortcuts for the mobile bottom menu.
-    /// Layouts render only these explicit shortcuts and never add hardcoded items.
+    /// Layouts render these shortcuts first, then the items chosen by <see cref="MobileMenuSelector"/>.
+    /// They do not copy the desktop icon rail.
     /// </summary>
     public List<MobileMenuShortcut> MobileShortcuts { get; } = new();
 }

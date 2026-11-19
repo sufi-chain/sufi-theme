@@ -1,16 +1,37 @@
 @namespace SufiChain.SufiTheme.Blazor.Components.Layout
+@using Microsoft.Extensions.Localization
 @using SufiChain.SufiBlazor.Components.Common
+@using SufiChain.SufiPlatform.UI.Localization
+@using SufiChain.SufiTheme
 @*
-    MobileBottomMenu - Fixed bottom bar on mobile with:
-    - Left: optional shortcut slots (e.g. 2 items)
-    - Center: large circular button to open main menu
-    - Right: optional shortcut slots (e.g. 2 items)
-    Reduces header clutter and makes the menu action highly visible.
+    MobileBottomMenu - Fixed bottom bar on a phone.
+    Host shortcuts come first, then the first N main items from MobileMenuSelector.
+    The desktop icon rail is not this bar.
 *@
 
 <nav class="sufi-mobile-bottom-menu @Class" aria-label="@AriaLabel">
-    <div class="sufi-mobile-bottom-menu__side sufi-mobile-bottom-menu__side--left">
-        @LeftShortcuts
+    <div class="sufi-mobile-bottom-menu__items">
+        @if (Links is { Count: > 0 })
+        {
+            @foreach (var link in Links)
+            {
+                var current = MobileShortcutSelection.IsCurrent(link.Url, CurrentPath);
+                <a href="@link.Url"
+                   data-enhance-nav="false"
+                   class="@(current ? "sufi-mobile-bottom-menu__shortcut sufi-mobile-bottom-menu__shortcut--active" : "sufi-mobile-bottom-menu__shortcut")"
+                   aria-label="@Label(link)"
+                   aria-current="@(current ? "page" : null)"
+                   @onclick="() => NavigateAsync(link.Url)"
+                   @onclick:preventDefault="true">
+                    <SbIcon Name="@link.Icon" Size="SbSize.Lg" />
+                </a>
+            }
+        }
+        else
+        {
+            @LeftShortcuts
+            @RightShortcuts
+        }
     </div>
     <div class="sufi-mobile-bottom-menu__center">
         <SbIconButton Type="button"
@@ -20,14 +41,14 @@
             <SbIcon Name="menu" Size="SbSize.Xl" />
         </SbIconButton>
     </div>
-    <div class="sufi-mobile-bottom-menu__side sufi-mobile-bottom-menu__side--right">
-        @RightShortcuts
-    </div>
 </nav>
 
 @code {
+    [Inject]
+    private IStringLocalizer<SufiFrameworkResource> L { get; set; } = null!;
+
     /// <summary>
-    /// Fired when the center "open menu" button is clicked.
+    /// Fired when the menu button is clicked.
     /// </summary>
     [Parameter]
     public EventCallback OnOpenMenu { get; set; }
@@ -39,23 +60,46 @@
     public string AriaLabel { get; set; } = "Mobile navigation";
 
     /// <summary>
-    /// Aria-label for the center menu button. Defaults to "Open main menu".
+    /// Aria-label for the menu button. Defaults to "Open main menu".
     /// </summary>
     [Parameter]
     public string? OpenMenuAriaLabel { get; set; } = "Open main menu";
 
     /// <summary>
-    /// Content for the left side (e.g. 2 shortcut buttons).
+    /// Host shortcuts followed by the first N main items.
+    /// </summary>
+    [Parameter]
+    public IReadOnlyList<MobileBottomLink>? Links { get; set; }
+
+    /// <summary>
+    /// Current path used for the active style and aria-current.
+    /// </summary>
+    [Parameter]
+    public string? CurrentPath { get; set; }
+
+    /// <summary>
+    /// In-circuit navigation. A plain enhanced anchor would reload the document.
+    /// </summary>
+    [Parameter]
+    public EventCallback<string> OnNavigate { get; set; }
+
+    /// <summary>
+    /// Legacy left slot. Unused when <see cref="Links"/> is set.
     /// </summary>
     [Parameter]
     public RenderFragment? LeftShortcuts { get; set; }
 
     /// <summary>
-    /// Content for the right side (e.g. 2 shortcut buttons).
+    /// Legacy right slot. Unused when <see cref="Links"/> is set.
     /// </summary>
     [Parameter]
     public RenderFragment? RightShortcuts { get; set; }
 
     [Parameter]
     public string? Class { get; set; }
+
+    private string Label(MobileBottomLink link) =>
+        link.LocalizeLabel ? L[link.Label].Value : link.Label;
+
+    private Task NavigateAsync(string url) => OnNavigate.InvokeAsync(url);
 }
